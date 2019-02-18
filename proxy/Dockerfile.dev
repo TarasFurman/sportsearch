@@ -1,0 +1,5 @@
+FROM nginx:1.15.8-alpine
+
+RUN run rm -f /etc/nginx/conf.d/*
+
+COPY nginx-dev.conf /etc/nginx/conf.d/app.conf

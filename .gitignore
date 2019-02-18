@@ -1,0 +1,5 @@
+# folder that PyCharm makes when you work with it
+.idea/
+
+# data from a database
+postgres_data/
