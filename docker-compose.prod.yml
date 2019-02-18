@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+#    ports:
+#      - 5000:5999
+    expose:
+      - 5000
+    depends_on:
+      - database
+    volumes:
+      - ./backend:/backend_app
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+#    ports:
+#      - 8000:5998
+    expose:
+      - 8000
+#    depends_on:
+#      - backend
+    volumes:
+      - ./frontend:/frontend_app
+    restart: always
+
+  database:
+    build:
+      context: ./conf
+      dockerfile: conf/postgres/Dockerfile
+    restart: always
+    expose:
+      - 5432
+    volumes:
+      - ./backend/db_data:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_DB=${POSTGRES_DB}
+#      - POSTGRES_USER=${POSTGRES_USER}
+#      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: proxy/Dockerfile.prod
+    depends_on:
+      - frontend
+      - backend
+    volumes:
+      - .:/sport_search_files
