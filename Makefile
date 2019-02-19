@@ -6,10 +6,10 @@ up:
 	docker-compose -f docker-compose.$(ENV).yml up -d
 
 start:
-    docker-compose -f docker-compose.$(ENV).yml start
+	docker-compose -f docker-compose.$(ENV).yml start
 
 stop:
-    docker-compose -f docker-compose.$(ENV).yml stop
+	docker-compose -f docker-compose.$(ENV).yml stop
 
 stop-dev: ENV=dev
 stop-dev: stop
