@@ -15,9 +15,15 @@ export class Map extends React.Component {
 
   render() {
     return (
-      <GMap google={this.props.google} zoom={15}>
+      <GMap google={this.props.google} 
+            zoom={15} 
+            bounds={this.bounds}
+
+      >
         <Marker onClick={this.onMarkerClick} onMouseover={this.onMouseover}
-                name={'Current location'} />
+                name={'Current location'} position={{lat: 44, lng: 50}} />
+        <Marker onClick={this.onMarkerClick} onMouseover={this.onMouseover}
+                name={'Current location'} position={{lat: 55, lng: 55}} />
       </GMap>
     );
   }

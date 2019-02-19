@@ -4,14 +4,15 @@ import { Nav, Navbar as BNavbar} from 'react-bootstrap';
 
 const Navbar = () => (
   <BNavbar bg="dark" variant="dark">
-    <BNavbar.Brand href="#home">SportSearch</BNavbar.Brand>
+    <BNavbar.Brand>
+      <Link to="/">SportSearch</Link>
+    </BNavbar.Brand>
     <Nav className="mr-auto">
-      <Nav.Link>
-        <Link to="/settings">Settings</Link>
-      </Nav.Link>
+      <Link to="/settings">Settings</Link>
     </Nav>
     <Nav>
-      <Nav.Link href="#signup">Sign up</Nav.Link>
+      <Link to="/signup">Sign up</Link>
+      <Link to="/signin">Sign in</Link>
     </Nav>
   </BNavbar>
 );
