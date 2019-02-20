@@ -65,7 +65,7 @@ class User(db.Model):
     description = db.Column(db.Text, nullable=True, unique=False)
     viber_account = db.Column(db.Text, nullable=True, unique=False)
     telegram_account = db.Column(db.Text, nullable=True, unique=False)
-    settings = db.Column(db.Text, nullable=False, unique=False)
+    settings = db.Column(db.JSON, nullable=False, unique=False)
 
     status_id = db.Column(db.Integer, db.ForeignKey('user_status.id'), nullable=False, unique=False)
 
