@@ -11,6 +11,8 @@ app.config.from_object(config.DevelopmentConfig)
 
 app.register_blueprint(routes)
 db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')

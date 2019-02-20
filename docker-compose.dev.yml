@@ -13,7 +13,7 @@ services:
     depends_on:
       - database
     environment:
-      - DATABASE_URL=postgres://ss_user:5heMcHFf&L9ehUuk@localhost:5432/ss_db
+      - DATABASE_URL=postgres://ss_user:5heMcHFf&L9ehUuk@database:5432/ss_db
     volumes:
       - ./backend:/backend_app
     restart: always
