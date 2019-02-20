@@ -7,23 +7,43 @@ export class Map extends React.Component {
     this.onMarkerClick = () => {
       alert('Click me');
     }
+    this.state = {
+      lat: 50,
+      lng: 40
+    };
+  }
 
-    this.onMouseover = () => {
-      console.log('Hover me')
+  async componentWillMount() {
+    if (navigator.geolocation) {
+      await navigator.geolocation.getCurrentPosition((position) => {
+        this.setState({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      }, () => {
+        console.log('error');
+      });
     }
+  }
+
+  async componentDidMount() {
+    const url = 'https://swapi.co/api/people/1';
+    const response = await fetch(url);
+    const data = await response.json()
+    console.log(data)
   }
 
   render() {
     return (
       <GMap google={this.props.google} 
-            zoom={15} 
-            bounds={this.bounds}
-
+            zoom={15}
+            center={{
+              lat: this.state.lat, 
+              lng: this.state.lng
+            }}
+            style={{height: '90%'}}
       >
-        <Marker onClick={this.onMarkerClick} onMouseover={this.onMouseover}
-                name={'Current location'} position={{lat: 44, lng: 50}} />
-        <Marker onClick={this.onMarkerClick} onMouseover={this.onMouseover}
-                name={'Current location'} position={{lat: 55, lng: 55}} />
+        <Marker position={this.state} onClick={this.onMarkerClick} />
       </GMap>
     );
   }
