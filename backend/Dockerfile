@@ -8,10 +8,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY api/fill_data.py
-
-RUN python fill_data.py test
-
 COPY . .
 
 RUN export PYTHONPATH=$PYTHONPATH:/backend_app/src

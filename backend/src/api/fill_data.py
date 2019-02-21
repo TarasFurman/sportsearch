@@ -196,7 +196,7 @@ def event(fake):
 
     if not data_in_db:
         with app.app_context():
-            for i in range(5):
+            for i in range(10):
                 event_time = datetime_generator()
                 new_event = Event ( name = fake.text(max_nb_chars=50),
                                     image_url = random.choice(user_img_urls),
@@ -248,7 +248,7 @@ def message(fake):
     if not data_in_db:
         with app.app_context():
             for event in events:
-                users_in_event = UserInEvent.query.filter_by(event_id = event.id).all
+                users_in_event = UserInEvent.query.filter_by(event_id = event.id)
                 for user_in_event in users_in_event:
                     new_Message = Message ( text = fake.text(max_nb_chars=150),
                                             message_time = fake.date_time_between(start_date="-30d", end_date="now", tzinfo=None).strftime('%Y-%m-%d %H:%M:%S'),
