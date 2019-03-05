@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 
 db = SQLAlchemy()
 
@@ -69,12 +70,29 @@ class User(db.Model):
 
     status_id = db.Column(db.Integer, db.ForeignKey('user_status.id'), nullable=False, unique=False)
 
+    @staticmethod
+    def update_rating(user_id):
+        """
+        Method that replaces a trigger in database (but not entirely, it'll not be updated ).
+        It will count current rating of a user and update it.
+        :return:
+        """
+        user = db.session.query(User).filter(
+            User.id == user_id,
+        ).first()
+        user.rating = db.session.query(func.avg(Feedback.rating).label('avg_rate')).filter(
+            Feedback.user_to_id == user_id,
+        )
+
+        db.session.commit()
+
 
 class Event(db.Model):
     __tablename__ = 'event'
 
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.Text, nullable=False, unique=False)
+    description = db.Column(db.Text, nullable=True, unique=False)
     image_url = db.Column(db.Text, nullable=True, unique=False)
     x_coord = db.Column(db.Float, nullable=False, unique=False)
     y_coord = db.Column(db.Float, nullable=False, unique=False)
@@ -102,7 +120,7 @@ class Event(db.Model):
 class Feedback(db.Model):
     __tablename__ = 'feedback'
 
-    id = db.Column(db.Integer,primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer, nullable=False, unique=False)
     text = db.Column(db.Text, nullable=True, unique=False)
     feedback_time = db.Column(db.DateTime, nullable=False, unique=False)
@@ -151,4 +169,4 @@ class Message(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False, unique=False)
     sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=False)
 
-    messages = db.relationship('User', foreign_keys=[sender_id], backref='user_message', lazy=True)
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='user_message', lazy='subquery')

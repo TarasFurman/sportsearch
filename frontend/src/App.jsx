@@ -8,6 +8,8 @@ import Profile from './pages/Profile';
 
 import Signin from './pages/Signin';
 import Signup from './pages/Signup';
+
+import EventPage from './pages/EventPage'
  
 export class App extends React.Component {
   render() {
@@ -20,6 +22,7 @@ export class App extends React.Component {
           <Route path="/settings" component={Settings}/>
           <Route path="/signin" component={Signin}/>
           <Route path="/signup" component={Signup}/>
+          <Route path="/event/:eventId" component={EventPage}/>
         </div>
       </Router>
     );

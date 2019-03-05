@@ -87,6 +87,7 @@ def user_event_status():
             UserEventStatus(name='Approved'),
             UserEventStatus(name='Rejected'),
             UserEventStatus(name='Kicked'),
+            UserEventStatus(name='Waiting for user approving')
         ]
 
         with app.app_context():
@@ -199,6 +200,7 @@ def event(fake):
             for i in range(10):
                 event_time = datetime_generator()
                 new_event = Event ( name = fake.text(max_nb_chars=50),
+                                    description=fake.text(max_nb_chars=500),
                                     image_url = random.choice(user_img_urls),
                                     x_coord = round(random.uniform(some_Kyiv_cords['x_min'],some_Kyiv_cords['x_max']),6),
                                     y_coord = round(random.uniform(some_Kyiv_cords['y_min'],some_Kyiv_cords['y_max']),6),
