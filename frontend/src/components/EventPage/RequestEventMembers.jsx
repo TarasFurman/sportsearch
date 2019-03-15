@@ -16,7 +16,11 @@ export class RequestEventMembers extends React.Component {
     }
 
     getMembers() {
-        fetch("http://localhost:5999/request-members/" + this.props.eventId)
+        fetch("http://localhost:5999/request-members/" + this.props.eventId,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(response => response.json())
         .then(data => {
             this.setState({
@@ -28,6 +32,8 @@ export class RequestEventMembers extends React.Component {
 
     grandMember(memberId, memberStatus) {
         fetch('http://localhost:5999/request-member/' + this.props.eventId, {
+            mode: "cors",
+            credentials: "include",
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

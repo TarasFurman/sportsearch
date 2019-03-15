@@ -124,18 +124,30 @@ export class EventPage extends React.Component {
     }
 
     leaveEvent() {
-        fetch("http://localhost:5999/leave-event/" + this.props.match.params.eventId)
+        fetch("http://localhost:5999/leave-event/" + this.props.match.params.eventId,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(() => window.location.reload());
     }
 
     cancelEvent() {
-        fetch("http://localhost:5999/cancel-event/" + this.props.match.params.eventId)
+        fetch("http://localhost:5999/cancel-event/" + this.props.match.params.eventId,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(() => window.location.reload());
     }
 
     componentDidMount() {
         fetch(
-            "http://localhost:5999/event-room/" + this.props.match.params.eventId)
+            "http://localhost:5999/event-room/" + this.props.match.params.eventId,
+            {
+                mode: "cors",
+                credentials: "include",
+            })
             .then(
                 response => response.json())
             .then(data => {

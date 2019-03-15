@@ -20,8 +20,8 @@ export class EventInfo extends React.Component {
 
     render() {
         var info = this.props.eventInfo;
-        var givendate1 = new Date(info.start_time);
-        var givendate2 = new Date(info.end_time);
+        var givendate1 = new Date(info.start_time + "Z");
+        var givendate2 = new Date(info.end_time + "Z");
         var nowdate = new Date();
 
         //////////////////////////////////////////////////
@@ -110,8 +110,12 @@ export class EventInfo extends React.Component {
                         <h5>
                             Start time:
                             &nbsp;
-                            { new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) < givendate1 ? "Today" : 
-                                new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() - 1) < givendate1 ? "Yesterday" : (
+                            { new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) < givendate1
+                                && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 1) > givendate1 ? "today" : 
+                                new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() - 1) < givendate1
+                                    && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) > givendate1 ? "yesterday" :
+                                    new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 1) < givendate1
+                                        && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 2) > givendate1 ? "tomorrow" : (
                                     <span>
                                         { ("0" + givendate1.getDate()).slice(-2) }
                                         .{ ("0" + givendate1.getMonth()).slice(-2) }
@@ -119,14 +123,18 @@ export class EventInfo extends React.Component {
                                     </span>
                             )}
                             &nbsp;&nbsp;
-                            { ("0" + new Date(info.start_time).getHours()).slice(-2) }:
-                            { ("0" + new Date(info.start_time).getMinutes()).slice(-2) }
+                            { ("0" + givendate1.getHours()).slice(-2) }:
+                            { ("0" + givendate1.getMinutes()).slice(-2) }
                         </h5>
                         <h5>
                             End time:
                             &nbsp;
-                            { new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) < givendate2 ? "Today" : 
-                                new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() - 1) < givendate2 ? "Yesterday" : (
+                            { new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) < givendate2
+                                && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 1) > givendate2 ? "today" : 
+                                new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() - 1) < givendate2
+                                    && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate()) > givendate2 ? "yesterday" :
+                                    new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 1) < givendate2
+                                        && new Date(nowdate.getFullYear(), nowdate.getMonth(), nowdate.getDate() + 2) > givendate2 ? "tomorrow" : (
                                     <span>
                                         { ("0" + givendate2.getDate()).slice(-2) }
                                         .{ ("0" + givendate2.getMonth()).slice(-2) }
@@ -134,8 +142,8 @@ export class EventInfo extends React.Component {
                                     </span>
                             )}
                             &nbsp;&nbsp;
-                            { ("0" + new Date(info.end_time).getHours()).slice(-2) }:
-                            { ("0" + new Date(info.end_time).getMinutes()).slice(-2) }
+                            { ("0" + givendate2.getHours()).slice(-2) }:
+                            { ("0" + givendate2.getMinutes()).slice(-2) }
                         </h5>
                         <h5>
                             Period: { info.period ? info.period + " days" : "one-time event" }
@@ -143,6 +151,8 @@ export class EventInfo extends React.Component {
                         <h5>
                             Price: ${ info.price ? info.price : 0 }
                         </h5>
+                        { info.card_number ? <h5>Card number: { info.card_number } </h5> : "" }
+                        { info.card_holder ? <h5>Card holder: { info.card_holder } </h5> : "" }                        
                         <h5>
                             Age: { info.age_from } to { info.age_to }
                         </h5>

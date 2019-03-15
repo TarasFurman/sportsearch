@@ -10,26 +10,51 @@ export class RequestEventMembers extends React.Component {
 
         this.state = {
             members: [],
+            nick: "",
+            limit: 5,
+            offset: 0,
             isLoaded: false,
         }
 
         this.getMembers = this.getMembers.bind(this);
         this.inviteMember = this.inviteMember.bind(this);
+        this.changeNick = this.changeNick.bind(this);
     }
 
-    getMembers(nick) {
-        fetch("http://localhost:5999/search-members/" + this.props.eventId + "?nickname=" + nick)
+    changeNick(nickname) {
+        this.setState({
+            nick: nickname,
+            offset: 0,
+            isLoaded: false,
+        }, () => this.getMembers(true) );
+    }
+
+    getMembers(haschanged) {
+        fetch("http://localhost:5999/search-members/" + this.props.eventId 
+            + "?nickname=" + this.state.nick 
+            + "&limit=" + this.state.limit
+            + "&offset=" + this.state.offset,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(response => response.json())
+        .then(data => data.members)
         .then(data => {
             this.setState({
-                members: data.members,
-                isLoaded: true,
+                members: haschanged ? 
+                            data ? data : []
+                            : [...this.state.members, ...data],
+                offset: this.state.offset + data.length,
             })
-        });
+        })
+        .catch(error => console.log("error", error));
     }
 
     inviteMember(memberId) {
         fetch('http://localhost:5999/invite-member/' + this.props.eventId, {
+            mode: "cors",
+            credentials: "include",    
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -45,12 +70,14 @@ export class RequestEventMembers extends React.Component {
     render() {
         return(
             <>
-                <SearchEventMembersForm onSubmit={ this.getMembers } />
+                <SearchEventMembersForm 
+                    changeNick={ this.changeNick } />
                 <SearchEventMembersArea 
                     members={ this.state.members }
                     eventMinAge={ this.props.eventMinAge }
                     eventMaxAge={ this.props.eventMaxAge }
-                    inviteMember={ this.inviteMember } />
+                    inviteMember={ this.inviteMember }
+                    getMembers={ this.getMembers } />
             </>
         );
     }

@@ -9,15 +9,18 @@ export class EventMessage extends React.Component {
 
         this.state = {
             offset: 0,
-            limit: 0,
+            limit: 5,
             messages: [],
             isLoaded: false,
         };
         this.sendMessage = this.sendMessage.bind(this);
+        this.getMessages = this.getMessages.bind(this);
     }
 
     sendMessage(text) {
         fetch("http://localhost:5999/event-message/" + this.props.eventId, {
+            mode: "cors",
+            credentials: "include",    
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -33,7 +36,12 @@ export class EventMessage extends React.Component {
     }
 
     getnewMessages(lastdate) {
-        fetch("http://localhost:5999/new-event-messages/" + this.props.eventId + "?last_time=" + lastdate)
+        fetch("http://localhost:5999/new-event-messages/" + this.props.eventId 
+            + "?last_time=" + lastdate,
+        {
+            mode: "cors",
+            credentials: "include",  
+        })
         .then(response => response.json())
         .then(data => data.messages)
         .then(data => {
@@ -47,13 +55,19 @@ export class EventMessage extends React.Component {
     }
 
     getMessages() {
-        fetch("http://localhost:5999/event-messages/" + this.props.eventId)
+        fetch("http://localhost:5999/event-messages/" + this.props.eventId 
+            + "?limit=" + this.state.limit 
+            + "&offset=" + this.state.offset,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(response => response.json())
         .then(data => data.messages)
         .then(data => {
             this.setState({
                 messages: this.state.messages.concat(data),
-                offset: this.state.offset + this.state.limit,
+                offset: this.state.offset + data.length,
                 isLoaded: true,
             })
         })
@@ -87,7 +101,8 @@ export class EventMessage extends React.Component {
                     <EventMessageArea 
                         messages={ this.state.messages }
                         userId={ this.props.userId }
-                        ownerId={ this.props.ownerId } />
+                        ownerId={ this.props.ownerId }
+                        forthMessages={ this.getMessages } />
                 </div>
             );
         }

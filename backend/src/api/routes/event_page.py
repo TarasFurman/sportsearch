@@ -15,8 +15,8 @@ from ..models import (db,
 
 def error_func(error_status=400,
                error_description='Unknown error was occurred. Check your data and try to '
-                               'send your request later.',
-                error_message='UNKNOWN_ERROR'):
+                                 'send your request later.',
+               error_message='UNKNOWN_ERROR'):
     """
     Function that returns an error API status.
     :return:
@@ -59,7 +59,7 @@ def visitor_allowed(func):
                                   error_description='Event was not found.',
                                   error_message='EVENT_NOT_FOUND',)
 
-            user_id = session['user']  # identify user by their id
+            user_id = session.get('user')  # identify user by their id
             user = db.session.query(User).filter(
                 User.id == user_id,
                 User.status_id == 1,  # only active users
@@ -112,6 +112,8 @@ def get_event_room(*args, **kwargs):
                 'start_time': event.start_time.isoformat(),
                 'end_time': event.end_time.isoformat(),
                 'price': event.price,
+                'card_number': event.card_number,
+                'card_holder': event.card_holder,
                 'age_from': event.age_from,
                 'age_to': event.age_to,
                 'x_coord': event.x_coord,
@@ -687,6 +689,10 @@ def search_members(*args, **kwargs):
                 UserInEvent.user_event_status_id.is_(None),)
         ).order_by(
             User.nickname,
+        ).offset(
+            request.args.get('offset') or None
+        ).limit(
+            request.args.get('limit') or None
         ).all()
 
     except Exception:

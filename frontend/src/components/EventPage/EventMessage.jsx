@@ -24,7 +24,7 @@ export class EventMessage extends React.Component {
     }
 
     render() {
-        var givendate = new Date(this.props.message.message_time);
+        var givendate = new Date(this.props.message.message_time + "Z");
         var nowdate = new Date();
         var you = <span className="badge badge-success">You</span>;
         var admin = <span className="badge badge-warning">Admin</span>

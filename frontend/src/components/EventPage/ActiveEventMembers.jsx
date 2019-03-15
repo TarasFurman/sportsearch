@@ -17,7 +17,11 @@ export class ActiveEventMembers extends React.Component {
     }
 
     getMembers() {
-        fetch("http://localhost:5999/event-members/" + this.props.eventId)
+        fetch("http://localhost:5999/event-members/" + this.props.eventId,
+        {
+            mode: "cors",
+            credentials: "include",
+        })
         .then(response => response.json())
         .then(data => {
             this.setState({
@@ -29,6 +33,8 @@ export class ActiveEventMembers extends React.Component {
 
     kickMember(memberId) {
         fetch('http://localhost:5999/kick-user/' + this.props.eventId, {
+            mode: "cors",
+            credentials: "include",
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -43,6 +49,8 @@ export class ActiveEventMembers extends React.Component {
 
     rateMember(memberId, mark, comment) {
         fetch('http://localhost:5999/rate-user/' + this.props.eventId, {
+            mode: "cors",
+            credentials: "include",
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

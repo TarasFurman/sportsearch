@@ -13,7 +13,7 @@ export class SearchEventMembersForm extends React.Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.onSubmit(this.state.text);
+        this.props.changeNick(this.state.text);
     }
 
     onChange(e) {
