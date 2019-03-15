@@ -1,93 +1,19 @@
 from datetime import datetime, date
-from functools import wraps
-from flask import jsonify, session, request, Response
+from flask import jsonify, request, Response
 from sqlalchemy import or_
 
 from . import routes
+from .useful_decorators import visitor_allowed_event, error_func
 from ..models import (db,
                       User,
-                      Event,
                       UserInEvent,
                       Message,
                       EventStatus,
                       Feedback)
 
 
-def error_func(error_status=400,
-               error_description='Unknown error was occurred. Check your data and try to '
-                                 'send your request later.',
-               error_message='UNKNOWN_ERROR'):
-    """
-    Function that returns an error API status.
-    :return:
-    """
-    return jsonify(
-        {
-            'error': {
-                'status': error_status,
-                'description': error_description,
-                'message': error_message,
-            },
-        }
-    )
-
-
-def visitor_allowed(func):
-    """
-    Decorator that will check:
-    1. If user is registered.
-    2. If event with given id exists.
-    3. If user has an access to that event.
-    4. If user is an event owner/admin.
-    5. If event exists.
-    :return:
-    """
-    @wraps(func)
-    def inner(*args, **kwargs):
-        # variables for errors; they are necessary to make function more readable
-        try:
-            event_id = kwargs['event_id']
-
-            if not event_id or not isinstance(event_id, int):
-                return error_func(error_status=422,
-                                  error_description='Event id was not provided properly.',
-                                  error_message='INCORRECT_EVENT_ID',)
-
-            event = db.session.query(Event).filter(Event.id == event_id).first()
-            if not event:
-                return error_func(error_status=404,
-                                  error_description='Event was not found.',
-                                  error_message='EVENT_NOT_FOUND',)
-
-            user_id = session.get('user')  # identify user by their id
-            user = db.session.query(User).filter(
-                User.id == user_id,
-                User.status_id == 1,  # only active users
-            ).first()
-            if not user:
-                return error_func(error_status=404,
-                                  error_description='User is unauthorized.',
-                                  error_message='UNAUTHORIZED_USER',)
-
-            if not db.session.query(UserInEvent).filter(
-                    UserInEvent.user_id == user_id,
-                    UserInEvent.event_id == event_id,
-                    UserInEvent.user_event_status_id == 2,
-            ).first():
-                return error_func(error_status=403,
-                                  error_description='User is not in this event.',
-                                  error_message='USER_FORBIDDEN',)
-            user_is_owner = (user == event.owner)
-
-        except Exception:
-            return error_func()
-
-        return func(event, user, user_is_owner, *args, **kwargs)
-    return inner
-
-
 @routes.route('/event-room/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def get_event_room(*args, **kwargs):
     """
     Function that returns data about an event
@@ -130,7 +56,7 @@ def get_event_room(*args, **kwargs):
 
 
 @routes.route('/event-members/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def get_event_members(*args, **kwargs):
     """
     Function that returns a list of event members
@@ -176,7 +102,7 @@ def get_event_members(*args, **kwargs):
 
 
 @routes.route('/event-messages/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def get_event_messages(*args, **kwargs):
     """
     Function that returns list of messages for particular event using
@@ -224,7 +150,7 @@ def get_event_messages(*args, **kwargs):
 
 
 @routes.route('/new-event-messages/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def get_new_event_messages(*args, **kwargs):
     """
     This function returns messages that are newer that the last message on a frontend.
@@ -275,7 +201,7 @@ def get_new_event_messages(*args, **kwargs):
 
 
 @routes.route('/event-message/<int:event_id>', methods=['POST'])
-@visitor_allowed
+@visitor_allowed_event
 def send_event_message(*args, **kwargs):
     """
     This function send a message from a particular user in particular event chat.
@@ -316,7 +242,7 @@ def send_event_message(*args, **kwargs):
 
 
 @routes.route('/leave-event/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def leave_event(*args, **kwargs):
     """
     Function that kicks user from an event because of his desire.
@@ -349,7 +275,7 @@ def leave_event(*args, **kwargs):
 
 
 @routes.route('/cancel-event/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def cancel_event(*args, **kwargs):
     """
     Function that cancels an event because of event owner desire.
@@ -376,7 +302,7 @@ def cancel_event(*args, **kwargs):
 
 
 @routes.route('/kick-user/<int:event_id>', methods=['DELETE'])
-@visitor_allowed
+@visitor_allowed_event
 def kick_user(*args, **kwargs):
     """
     Function that kicks a user from an event.
@@ -429,7 +355,7 @@ def kick_user(*args, **kwargs):
 
 
 @routes.route('/rate-user/<int:event_id>', methods=['POST', 'PUT'])
-@visitor_allowed
+@visitor_allowed_event
 def rate_user(*args, **kwargs):
     """
     Function that create a feedback for the user.
@@ -502,7 +428,7 @@ def rate_user(*args, **kwargs):
 
 
 @routes.route('/request-members/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def get_request_members(*args, **kwargs):
     """
     Function that returns list of requests to participate in event.
@@ -559,7 +485,7 @@ def get_request_members(*args, **kwargs):
 
 
 @routes.route('/request-member/<int:event_id>', methods=['POST'])
-@visitor_allowed
+@visitor_allowed_event
 def grant_request_member(*args, **kwargs):
     """
     Function that kicks a user from an event.
@@ -636,7 +562,7 @@ def grant_request_member(*args, **kwargs):
 
 
 @routes.route('/search-members/<int:event_id>', methods=['GET'])
-@visitor_allowed
+@visitor_allowed_event
 def search_members(*args, **kwargs):
     """
     Function that returns list of people who can be invited.
@@ -720,7 +646,7 @@ def search_members(*args, **kwargs):
 
 
 @routes.route('/invite-member/<int:event_id>', methods=['POST'])
-@visitor_allowed
+@visitor_allowed_event
 def invite_member(*args, **kwargs):
     """
     Function that will change user status to 'waiting for user approving'

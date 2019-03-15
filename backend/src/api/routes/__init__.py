@@ -20,3 +20,6 @@ from .event_page import (get_event_room,
                          grant_request_member,
                          search_members,
                          invite_member,)
+
+from .feedbacks_page import (get_feedbacks_info,
+                             get_feedbacks_data)

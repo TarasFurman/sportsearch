@@ -71,7 +71,7 @@ export class EventMessage extends React.Component {
                 isLoaded: true,
             })
         })
-        .catch(error => console.log("error", error));
+        .catch((error => console.log("error", error)));
     }
 
     componentDidMount() {

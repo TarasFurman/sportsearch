@@ -157,7 +157,7 @@ export class EventPage extends React.Component {
                 error_data: data.error,
                 isLoaded: true, 
             })})
-            .catch(error => console.log("error raised", error));
+            .catch(() => {});
     }
 
     render() {

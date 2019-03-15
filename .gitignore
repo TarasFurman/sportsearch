@@ -6,6 +6,7 @@ postgres_data/
 
 # ignore pycache everywhere you can find it
 __pycache__/
+.pyc
 backend/**/__pycache__/
 
 # dependencies

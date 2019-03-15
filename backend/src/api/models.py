@@ -190,8 +190,9 @@ class Feedback(db.Model):
     user_from_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=False)
     user_to_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, unique=False)
 
-    feedbacks_from = db.relationship('User', foreign_keys=[user_from_id], backref='user_from_feedback', lazy=True)
-    feedbacks_to = db.relationship('User', foreign_keys=[user_to_id], backref='user_to_feedback', lazy=True)
+    sender = db.relationship('User', foreign_keys=[user_from_id], backref='user_from_feedback', lazy='joined')
+    receiver = db.relationship('User', foreign_keys=[user_to_id], backref='user_to_feedback', lazy=True)
+    event = db.relationship('Event', foreign_keys=[event_id], backref='event-feedback', lazy='joined')
 
 
 class Payment(db.Model):

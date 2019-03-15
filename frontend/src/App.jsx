@@ -10,6 +10,7 @@ import Signin from './pages/Signin';
 import Signup from './pages/Signup';
 
 import EventPage from './pages/EventPage'
+import FeedbacksPage from './pages/FeedbacksPage'
  
 export class App extends React.Component {
   render() {
@@ -23,6 +24,7 @@ export class App extends React.Component {
           <Route path="/signin" component={Signin}/>
           <Route path="/signup" component={Signup}/>
           <Route path="/event/:eventId" component={EventPage}/>
+          <Route path="/feedbacks/:userId" component={FeedbacksPage}/>
         </div>
       </Router>
     );
