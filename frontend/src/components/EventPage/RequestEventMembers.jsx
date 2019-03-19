@@ -1,6 +1,9 @@
 import React from 'react'
+import io from 'socket.io-client'
 
 import RequestEventMember from './RequestEventMember'
+
+var socket;
 
 export class RequestEventMembers extends React.Component {
 
@@ -12,48 +15,76 @@ export class RequestEventMembers extends React.Component {
             isLoaded: false,
         }
 
-        this.grandMember = this.grandMember.bind(this);
+        this.grantMember = this.grantMember.bind(this);
+        this.getMembers = this.getMembers.bind(this);
     }
 
     getMembers() {
-        fetch("http://localhost:5999/request-members/" + this.props.eventId,
-        {
-            mode: "cors",
-            credentials: "include",
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                members: data.members,
-                isLoaded: true,
-            })
-        });
+        socket.emit(
+            "get_request_users",
+            { 
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+            }
+        )
     }
 
-    grandMember(memberId, memberStatus) {
-        fetch('http://localhost:5999/request-member/' + this.props.eventId, {
-            mode: "cors",
-            credentials: "include",
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+    grantMember(memberId, memberStatus) {
+        socket.emit(
+            "grant_user",
+            {
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
                 "target_user_id": memberId,
                 "target_user_status": memberStatus
-            })
-        })
-        .then(() => this.getMembers());
+            }
+        );
+
+        this.getMembers();
+
+        if (memberStatus === 2) {
+            socket.emit(
+                "get_active_members",
+                { 
+                    "event_id": this.props.eventId,
+                    "user_id": this.props.userId,
+                    "update_all_users": true,
+                }
+            );
+        }
     }
 
     componentDidMount() {
+        socket = io("http://localhost:5999/members");
+
+        socket.on(
+            "receive_request_members",
+            response => this.setState({
+                        members: response.members,
+                        isLoaded: true,
+                    })
+        );
+        
+        socket.emit(
+            "join", 
+            { 
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+            }
+        );
+
         this.getMembers();
-        this.interval = setInterval(() => this.getMembers(), 60000)
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        socket.emit(
+            "leave", 
+            {
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+            }
+        );
+        socket.off("receive_request_members");
     }
 
     render() {
@@ -74,7 +105,7 @@ export class RequestEventMembers extends React.Component {
                             borderBottom: "1px solid #3498db",
                             paddingLeft: "1vmin",
                         }}>
-                            Requests: { this.state.members.length }
+                            Requests: { this.state.members ? this.state.members.length : 0 }
                         </span>
                     </h3>
     
@@ -87,18 +118,18 @@ export class RequestEventMembers extends React.Component {
                         padding: "0",
                         width: "100%",
                     }}>
-                        { this.state.members.map(member => (
+                        { this.state.members ? this.state.members.map(member => (
                             <li key={ member.id } style={{
                                 paddingBottom: "0",
                             }}>
                                 <RequestEventMember 
                                     requestMember={ member }
                                     eventStatus={ this.props.eventStatus }
-                                    grandMember={ this.grandMember }
+                                    grantMember={ this.grantMember }
                                     eventMinAge={ this.props.eventMinAge }
                                     eventMaxAge={ this.props.eventMaxAge } />
                             </li>
-                        )) }
+                        )) : <h6>Data was not loaded, click on button twice again, please :#)</h6> }
                     </ul>
                 </>
             );

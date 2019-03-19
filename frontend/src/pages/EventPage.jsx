@@ -124,7 +124,7 @@ export class EventPage extends React.Component {
     }
 
     leaveEvent() {
-        fetch("http://localhost:5999/leave-event/" + this.props.match.params.eventId,
+        fetch("http://localhost:5999/event/" + this.props.match.params.eventId + "/leave",
         {
             mode: "cors",
             credentials: "include",
@@ -133,7 +133,7 @@ export class EventPage extends React.Component {
     }
 
     cancelEvent() {
-        fetch("http://localhost:5999/cancel-event/" + this.props.match.params.eventId,
+        fetch("http://localhost:5999/event/" + this.props.match.params.eventId + "/cancel",
         {
             mode: "cors",
             credentials: "include",
@@ -143,7 +143,7 @@ export class EventPage extends React.Component {
 
     componentDidMount() {
         fetch(
-            "http://localhost:5999/event-room/" + this.props.match.params.eventId,
+            "http://localhost:5999/event/" + this.props.match.params.eventId + "/info",
             {
                 mode: "cors",
                 credentials: "include",

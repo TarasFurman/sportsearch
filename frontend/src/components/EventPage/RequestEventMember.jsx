@@ -31,7 +31,7 @@ export class RequestEventMember extends React.Component {
                 marginTop: "1vh",
                 marginBottom: "1vh",
                 marginRight: "2vw",
-            }} onClick={ () => this.props.grandMember(member.id, 2) }>
+            }} onClick={ () => this.props.grantMember(member.id, 2) }>
                 Accept
             </button>
         var rejectButton = 
@@ -39,7 +39,7 @@ export class RequestEventMember extends React.Component {
                 marginTop: "1vh",
                 marginBottom: "1vh",
                 marginRight: "2vw",
-            }} onClick={ () => this.props.grandMember(member.id, 3) }>
+            }} onClick={ () => this.props.grantMember(member.id, 3) }>
                 Reject
             </button>
 

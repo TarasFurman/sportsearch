@@ -30,7 +30,7 @@ export class RequestEventMembers extends React.Component {
     }
 
     getMembers(haschanged) {
-        fetch("http://localhost:5999/search-members/" + this.props.eventId 
+        fetch("http://localhost:5999/event/" + this.props.eventId + "/users/search" 
             + "?nickname=" + this.state.nick 
             + "&limit=" + this.state.limit
             + "&offset=" + this.state.offset,
@@ -52,7 +52,7 @@ export class RequestEventMembers extends React.Component {
     }
 
     inviteMember(memberId) {
-        fetch('http://localhost:5999/invite-member/' + this.props.eventId, {
+        fetch('http://localhost:5999/event/' + this.props.eventId + "/user/invite", {
             mode: "cors",
             credentials: "include",    
             method: 'POST',

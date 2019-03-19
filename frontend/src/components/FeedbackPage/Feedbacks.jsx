@@ -29,7 +29,7 @@ export class Feedbacks extends React.Component {
 
     getFeedbacks() {
         fetch(
-            "http://localhost:5999/feedbacks/data/" + this.props.userId
+            "http://localhost:5999/feedbacks/" + this.props.userId + "/data"
             + "?offset=" + this.state.offset 
             + "&limit=" + this.state.limit,
             {

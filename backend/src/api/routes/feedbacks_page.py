@@ -6,7 +6,7 @@ from ..models import (db,
                       Feedback)
 
 
-@routes.route('/feedbacks/info/<int:target_id>', methods=['GET'])
+@routes.route('/feedbacks/<int:target_id>/info', methods=['GET'])
 @visitor_allowed_feedback
 def get_feedbacks_info(*args, **kwargs):
     """
@@ -31,7 +31,7 @@ def get_feedbacks_info(*args, **kwargs):
     )
 
 
-@routes.route('/feedbacks/data/<int:target_id>', methods=['GET'])
+@routes.route('/feedbacks/<int:target_id>/data', methods=['GET'])
 @visitor_allowed_feedback
 def get_feedbacks_data(*args, **kwargs):
     """

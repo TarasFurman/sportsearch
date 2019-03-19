@@ -17,7 +17,7 @@ export class FeedbacksPage extends React.Component {
 
     componentDidMount() {
         fetch(
-            'http://localhost:5999/feedbacks/info/' + this.props.match.params.userId,
+            'http://localhost:5999/feedbacks/' + this.props.match.params.userId + "/info",
             {
                 mode: "cors",
                 credentials: "include",

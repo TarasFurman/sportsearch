@@ -1,6 +1,11 @@
 from flask import Blueprint
+from flask_socketio import SocketIO
 
 routes = Blueprint('routes', __name__)
+
+# Initialize sockets here to have an access to them
+# from an endpoints (configured with app in app.py)
+socketio = SocketIO()
 
 # add a file you want to write code in, for instance zaebis.py
 # ADD IT HERE
@@ -8,18 +13,23 @@ routes = Blueprint('routes', __name__)
 # from .zaebis import zaebis1, zaebis2 ...
 
 from .event_page import (get_event_room,
-                         get_event_members,
-                         get_event_messages,
-                         get_new_event_messages,
-                         send_event_message,
                          leave_event,
                          cancel_event,
-                         kick_user,
                          rate_user,
-                         get_request_members,
-                         grant_request_member,
                          search_members,
-                         invite_member,)
+                         invite_member, )
 
 from .feedbacks_page import (get_feedbacks_info,
-                             get_feedbacks_data)
+                             get_feedbacks_data, )
+
+from .event_chat import (join,
+                         leave,
+                         send_message,
+                         get_event_messages, )
+
+from .event_members import (join,
+                            leave,
+                            get_event_members,
+                            kick_user,
+                            grant_request_member,
+                            get_request_members, )

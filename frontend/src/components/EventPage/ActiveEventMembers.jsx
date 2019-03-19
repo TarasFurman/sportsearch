@@ -1,6 +1,9 @@
 import React from 'react'
+import io from 'socket.io-client'
 
 import ActiveEventMember from './ActiveEventMember'
+
+var socket;
 
 export class ActiveEventMembers extends React.Component {
 
@@ -12,43 +15,37 @@ export class ActiveEventMembers extends React.Component {
             isLoaded: false,
         }
 
-        this.kickMember = this.kickMember.bind(this);
         this.rateMember = this.rateMember.bind(this);
+        this.kickMember = this.kickMember.bind(this);
+        this.updateActiveMembers = this.updateActiveMembers.bind(this);
     }
 
-    getMembers() {
-        fetch("http://localhost:5999/event-members/" + this.props.eventId,
-        {
-            mode: "cors",
-            credentials: "include",
-        })
-        .then(response => response.json())
-        .then(data => {
-            this.setState({
-                members: data.members,
-                isLoaded: true,
-            })
-        });
+    updateActiveMembers(toAll) {
+        socket.emit(
+            "get_active_members",
+            { 
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+                "update_all_users": toAll,
+            }
+        );
     }
 
     kickMember(memberId) {
-        fetch('http://localhost:5999/kick-user/' + this.props.eventId, {
-            mode: "cors",
-            credentials: "include",
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "kick_user_id": memberId
-            })
-        })
-        .then(() => this.getMembers());
+        socket.emit(
+            "kick_member",
+            { 
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+                "kick_user_id": memberId,
+            }
+        );
+
+        this.updateActiveMembers(true);
     }
 
     rateMember(memberId, mark, comment) {
-        fetch('http://localhost:5999/rate-user/' + this.props.eventId, {
+        fetch('http://localhost:5999/event/' + this.props.eventId + "/user/rate", {
             mode: "cors",
             credentials: "include",
             method: 'POST',
@@ -66,12 +63,37 @@ export class ActiveEventMembers extends React.Component {
     }
 
     componentDidMount() {
-        this.getMembers();
-        this.interval = setInterval(() => this.getMembers(), 60000)
+        socket = io("http://localhost:5999/members");
+
+        socket.on(
+            "receive_active_members",
+            response => this.setState({
+                members: response.members,
+                isLoaded: true,
+            })
+        );
+
+        // Join a group
+        socket.emit(
+            "join", 
+            { 
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+            }
+        );
+        
+        this.updateActiveMembers(false);
     }
 
     componentWillUnmount() {
-        clearInterval(this.interval);
+        socket.emit(
+            "leave", 
+            {
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+            }
+        );
+        socket.off("receive_active_members");
     }
 
     render() {

@@ -7,12 +7,11 @@ from .useful_decorators import visitor_allowed_event, error_func
 from ..models import (db,
                       User,
                       UserInEvent,
-                      Message,
                       EventStatus,
                       Feedback)
 
 
-@routes.route('/event-room/<int:event_id>', methods=['GET'])
+@routes.route('/event/<int:event_id>/info', methods=['GET'])
 @visitor_allowed_event
 def get_event_room(*args, **kwargs):
     """
@@ -45,7 +44,7 @@ def get_event_room(*args, **kwargs):
                 'x_coord': event.x_coord,
                 'y_coord': event.y_coord,
                 'status': db.session.query(EventStatus)
-                        .filter(EventStatus.id == event.event_status_id).first().name,
+                    .filter(EventStatus.id == event.event_status_id).first().name,
                 'status_id': event.event_status_id,
                 'members_total': event.members_total,
                 'members_needed': event.members_needed,
@@ -55,193 +54,7 @@ def get_event_room(*args, **kwargs):
     )
 
 
-@routes.route('/event-members/<int:event_id>', methods=['GET'])
-@visitor_allowed_event
-def get_event_members(*args, **kwargs):
-    """
-    Function that returns a list of event members
-    :return:
-    """
-
-    event = args[0]
-    user = args[1]
-
-    # get all members that event has
-    members = db.session.query(User).filter(
-        or_(*(User.id == q_user.user_id
-              for q_user in event.users
-              # user status has to be 'approved'
-              if q_user.user_event_status_id == 2))
-    ).order_by(
-        User.first_name,
-        User.last_name
-    ).all()
-
-    return jsonify(
-        {
-            'members': [
-                {
-                    'id': member.id,
-                    'name': member.first_name,
-                    'surname': member.last_name,
-                    'nickname': member.nickname,
-                    'rating': member.rating,
-                    'request_user_rating':
-                        getattr(db.session.query(Feedback).filter(
-                            Feedback.user_from_id == user.id,
-                            Feedback.user_to_id == member.id,
-                            Feedback.event_id == event.id,
-                        ).first(), 'rating', 0) if member.id != user.id else 0,
-                    # if there are no such object, return 0
-                    # also, it is the turn of a request user, there is no need to query the database, so return 0
-                    'image_url': member.image_url,
-                } for member in members
-            ],
-        }
-    )
-
-
-@routes.route('/event-messages/<int:event_id>', methods=['GET'])
-@visitor_allowed_event
-def get_event_messages(*args, **kwargs):
-    """
-    Function that returns list of messages for particular event using
-    data from previous messages and offset (number of messages we want to return).
-    You can pass here next parameters:
-        - limit : (int) : number of rows that will be normally returned from the whole query
-        - offset : (int) : number of rows you want to be skipped (from the beginning)
-    :return:
-    """
-
-    event = args[0]
-
-    # filters for the query that will get messages
-
-    try:
-        messages = db.session.query(Message).filter(
-            Message.event_id == event.id,
-        ).order_by(
-            Message.message_time.desc()
-        ).offset(
-            request.args.get('offset') or None
-        ).limit(
-            request.args.get('limit') or None
-        ).all()
-
-    except Exception:
-        return error_func(error_status=400,
-                          error_description='You provided incorrect data.',
-                          error_message='INCORRECT_DATA_PROVIDED')
-
-    return jsonify(
-        {
-            'messages': [
-                {
-                    'id': message.id,
-                    'text': message.text,
-                    'message_time': message.message_time.isoformat(),
-                    'sender_id': message.sender_id,
-                    'sender_nickname': message.sender.nickname,
-                    'sender_image_url': message.sender.image_url,
-                } for message in messages
-            ]
-        }
-    )
-
-
-@routes.route('/new-event-messages/<int:event_id>', methods=['GET'])
-@visitor_allowed_event
-def get_new_event_messages(*args, **kwargs):
-    """
-    This function returns messages that are newer that the last message on a frontend.
-    Required arguments:
-        - last_time: (int) : timestamp to determine new messages
-    :return:
-    """
-
-    event = args[0]
-
-    try:
-        if event.event_status_id not in (1, 4):
-            return error_func(error_status=403,
-                              error_description='Event was finished or cancelled.',
-                              error_message='EVENT_FINISHED_OR_CANCELLED')
-
-        last_time = request.args.get('last_time')
-
-        if not last_time:
-            raise Exception
-
-        messages = db.session.query(Message).filter(
-            Message.event_id == event.id,
-            Message.message_time > last_time,
-        ).order_by(
-            Message.message_time.desc()
-        ).all()
-
-    except Exception:
-        return error_func(error_status=400,
-                          error_description='You provided incorrect data.',
-                          error_message='INCORRECT_DATA_PROVIDED')
-
-    return jsonify(
-        {
-            'messages': [
-                {
-                    'id': message.id,
-                    'text': message.text,
-                    'message_time': message.message_time.isoformat(),
-                    'sender_id': message.sender_id,
-                    'sender_nickname': message.sender.nickname,
-                    'sender_image_url': message.sender.image_url,
-                } for message in messages
-            ]
-        }
-    )
-
-
-@routes.route('/event-message/<int:event_id>', methods=['POST'])
-@visitor_allowed_event
-def send_event_message(*args, **kwargs):
-    """
-    This function send a message from a particular user in particular event chat.
-    Required body:
-        {
-            "text": <your text here>,
-        }
-    :return:
-    """
-
-    event = args[0]
-    user = args[1]
-
-    try:
-        message_text = request.get_json().get('text')
-
-        if not message_text:
-            return error_func(error_status=400,
-                              error_description='Message text is empty or missed.',
-                              error_message='MESSAGE_TEXT_EMPTY',)
-        if event.event_status_id not in (1, 4):
-            return error_func(error_status=403,
-                              error_description='Event was finished or cancelled.',
-                              error_message='EVENT_FINISHED_OR_CANCELLED',)
-
-        message = Message(
-            text=message_text,
-            message_time=datetime.utcnow(),
-            event_id=event.id,
-            sender_id=user.id,
-        )
-        db.session.add(message)
-        db.session.commit()
-    except Exception:
-        return error_func()
-
-    return Response(status=200)
-
-
-@routes.route('/leave-event/<int:event_id>', methods=['GET'])
+@routes.route('/event/<int:event_id>/leave', methods=['GET'])
 @visitor_allowed_event
 def leave_event(*args, **kwargs):
     """
@@ -256,11 +69,11 @@ def leave_event(*args, **kwargs):
     if event.event_status_id != 1:
         return error_func(error_status=400,
                           error_description='Only planned events can be left.',
-                          error_message='EVENT_NOT_PLANNED',)
+                          error_message='EVENT_NOT_PLANNED', )
     if is_owner:
         return error_func(error_status=403,
                           error_description='Admin/owner can not leave event.',
-                          error_message='USER_OWNER_FORBIDDEN',)
+                          error_message='USER_OWNER_FORBIDDEN', )
 
     user_in_event = db.session.query(UserInEvent).filter(
         UserInEvent.event_id == event.id,
@@ -274,7 +87,7 @@ def leave_event(*args, **kwargs):
     return Response(status=200)
 
 
-@routes.route('/cancel-event/<int:event_id>', methods=['GET'])
+@routes.route('/event/<int:event_id>/cancel', methods=['GET'])
 @visitor_allowed_event
 def cancel_event(*args, **kwargs):
     """
@@ -288,11 +101,11 @@ def cancel_event(*args, **kwargs):
     if not user_is_owner:
         return error_func(error_status=403,
                           error_description='Only event owner can cancel event.',
-                          error_message='USER_NOT_OWNER_FORBIDDEN',)
+                          error_message='USER_NOT_OWNER_FORBIDDEN', )
     if event.event_status_id != 1:
         return error_func(error_status=400,
                           error_description='Only active event can be canceled.',
-                          error_message='EVENT_NOT_PLANNED',)
+                          error_message='EVENT_NOT_PLANNED', )
 
     event.event_status_id = 3
 
@@ -301,60 +114,7 @@ def cancel_event(*args, **kwargs):
     return Response(status=200)
 
 
-@routes.route('/kick-user/<int:event_id>', methods=['DELETE'])
-@visitor_allowed_event
-def kick_user(*args, **kwargs):
-    """
-    Function that kicks a user from an event.
-    Required parameters:
-        - kick_user_id : (int) { required } : id of user function need to kick from an event
-    :return:
-    """
-
-    event = args[0]
-    user = args[1]
-    user_is_owner = args[2]
-
-    if not user_is_owner:
-        return error_func(error_status=403,
-                          error_description='Only event owner can kick users.',
-                          error_message='USER_NOT_OWNER_FORBIDDEN',)
-    if event.event_status_id != 1:
-        return error_func(error_status=400,
-                          error_description='Users can be kicked only from active events.',
-                          error_message='EVENT_NOT_PLANNED',)
-
-    try:
-        kick_id = request.get_json().get('kick_user_id')
-
-        if not kick_id:
-            return error_func(error_status=400,
-                              error_description='Kick user id was not provided correctly.',
-                              error_message='USER_ID_NOT_FOUND',)
-
-        if user.id == kick_id:
-            return error_func(error_status=403,
-                              error_description='Admin/owner can not kick themselves.',
-                              error_message='USER_OWNER_FORBIDDEN',)
-
-        kick_in_event = db.session.query(UserInEvent).filter(
-            UserInEvent.user_id == kick_id,
-            UserInEvent.event_id == event.id,
-        ).first()
-
-        kick_in_event.user_event_status_id = 4
-
-        db.session.commit()
-
-    except Exception:
-        return error_func(error_status=400,
-                          error_description='You provided incorrect data.',
-                          error_message='INCORRECT_DATA_PROVIDED',)
-
-    return Response(status=200)
-
-
-@routes.route('/rate-user/<int:event_id>', methods=['POST', 'PUT'])
+@routes.route('/event/<int:event_id>/user/rate', methods=['POST', 'PUT'])
 @visitor_allowed_event
 def rate_user(*args, **kwargs):
     """
@@ -374,14 +134,14 @@ def rate_user(*args, **kwargs):
         mark = request.get_json().get('mark')
         comment = request.get_json().get('comment')
 
-        if not target_user_id :
+        if not target_user_id:
             return error_func(error_status=400,
                               error_description='User id ws not found.',
-                              error_message='USER_ID_NOT_FOUND',)
+                              error_message='USER_ID_NOT_FOUND', )
         if not mark:
             return error_func(error_status=400,
                               error_description='Rate for user is empty.',
-                              error_message='USER_RATE_NOT_FOUND',)
+                              error_message='USER_RATE_NOT_FOUND', )
         if target_user_id == user.id:
             return error_func(error_status=400,
                               error_description='User can not rate themselves.',
@@ -389,7 +149,7 @@ def rate_user(*args, **kwargs):
         if event.event_status_id != 2:
             return error_func(error_status=400,
                               error_description='Only when event was finished feedback can be left.',
-                              error_message='EVENT_NOT_FINISHED',)
+                              error_message='EVENT_NOT_FINISHED', )
 
         feedback = db.session.query(Feedback).filter(
             Feedback.event_id == event.id,
@@ -427,141 +187,7 @@ def rate_user(*args, **kwargs):
     return Response(status=200)
 
 
-@routes.route('/request-members/<int:event_id>', methods=['GET'])
-@visitor_allowed_event
-def get_request_members(*args, **kwargs):
-    """
-    Function that returns list of requests to participate in event.
-    :return:
-    """
-
-    event = args[0]
-    user_is_owner = args[2]
-
-    if not user_is_owner:
-        return error_func(error_status=403,
-                          error_description='Only admin/owner can get membership requests.',
-                          error_message='USER_NOT_OWNER_FORBIDDEN',)
-
-    # check initial filters
-    # we need to do this, because if filters will be empty,
-    # query will return all users in database (filter() behaviour)
-    filters = [*(User.id == q_user.user_id
-              for q_user in event.users
-              # user status has to be 'waiting for approve'
-              if q_user.user_event_status_id == 1)]
-    if filters:
-        # get all requested members
-        members = db.session.query(User).filter(
-            or_(*(User.id == q_user.user_id
-              for q_user in event.users
-              # user status has to be 'waiting for approve'
-              if q_user.user_event_status_id == 1))
-        ).order_by(
-            User.first_name,
-            User.last_name
-        ).all()
-    else:
-        members = []
-
-    today = date.today()
-
-    return jsonify(
-        {
-            'members': [
-                {
-                    'id': member.id,
-                    'name': member.first_name,
-                    'surname': member.last_name,
-                    'nickname': member.nickname,
-                    'rating': member.rating,
-                    'age': today.year - member.birth_date.year - \
-                           ((today.month, today.day) < (member.birth_date.month, member.birth_date.day)),
-                    'image_url': member.image_url,
-                } for member in members
-            ],
-        }
-    )
-
-
-@routes.route('/request-member/<int:event_id>', methods=['POST'])
-@visitor_allowed_event
-def grant_request_member(*args, **kwargs):
-    """
-    Function that kicks a user from an event.
-    Required parameters:
-        - target_user_id : (int) { required } : id of user that will be granted
-        - target_user_status: (int) { required } : status of user that will be granted to him
-    :return:
-    """
-
-    event = args[0]
-    user = args[1]
-    user_is_owner = args[2]
-
-    if not user_is_owner:
-        return error_func(error_status=403,
-                          error_description='Only event owner can accept or decline users.',
-                          error_message='USER_NOT_OWNER_FORBIDDEN',)
-    if event.event_status_id != 1:
-        return error_func(error_status=400,
-                          error_description='Users can be only accepted to an planned event.',
-                          error_message='EVENT_NOT_PLANNED',)
-
-    try:
-        target_id = request.get_json().get('target_user_id')
-        target_status = request.get_json().get('target_user_status')
-
-        if not (target_id and target_status):
-            return error_func(error_status=400,
-                              error_description='Some of required fields missed.',
-                              error_message='INCORRECT_DATA_PROVIDED',)
-
-        if target_status not in (2, 3):
-            return error_func(error_status=400,
-                              error_description='User status can be changed only to 2 or 3.',
-                              error_message='INCORRECT_STATUS_PROVIDED',)
-
-        if user.id == target_id:
-            return error_func(error_status=403,
-                              error_description='Admin/owner can not grand themselves.',
-                              error_message='USER_OWNER_FORBIDDEN',)
-
-        target_user = db.session.query(User).filter(
-            User.id == target_id,
-        ).first()
-
-        today = date.today()
-        user_age = today.year - target_user.birth_date.year - \
-                   ((today.month, today.day) < (target_user.birth_date.month, target_user.birth_date.day))
-        if not (event.age_from <= user_age <= event.age_to):
-            return error_func(error_status=400,
-                              error_description='User does not fit age restrictions.',
-                              error_message='USER_AGE_RESTRICTED',)
-
-        target_in_event = db.session.query(UserInEvent).filter(
-            UserInEvent.user_id == target_id,
-            UserInEvent.event_id == event.id,
-        ).first()
-
-        if not target_in_event:
-            return error_func(error_status=404,
-                              error_description='User does not have request for this event.',
-                              error_message='USER_NOT_REQUESTED_EVENT',)
-
-        target_in_event.user_event_status_id = target_status
-
-        db.session.commit()
-
-    except Exception:
-        return error_func(error_status=400,
-                          error_description='You provided incorrect data.',
-                          error_message='INCORRECT_DATA_PROVIDED',)
-
-    return Response(status=200)
-
-
-@routes.route('/search-members/<int:event_id>', methods=['GET'])
+@routes.route('/event/<int:event_id>/users/search', methods=['GET'])
 @visitor_allowed_event
 def search_members(*args, **kwargs):
     """
@@ -577,11 +203,11 @@ def search_members(*args, **kwargs):
     if not user_is_owner:
         return error_func(error_status=403,
                           error_description='Only event owner can search users.',
-                          error_message='USER_NOT_OWNER_FORBIDDEN',)
+                          error_message='USER_NOT_OWNER_FORBIDDEN', )
     if event.event_status_id != 1:
         return error_func(error_status=400,
                           error_description='Users can be only invited to an planned event.',
-                          error_message='EVENT_NOT_PLANNED',)
+                          error_message='EVENT_NOT_PLANNED', )
 
     today = date.today()
 
@@ -591,8 +217,7 @@ def search_members(*args, **kwargs):
         if not nick:
             return error_func(error_status=400,
                               error_description='Nickname missed.',
-                              error_message='INCORRECT_DATA_PROVIDED',)
-
+                              error_message='INCORRECT_DATA_PROVIDED', )
 
         # get all members that has an object that are not in an event
         # it includes users that were kicked, rejected and did not yet
@@ -612,7 +237,7 @@ def search_members(*args, **kwargs):
                 UserInEvent.user_id.is_(None)),
             or_(UserInEvent.user_event_status_id == 3,
                 UserInEvent.user_event_status_id == 4,
-                UserInEvent.user_event_status_id.is_(None),)
+                UserInEvent.user_event_status_id.is_(None), )
         ).order_by(
             User.nickname,
         ).offset(
@@ -624,7 +249,7 @@ def search_members(*args, **kwargs):
     except Exception:
         return error_func(error_status=400,
                           error_description='You provided incorrect data.',
-                          error_message='INCORRECT_DATA_PROVIDED',)
+                          error_message='INCORRECT_DATA_PROVIDED', )
 
     return jsonify(
         {
@@ -645,7 +270,7 @@ def search_members(*args, **kwargs):
     )
 
 
-@routes.route('/invite-member/<int:event_id>', methods=['POST'])
+@routes.route('/event/<int:event_id>/user/invite', methods=['POST'])
 @visitor_allowed_event
 def invite_member(*args, **kwargs):
     """
@@ -675,7 +300,7 @@ def invite_member(*args, **kwargs):
         if not target_id:
             return error_func(error_status=400,
                               error_description='Target user ID missed.',
-                              error_message='USER_ID_NOT_FOUND',)
+                              error_message='USER_ID_NOT_FOUND', )
 
         target_user = db.session.query(User).filter(
             User.id == target_id,
@@ -687,7 +312,7 @@ def invite_member(*args, **kwargs):
         if not (event.age_from <= user_age <= event.age_to):
             return error_func(error_status=400,
                               error_description='User does not fit age restrictions.',
-                              error_message='USER_AGE_RESTRICTED',)
+                              error_message='USER_AGE_RESTRICTED', )
 
         user_event = db.session.query(UserInEvent).filter(
             UserInEvent.user_id == target_id,

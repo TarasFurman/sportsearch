@@ -127,3 +127,53 @@ def visitor_allowed_event(func):
         return func(event, user, user_is_owner, *args, **kwargs)
 
     return inner
+
+
+def visitor_allowed_socket(func):
+    """
+    Decorator that checks data, necessary for sending and receiving
+    messages via sockets.
+    """
+    @wraps(func)
+    def inner(*args, **kwargs):
+        try:
+            # flask-socketio gives *args with a such structure:
+            # ({ <actual **kwargs here> },)
+            data = args[0]
+
+            event_id = int(data['event_id'])
+
+            if not event_id or not isinstance(event_id, int):
+                return error_func(error_status=422,
+                                  error_description='Event id was not provided properly.',
+                                  error_message='INCORRECT_EVENT_ID', )
+            event = db.session.query(Event).filter(Event.id == event_id).first()
+            if not event:
+                return error_func(error_status=404,
+                                  error_description='Event was not found.',
+                                  error_message='EVENT_NOT_FOUND', )
+
+            user_id = int(data['user_id'])
+            user = db.session.query(User).filter(
+                User.id == user_id,
+                User.status_id == 1,  # only active users
+            ).first()
+            if not user:
+                return error_func(error_status=404,
+                                  error_description='User is unauthorized.',
+                                  error_message='UNAUTHORIZED_USER', )
+
+            if not db.session.query(UserInEvent).filter(
+                    UserInEvent.user_id == user_id,
+                    UserInEvent.event_id == event_id,
+                    UserInEvent.user_event_status_id == 2,
+            ).first():
+                return error_func(error_status=403,
+                                  error_description='User is not in this event.',
+                                  error_message='USER_FORBIDDEN', )
+
+        except Exception:
+            return error_func()
+
+        return func(event, user, *args, **kwargs)
+    return inner

@@ -1,4 +1,5 @@
 import React from 'react'
+import io from 'socket.io-client'
 
 import ActiveEventMembers from './ActiveEventMembers'
 import RequestEventMembers from './RequestEventMembers'
@@ -37,6 +38,8 @@ export class EventMembers extends React.Component {
     }
 
     render() {
+        var socket = io("http://localhost:5999/members");
+
         return(
             <>
                 <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12" style={{
@@ -55,19 +58,23 @@ export class EventMembers extends React.Component {
                                     userId={ this.props.userId }
                                     ownerId={ this.props.ownerId }
                                     membersTotal={ this.props.membersTotal }
-                                    membersNeeded={ this.props.membersNeeded } /> 
+                                    membersNeeded={ this.props.membersNeeded }
+                                    socket={ socket } /> 
                             :   <RequestEventMembers
                                     eventId={ this.props.eventId }
+                                    userId={ this.props.userId }
                                     eventStatus={ this.props.eventStatus }
                                     eventMinAge={ this.props.eventMinAge }
-                                    eventMaxAge={ this.props.eventMaxAge } />
+                                    eventMaxAge={ this.props.eventMaxAge }
+                                    socket={ socket } />
                                                     : <ActiveEventMembers 
                                                         eventId={ this.props.eventId }
                                                         eventStatus={ this.props.eventStatus }
                                                         userId={ this.props.userId }
                                                         ownerId={ this.props.ownerId }
                                                         membersTotal={ this.props.membersTotal }
-                                                        membersNeeded={ this.props.membersNeeded } />  }
+                                                        membersNeeded={ this.props.membersNeeded }
+                                                        socket={ socket } />  }
                 </div>
                 <div className="col-xl-1 col-lg-2 col-md-2 col-sm-12 text-center">
                     { this.props.ownerId === this.props.userId ? this.activeMembersButton() : ""}
