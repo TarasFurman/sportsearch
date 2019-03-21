@@ -1,0 +1,14 @@
+.form-control-file {
+  width: 210px;
+}
+
+.rounded-circle {
+  height: 100px;
+  width: 100px;
+}
+
+.image-block {
+  display: table;
+  margin: auto;
+  text-align: center;
+}

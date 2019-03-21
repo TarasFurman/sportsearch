@@ -22,8 +22,8 @@ export class EventMessage extends React.Component {
 
     sendMessage(text) {
         socket.emit(
-            "send_message", 
-            { 
+            "send_message",
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
                 "text": text,
@@ -33,7 +33,7 @@ export class EventMessage extends React.Component {
 
     getMessages() {
         socket.emit(
-            "request_messages", 
+            "request_messages",
             {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
@@ -45,7 +45,7 @@ export class EventMessage extends React.Component {
 
     componentDidMount() {
         socket = io("http://localhost:5999/chat");
-        
+
         socket.on(
             "receive_messages",
             response => this.setState(prevState => ({
@@ -64,23 +64,30 @@ export class EventMessage extends React.Component {
 
         // Join a group
         socket.emit(
-            "join", 
-            { 
+            "join",
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
             }
         );
-        
-        
+
+
         // We need to listen to the messages at first, and just then
         // go on and send a request to get a bunch of messages
         this.getMessages();
+        if ([1, 4].includes(this.props.eventStatus)) {
+            this.interval = setInterval(() => this.getnewMessages(
+                this.state.messages.length === 0 ?
+                        new Date().toISOString().slice(1) :
+                        this.state.messages[0].message_time
+                ), 3000)
+        }
     }
 
     componentWillUnmount() {
         socket.emit(
-            "leave", 
-            { 
+            "leave",
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
             }
@@ -107,7 +114,7 @@ export class EventMessage extends React.Component {
         else {
             return(
                 <div>
-                    {[1, 4].includes(this.props.eventStatus) ? 
+                    {[1, 4].includes(this.props.eventStatus) ?
                         <EventMessageForm onSubmit={ this.sendMessage } /> : ""}
                     <hr/>
                     <div className="spinner-grow text-success" role="status">

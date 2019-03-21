@@ -134,12 +134,18 @@ def payment_status():
 #  function for inserting data into user table
 def users(fake):
     user_default_settings = {'email_notification':True,
-                             'new_event':True,
-                             'new_reviews':True,
-                             'conformation_of_app':True,
-                             'event_invitation':True,
-                             'viber_notification':False,
-                             'telegram_notification':False, }
+                             'telegram_notification': False,
+                             'viber_notification': False,
+                             'request_approved': False,
+                             'request_rejected': False,
+                             'is_kicked': False,
+                             'event_finished': False,
+                             'event_canceled': False,
+                             'received_feedback': False,
+                             'before_event': False,
+                             'event_request': False,
+                             'event_invitation': False,
+                             }
 
     with app.app_context():
         data_in_db = User.query.all()

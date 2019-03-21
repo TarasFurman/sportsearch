@@ -1,24 +1,27 @@
-# folder that PyCharm makes when you work with it
+# folder that PyCharm or VSCode makes when you work with it
 .idea/
+.vscode/
 
-# data from a database
+# environments
+venv/
+node_modules/
 postgres_data/
 
 # ignore pycache everywhere you can find it
 __pycache__/
-.pyc
+*.pyc
 backend/**/__pycache__/
+package-lock.json
 
 # dependencies
-/node_modules
-/.pnp
+.pnp
 .pnp.js
 
 # testing
-/coverage
+coverage/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store

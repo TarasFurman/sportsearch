@@ -23,7 +23,7 @@ export class ActiveEventMembers extends React.Component {
     updateActiveMembers(toAll) {
         socket.emit(
             "get_active_members",
-            { 
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
                 "update_all_users": toAll,
@@ -34,7 +34,7 @@ export class ActiveEventMembers extends React.Component {
     kickMember(memberId) {
         socket.emit(
             "kick_member",
-            { 
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
                 "kick_user_id": memberId,
@@ -75,19 +75,19 @@ export class ActiveEventMembers extends React.Component {
 
         // Join a group
         socket.emit(
-            "join", 
-            { 
+            "join",
+            {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,
             }
         );
-        
+
         this.updateActiveMembers(false);
     }
 
     componentWillUnmount() {
         socket.emit(
-            "leave", 
+            "leave",
             {
                 "event_id": this.props.eventId,
                 "user_id": this.props.userId,

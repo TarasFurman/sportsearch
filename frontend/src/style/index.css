@@ -1,7 +1,251 @@
-html, body {
+/* html, body {
   width: 100%;
   height: 100%;
   padding: 0px;
   margin: 0px;
 }
 
+body {
+  padding: 0;
+  margin: 0;
+} */
+
+/* #notfound {
+  position: relative;
+  height: 100vh;
+}
+
+#notfound .notfound {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
+.notfound {
+  max-width: 520px;
+  width: 100%;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.notfound .notfound-404 {
+  position: relative;
+  height: 240px;
+}
+
+.notfound .notfound-404 h1 {
+  font-family: 'Montserrat', sans-serif;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 252px;
+  font-weight: 900;
+  margin: 0px;
+  color: #262626;
+  text-transform: uppercase;
+  letter-spacing: -40px;
+  margin-left: -20px;
+} */
+
+/* .notfound .notfound-404 h1>span {
+  text-shadow: -8px 0px 0px #fff;
+} */
+/* 
+.notfound .notfound-404 h3 {
+  font-family: 'Cabin', sans-serif;
+  position: relative;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #262626;
+  margin: 0px;
+  letter-spacing: 3px;
+  padding-left: 6px;
+} */
+/* 
+.notfound h2 {
+  font-family: 'Cabin', sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #000;
+  margin-top: 0px;
+  margin-bottom: 25px;
+} */
+/* 
+@media only screen and (max-width: 767px) {
+  .notfound .notfound-404 {
+    height: 200px;
+  }
+  .notfound .notfound-404 h1 {
+    font-size: 200px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .notfound .notfound-404 {
+    height: 162px;
+  }
+  .notfound .notfound-404 h1 {
+    font-size: 162px;
+    height: 150px;
+    line-height: 162px;
+  }
+  .notfound h2 {
+    font-size: 16px;
+  }
+} */
+
+
+/* .customMargin {
+  margin-top: 10px;
+  margin-bottom: 10px;
+} */
+/* .imgCol {
+
+  margin-bottom: 10px;
+}
+
+.namesicon {
+  display: flex;
+  flex-direction: row;
+}
+
+.nameMargin {
+  margin-left: 4px;
+}
+
+
+.global-svg-icon-class{
+  min-height: 1.25em!important;
+  min-width: 1.25em!important;
+}
+
+h2 {
+  margin-left: 10px;
+}
+.eventCard {
+  border: 3px;
+  border-radius: 10px;
+  border-style: groove;
+}
+.eventName {
+  text-align: center;
+}
+/* .customLeftPadding {
+  padding-left: 20px;
+} */
+/* .scrollDiv{
+  height: 88vh;
+  overflow-y: scroll;
+}  */
+/*
+.gmapColumn {
+  padding-left:0px;
+}
+*/
+
+/* Large desktops and laptops */
+/* @media (min-width: 1400px) {
+  h3{
+    font-size: 2em;
+  }
+  h2{
+    font-size: 2em;
+  }
+  .namesicon{
+    font-size: 0.8em;
+  }
+  .img-thumbnail {
+    width: 125px!important;
+    height: 125px!important;
+  }
+  .dropdownDiv svg{
+    font-size: 1.75em;
+  }
+} */
+
+/* Portrait tablets and medium desktops */
+/* @media (min-width: 1200px) and (max-width: 1399px) {
+  .namesicon{
+    font-size: 0.7em;
+  }
+  .dropdownDiv svg{
+    font-size: 1em;
+  }
+} */
+/* Portrait tablets and medium desktops */
+/* @media (min-width: 992px) and (max-width: 1199px) {
+  .namesicon{
+    font-size: 0.7em;
+  }
+  .imgCol {
+    margin-bottom: 5px;
+  }
+  .dropdownDiv svg{
+    font-size: 0.8em;
+  }
+} */
+
+/* Portrait tablets and small desktops */
+/* @media (min-width: 768px) and (max-width: 991px) {
+  .namesicon{
+    font-size: 0.8em;
+  }
+  .customHeightevent{
+    height: 45vh;
+  }
+  .gmapColumn {
+    height:55vh;
+  }
+  .img-thumbnail {
+    width: 125px!important;
+    height: 125px!important;
+  }
+} */
+
+/* Landscape phones and portrait tablets */
+/* @media (max-width: 767px) {
+  h3{
+    font-size: 0.8em;
+  }
+  h2{
+    font-size: 0.9em;
+  }
+  .namesicon{
+    font-size: 0.8em;
+  }
+  .customHeightevent{
+    height: 35vh;
+  }
+  .gmapColumn {
+    height: 65vh;
+  }
+  .img-thumbnail {
+    width: 125px!important;
+    height: 125px!important;
+  }
+}
+
+/* Landscape phones and smaller */
+/* @media (max-width: 480px) {
+  .imgCol img {
+    height: 100px;
+  }
+  .scrollDiv{
+    height: 30vh;
+    overflow-y: scroll;
+  }
+}
+
+.dropdownDiv{
+  display: flex;
+  flex-direction:row;
+  justify-content: center;
+}  */

@@ -2,6 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 import logging
 from api.models import db
+from api.routes.signup import mail
 from api.routes import routes, socketio
 
 from conf import APP_CONFIG
@@ -14,6 +15,7 @@ def register_blueprints(app):
 def init_extensions(app):
     logging.basicConfig(level=logging.DEBUG)
     db.init_app(app)
+    mail.init_app(app)
     CORS(
         app,
         supports_credentials=True,

@@ -38,7 +38,7 @@ export class EventPage extends React.Component {
         return(
             <div>
                 <h1 className="text-center">
-                    You are not registered in this event or your request 
+                    You are not registered in this event or your request
                     is waiting to be approved by admin.
                 </h1>
             </div>
@@ -66,7 +66,7 @@ export class EventPage extends React.Component {
             }}>
                 <hr/>
                 <h1 className="text-center mx-auto">
-                    <span className={ status_name === "Planned" ? "badge badge-success" : 
+                    <span className={ status_name === "Planned" ? "badge badge-success" :
                                     status_name === "Canceled" ? "badge badge-danger" :
                                     status_name === "Finished" ? "badge badge-dark" :
                                     status_name === "In action" ? "badge badge-warning" :
@@ -75,14 +75,14 @@ export class EventPage extends React.Component {
                     </span>
                 </h1>
                 <hr/>
-                <div className="container-fluid mx-2"> 
+                <div className="container-fluid mx-2">
                     <div className="row no-gutters">
                         <div className="col-xl-8 col-lg-8 col-md-8 col-sm-12" style={{
                             border: "1px solid #a29bfe",
                             padding: "2vmin",
                             // paddingLeft: "0",
                         }}>
-                            <EventInfo 
+                            <EventInfo
                                 eventInfo={ data }
                                 isOwner={ data.owner_id === this.state.user_data.id }
                                 leaveEvent={ this.leaveEvent }
@@ -101,7 +101,7 @@ export class EventPage extends React.Component {
                 <hr/>
                 <div className="container-fluid mt-2">
                     <div className="row no-gutters">
-                        <EventMembers 
+                        <EventMembers
                             eventId={ this.props.match.params.eventId }
                             eventStatus={ this.state.event_data.status_id }
                             userId={ this.state.user_data.id }
@@ -111,7 +111,7 @@ export class EventPage extends React.Component {
                             eventMinAge={ this.state.event_data.age_from }
                             eventMaxAge={ this.state.event_data.age_to } />
                         <div className="col-xl-7 col-lg-6 col-md-6 col-sm-12">
-                            <EventMessages 
+                            <EventMessages
                                 eventId={ this.props.match.params.eventId }
                                 eventStatus={ this.state.event_data.status_id }
                                 userId={ this.state.user_data.id }
@@ -155,7 +155,7 @@ export class EventPage extends React.Component {
                 user_data: data.user_data,
                 event_data: data.event_data,
                 error_data: data.error,
-                isLoaded: true, 
+                isLoaded: true,
             })})
             .catch(() => {});
     }

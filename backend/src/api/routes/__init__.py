@@ -19,6 +19,17 @@ from .event_page import (get_event_room,
                          search_members,
                          invite_member, )
 
+from .signup import signup
+from .signin import signin
+from .facebook import signin_fb
+from .google import signin_google
+from .main_page import get_events, get_filters
+from .create_event import get_sports, create_event
+from .events import events
+from .setting import save_setting
+from .notification import notification
+from .another_users_profile import another_users_profile
+
 from .feedbacks_page import (get_feedbacks_info,
                              get_feedbacks_data, )
 
