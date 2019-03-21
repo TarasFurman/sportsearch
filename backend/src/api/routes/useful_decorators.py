@@ -1,10 +1,24 @@
+import boto3
+import os
+import imghdr
+from botocore.exceptions import ClientError
 from flask import jsonify, session
 from functools import wraps
+from uuid import uuid4
 
 from ..models import (db,
                       Event,
                       User,
                       UserInEvent)
+
+
+class AWSS3Exception(Exception):
+    """
+    Class to identify Amazon AWS S3 specific exception
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 def error_func(error_status=400,
@@ -24,6 +38,57 @@ def error_func(error_status=400,
             },
         }
     )
+
+
+def upload_image_to_s3(file=None, bucket=None):
+    """
+    Function that pushes image to an Amazon AWS S3 bucket
+    Required parameters:
+        - file : (file) : file that need to be pushed (opened image)
+        - bucket : (str) : bucket you want to push it to; bucket Є {'users', 'events'}
+    :return:
+    """
+
+    # Check all constraints for bucket and file
+    if not file:
+        return AWSS3Exception('FILE_EMPTY')
+    # Check file type (can only upload .jpeg, .jpg and .png images)
+    filetype = imghdr.what(file)
+    if filetype not in ('jpeg', 'png'):
+        return AWSS3Exception('FILE_TYPE_UNSUPPORTED')
+    if not bucket:
+        return AWSS3Exception('BUCKET_NAME_EMPTY')
+    if bucket not in ('user', 'event'):
+        return AWSS3Exception('BUCKET_NAME_NOT_ALLOWED')
+
+    # Initialize resource (connect to AWS S3)
+    try:
+        s3 = boto3.resource(
+            's3',
+            region_name='eu-north-1',
+            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'),
+            aws_secret_access_key=os.environ.get('AWS_SECRET_KEY'),
+        )
+
+        # Generate random name for a file
+        filename = str(uuid4())
+        # Set bucket name dependent on the input
+        bucket_name = 'sportsearch-images-events' \
+            if bucket == 'event' \
+            else 'sportsearch-images-users'
+
+        s3.Bucket(bucket_name).put_object(
+            Key=filename + '.' + filetype,
+            Body=file,
+        )
+
+    except ClientError:
+        return AWSS3Exception('CREDENTIALS_NOT_VALID')
+
+    return 'https://s3.eu-north-1.amazonaws.com/{bucket}/' \
+               .format(bucket=bucket_name) \
+           + filename \
+           + '.jpg'
 
 
 def visitor_allowed_feedback(func):
@@ -134,6 +199,7 @@ def visitor_allowed_socket(func):
     Decorator that checks data, necessary for sending and receiving
     messages via sockets.
     """
+
     @wraps(func)
     def inner(*args, **kwargs):
         try:
@@ -176,4 +242,5 @@ def visitor_allowed_socket(func):
             return error_func()
 
         return func(event, user, *args, **kwargs)
+
     return inner
