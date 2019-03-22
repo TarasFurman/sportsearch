@@ -18,8 +18,8 @@ class CreateEvent extends React.Component {
     newEvent: {
       name: '',
       image_url: 'https://img.icons8.com/color/96/000000/today.png',
-      x_coord: 0,
-      y_coord: 0,
+      x_coord: 0.0,
+      y_coord: 0.0,
       description: '',
       start_time: '',
       end_time: '',
@@ -112,17 +112,28 @@ class CreateEvent extends React.Component {
 
   handleCancel = () => {
     this.setState({
-      redirect: true,
+      redirectToIndex: true,
     });
   };
+
+  setInitialMarkerPosition = (lat, lng) => {
+    const { newEvent } = this.state;
+    this.setState({
+      newEvent: {
+        ...newEvent,
+        x_coord: Number(lng.toFixed(6)),
+        y_coord: Number(lat.toFixed(6)),
+      },
+    });
+  }
 
   handleMarkerDragend = (mapProps, map) => {
     const { newEvent } = this.state;
     this.setState({
       newEvent: {
         ...newEvent,
-        x_coord: map.position.lng(),
-        y_coord: map.position.lat(),
+        x_coord: Number(map.position.lng().toFixed(6)),
+        y_coord: Number(map.position.lat().toFixed(6)),
       },
     });
   };
@@ -210,22 +221,32 @@ class CreateEvent extends React.Component {
         body: JSON.stringify(obj),
       });
       const message = await response.json();
-      await console.log(message);
-      this.setState({
-        redirect: true,
-        id: message.id,
-      });
+      // await console.log(message);
+
+      if (message.code === 201) {
+        this.setState({
+          redirect: true,
+          id: message.id,
+        });
+      } else {
+        alert('We\'re so sorry!');
+      }
     }
   }
 
   render() {
     const {
-      sportTypes, newEvent, fields, redirect, id,
+      sportTypes, newEvent, fields, redirect, id, redirectToIndex,
     } = this.state;
 
     if (redirect) {
       return <Redirect to={`/event/${id}`} />;
     }
+
+    if (redirectToIndex) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <React.Fragment>
         <div className="container my-3">
@@ -244,7 +265,10 @@ class CreateEvent extends React.Component {
               />
             </div>
             <div className="col-xl-8 col-lg-7 col-md-12 col-sm-12 col-12">
-              <GoogleApiWrapper handleMarkerDragend={this.handleMarkerDragend} />
+              <GoogleApiWrapper
+                setInitialMarkerPosition={this.setInitialMarkerPosition}
+                handleMarkerDragend={this.handleMarkerDragend}
+              />
             </div>
           </div>
         </div>

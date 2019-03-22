@@ -13,6 +13,7 @@ export class SimpleMap extends React.Component {
   }
 
   getCurrentLocation = () => {
+    const { setInitialMarkerPosition } = this.props;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -23,6 +24,7 @@ export class SimpleMap extends React.Component {
           this.setState({
             markerPosition: location,
           });
+          setInitialMarkerPosition(location.lat, location.lng);
         },
         () => {
           //  error callback
