@@ -6,8 +6,8 @@ export default class Events extends Component {
     
     render(){
         return(
-            <a className={'link'} href={'http://localhost:5998/event/' + this.props.id}>
-            <table className="eventsTable">
+            <a className="link" href={'http://localhost:5998/event/' + this.props.id}>
+                <table className="eventsTable">
                     <thead>
                         <tr>
                         <th>Image</th>
@@ -46,7 +46,6 @@ export default class Events extends Component {
                     </tbody>
                 </table>
             </a>
-            
         )
     }
 }
