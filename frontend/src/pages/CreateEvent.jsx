@@ -112,7 +112,7 @@ class CreateEvent extends React.Component {
 
   handleCancel = () => {
     this.setState({
-      redirect: true,
+      redirectToIndex: true,
     });
   };
 
@@ -210,22 +210,32 @@ class CreateEvent extends React.Component {
         body: JSON.stringify(obj),
       });
       const message = await response.json();
-      await console.log(message);
-      this.setState({
-        redirect: true,
-        id: message.id,
-      });
+      // await console.log(message);
+
+      if (message.code === 201) {
+        this.setState({
+          redirect: true,
+          id: message.id,
+        });
+      } else {
+        alert('We\'re so sorry!');
+      }
     }
   }
 
   render() {
     const {
-      sportTypes, newEvent, fields, redirect, id,
+      sportTypes, newEvent, fields, redirect, id, redirectToIndex,
     } = this.state;
 
     if (redirect) {
       return <Redirect to={`/event/${id}`} />;
     }
+
+    if (redirectToIndex) {
+      return <Redirect to="/" />;
+    }
+
     return (
       <React.Fragment>
         <div className="container my-3">

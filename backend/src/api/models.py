@@ -487,6 +487,12 @@ class UserInEvent(db.Model):
 
     users_in_events = db.relationship('User', foreign_keys=[user_id], backref='user_in_event', lazy=True)
 
+    @staticmethod
+    def create_userInEvent(new_instance):
+        db.session.add(new_instance)
+        db.session.commit()
+        return new_instance.id
+
 
 class Message(db.Model):
     __tablename__ = 'message'
