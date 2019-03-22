@@ -91,7 +91,7 @@ export class Map extends React.Component {
   };
 
   shouldComponentUpdate() {
-    return false;
+    return true;
   }
 
   getCurrentLocation = (map) => {
