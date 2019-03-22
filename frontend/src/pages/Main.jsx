@@ -27,21 +27,6 @@ class Index extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const { domain } = this.state;
-    const urlEvents = `${domain}get-events`;
-    const urlFilters = `${domain}get-filters`;
-
-    const requestEvent = fetch(urlEvents);
-    const requestFilters = fetch(urlFilters);
-    const [d1, d2] = await Promise.all([requestEvent, requestFilters]);
-    const [eventsData, filtersData] = await Promise.all([
-      d1.json(),
-      d2.json(),
-    ]);
-    console.log(eventsData, filtersData);
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     // to avoid unnecessary re-render
     const { locations } = this.state;

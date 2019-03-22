@@ -18,8 +18,8 @@ class CreateEvent extends React.Component {
     newEvent: {
       name: '',
       image_url: 'https://img.icons8.com/color/96/000000/today.png',
-      x_coord: 0,
-      y_coord: 0,
+      x_coord: 0.0,
+      y_coord: 0.0,
       description: '',
       start_time: '',
       end_time: '',
@@ -116,13 +116,24 @@ class CreateEvent extends React.Component {
     });
   };
 
+  setInitialMarkerPosition = (lat, lng) => {
+    const { newEvent } = this.state;
+    this.setState({
+      newEvent: {
+        ...newEvent,
+        x_coord: Number(lng.toFixed(6)),
+        y_coord: Number(lat.toFixed(6)),
+      },
+    });
+  }
+
   handleMarkerDragend = (mapProps, map) => {
     const { newEvent } = this.state;
     this.setState({
       newEvent: {
         ...newEvent,
-        x_coord: map.position.lng(),
-        y_coord: map.position.lat(),
+        x_coord: Number(map.position.lng().toFixed(6)),
+        y_coord: Number(map.position.lat().toFixed(6)),
       },
     });
   };
@@ -254,7 +265,10 @@ class CreateEvent extends React.Component {
               />
             </div>
             <div className="col-xl-8 col-lg-7 col-md-12 col-sm-12 col-12">
-              <GoogleApiWrapper handleMarkerDragend={this.handleMarkerDragend} />
+              <GoogleApiWrapper
+                setInitialMarkerPosition={this.setInitialMarkerPosition}
+                handleMarkerDragend={this.handleMarkerDragend}
+              />
             </div>
           </div>
         </div>
