@@ -157,6 +157,14 @@ class Event(db.Model):
             db.session.commit()
         return self._start_time
 
+    @start_time.expression
+    def start_time(cls):
+        """
+        It will return object to be used in SQLAlchemy queries
+        :return:
+        """
+        return cls._start_time
+
     @hybrid_property
     def end_time(self):
         """
@@ -172,6 +180,14 @@ class Event(db.Model):
             self._end_time += timedelta(days=self.period)
             db.session.commit()
         return self._end_time
+
+    @end_time.expression
+    def end_time(cls):
+        """
+                It will return object to be used in SQLAlchemy queries
+                :return:
+        """
+        return cls._end_time
 
     @hybrid_property
     def event_status_id(self):
@@ -189,6 +205,14 @@ class Event(db.Model):
         if self.end_time <= now:
             return 2
         return 0
+
+    @event_status_id.expression
+    def event_status_id(cls):
+        """
+                It will return object to be used in SQLAlchemy queries
+                :return:
+        """
+        return cls._event_status_id
 
     @event_status_id.setter
     def event_status_id(self, value):
