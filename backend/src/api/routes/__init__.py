@@ -22,7 +22,7 @@ from .events import events
 from .setting import save_setting
 from .notification import notification
 from .another_users_profile import another_users_profile
-
+from .profile import profile
 from .event_page import (get_event_room,
                          leave_event,
                          cancel_event,

@@ -29,7 +29,8 @@ export class App extends React.Component {
     super(props);
     this.state = {
       user: '',
-        notifications: []
+        notifications: [],
+      userId:'',
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -90,7 +91,7 @@ export class App extends React.Component {
               />
               <Switch>
                 <Route exact path="/" component={Main}/>
-                <Route path="/profile" component={Profile}/>
+                <Route path="/profile/" component={Profile} />
                 <Route path="/settings" component={Settings}/>
                 <Route path="/signin" render={() => <Signin handleClick={this.handleClick}/>} />
                 <Route path="/signup" render={() => <Signup handleClick={this.handleClick}/>} />

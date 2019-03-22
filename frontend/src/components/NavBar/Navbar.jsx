@@ -62,7 +62,7 @@ const User = (props) =>{
         <div className="user">
             <Link className="createEvent" to="/createEvent">Create Event</Link>
             <Link className="settings" to="/settings">Settings</Link>
-            <Link className="userName" to="/profile">{props.user}</Link>
+            <Link to="/profile/">{props.user}</Link>
             <Link className="myEvents" to={"/my-events"} > My events </Link>
             <Popup
                 trigger={<a href="#" className="notifications">Notification</a>} position="bottom center">
