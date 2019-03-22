@@ -81,7 +81,9 @@ export class Feedback extends React.Component {
                     marginLeft: "6vw",
                     fontSize: "0.9em",
                 }}>
-                    <i>
+                    <i style={{
+                        fontSize: "1.0em",
+                    }}>
                         { new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate()) < feedbackTime ? "Today" : 
                             new Date(nowTime.getFullYear(), nowTime.getMonth(), nowTime.getDate() - 1) < feedbackTime ? "Yesterday" : (
                                 <span>

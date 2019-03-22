@@ -20,7 +20,9 @@ export class BriefUserInfo extends React.Component {
                 <div className="col-xl-10">
                     <h3>{ info.first_name } { info.last_name }</h3>
                     <h6>
-                        <i>
+                        <i style={{
+                            fontSize: "1.0em",
+                        }}>
                             @{ info.nick }
                         </i>
                         &nbsp;&nbsp;
