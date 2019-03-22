@@ -12,13 +12,6 @@ socketio = SocketIO()
 # then add here:
 # from .zaebis import zaebis1, zaebis2 ...
 
-from .event_page import (get_event_room,
-                         leave_event,
-                         cancel_event,
-                         rate_user,
-                         search_members,
-                         invite_member, )
-
 from .signup import signup
 from .signin import signin
 from .facebook import signin_fb
@@ -29,6 +22,12 @@ from .events import events
 from .setting import save_setting
 from .notification import notification
 from .another_users_profile import another_users_profile
+
+from .event_page import (get_event_room,
+                         leave_event,
+                         cancel_event,
+                         search_members,
+                         invite_member, )
 
 from .feedbacks_page import (get_feedbacks_info,
                              get_feedbacks_data, )
@@ -42,5 +41,6 @@ from .event_members import (join,
                             leave,
                             get_event_members,
                             kick_user,
+                            rate_user,
                             grant_request_member,
                             get_request_members, )

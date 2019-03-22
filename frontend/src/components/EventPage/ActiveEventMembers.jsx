@@ -45,21 +45,18 @@ export class ActiveEventMembers extends React.Component {
     }
 
     rateMember(memberId, mark, comment) {
-        fetch('http://localhost:5999/event/' + this.props.eventId + "/user/rate", {
-            mode: "cors",
-            credentials: "include",
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                target_user_id: memberId,
-                mark: mark,
-                comment: comment,
-            })
-        })
-        .then(() => this.getMembers());
+        socket.emit(
+            "rate_user",
+            {
+                "event_id": this.props.eventId,
+                "user_id": this.props.userId,
+                "target_user_id": memberId,
+                "mark": mark,
+                "comment": comment,
+            }
+        );
+
+        this.updateActiveMembers(false);
     }
 
     componentDidMount() {

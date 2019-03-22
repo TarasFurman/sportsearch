@@ -210,8 +210,8 @@ def event(fake):
                                     image_url = random.choice(user_img_urls),
                                     x_coord = round(random.uniform(some_Kyiv_cords['x_min'],some_Kyiv_cords['x_max']),6),
                                     y_coord = round(random.uniform(some_Kyiv_cords['y_min'],some_Kyiv_cords['y_max']),6),
-                                    start_time = event_time[0],
-                                    end_time = event_time[1],
+                                    _start_time = event_time[0],
+                                    _end_time = event_time[1],
                                     #price = None,
                                     #period = None,
                                     age_from = randint(10,14),
@@ -219,8 +219,10 @@ def event(fake):
                                     members_total = randint(6,10),
                                     members_needed = randint(1,5),
                                     sport_id = randint(1,6),
-                                    event_status_id = event_time[2],
+                                    _event_status_id = event_time[2],
                                     owner_id = randint(1,10),)
+                # e = Event(name='a', x_coord=10, y_coord=20, _start_time=datetime.now(), _end_time=datetime.now(), age_from=10, age_to=100, members_total=15, members_needed=10, sport_id
+                # =1, owner_id=1, _event_status_id=1)
                 db.session.add(new_event)
             db.session.commit()
 

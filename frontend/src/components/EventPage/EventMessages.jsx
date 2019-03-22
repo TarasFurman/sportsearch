@@ -75,13 +75,6 @@ export class EventMessage extends React.Component {
         // We need to listen to the messages at first, and just then
         // go on and send a request to get a bunch of messages
         this.getMessages();
-        if ([1, 4].includes(this.props.eventStatus)) {
-            this.interval = setInterval(() => this.getnewMessages(
-                this.state.messages.length === 0 ?
-                        new Date().toISOString().slice(1) :
-                        this.state.messages[0].message_time
-                ), 3000)
-        }
     }
 
     componentWillUnmount() {

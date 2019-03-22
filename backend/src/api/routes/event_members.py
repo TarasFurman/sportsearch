@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from flask import Response, request
 from flask_socketio import join_room, leave_room
 from sqlalchemy import or_
@@ -274,3 +274,75 @@ def get_request_members(*args, **kwargs):
         )
     except Exception:
         error_func()
+
+
+@socketio.on('rate_user', namespace=NAMESPACE)
+@visitor_allowed_socket
+def rate_user(*args, **kwargs):
+    """
+    Function that create a feedback for the user.
+    Required parameters:
+        - target_user_id : (int) { required } : id of user function need to kick from an event
+        - mark : (int) { required } : mark that request user gave to the tarhet user
+        - comment : (str) { optional } : comment that user can leave
+    :return:
+    """
+
+    event = args[0]
+    user = args[1]
+    data = args[2]
+
+    try:
+        target_user_id = data.get('target_user_id')
+        mark = data.get('mark')
+        comment = data.get('comment')
+
+        if not target_user_id:
+            return error_func(error_status=400,
+                              error_description='User id ws not found.',
+                              error_message='USER_ID_NOT_FOUND', )
+        if not mark:
+            return error_func(error_status=400,
+                              error_description='Rate for user is empty.',
+                              error_message='USER_RATE_NOT_FOUND', )
+        if target_user_id == user.id:
+            return error_func(error_status=400,
+                              error_description='User can not rate themselves.',
+                              error_message='USER_RATE_FORBIDDEN', )
+        if event.event_status_id != 2:
+            return error_func(error_status=400,
+                              error_description='Only when event was finished feedback can be left.',
+                              error_message='EVENT_NOT_FINISHED', )
+
+        feedback = db.session.query(Feedback).filter(
+            Feedback.event_id == event.id,
+            Feedback.user_from_id == user.id,
+            Feedback.user_to_id == target_user_id,
+        ).first()
+
+        if not feedback:
+            feedback = Feedback(
+                rating=mark,
+                text=comment if comment else None,
+                feedback_time=datetime.utcnow(),
+                event_id=event.id,
+                user_from_id=user.id,
+                user_to_id=target_user_id,
+            )
+
+            db.session.add(feedback)
+
+        else:
+            feedback.rating = mark
+            feedback.text = comment or None
+
+        db.session.commit()
+
+        User.update_rating(target_user_id)
+
+    except Exception as ex:
+        return error_func(error_status=400,
+                          error_description='You provided incorrect data.',
+                          error_message='INCORRECT_DATA_PROVIDED')
+
+    return Response(status=200)

@@ -1,10 +1,9 @@
 import requests
-from datetime import datetime, timedelta
+from datetime import timedelta
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import func
 from sqlalchemy.ext.hybrid import hybrid_property
-from flask import jsonify, Response
+from flask import jsonify
 from sqlalchemy import func, or_
 from datetime import datetime
 
