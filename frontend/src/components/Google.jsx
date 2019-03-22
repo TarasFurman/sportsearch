@@ -75,7 +75,7 @@ class Google extends Component {
 
   render() {
     if (this.state.redirect) {
-      return (<Redirect to={'/'}/>)
+      return (window.location.reload(),<Redirect to={'/'}/>)
     }
 
     const responseGoogle = (response) => {

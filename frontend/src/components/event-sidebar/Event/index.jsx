@@ -43,7 +43,7 @@ class Event extends React.Component {
       },
     })
       .then(response => response.json())
-      .then(response => console.log(response));
+      .then(response => console.log(response.error.description));
   }
 
   render() {
@@ -124,29 +124,13 @@ of
           <button className="applyButton" onClick={this.handleApply}>
             Apply
           </button>
-          {/* <Popup
-          trigger={
-            <ButtonToolbar className="buttonDiv"><Button variant="light" size="sm" onClick={this.handleApply}>
-            Apply
-            </Button> </ButtonToolbar>
-          }>
-          {close => (
-            <div>
-              You have applied to this event
-              <a className="close" onClick={close}>
-                &times;
-              </a>
-            </div>
-          )}
-        </Popup> */}
+        
 
           <a href="#container">
             <div id="arrow-down">{buttonDownUp}</div>
           </a>
-          {/* <div className="dropdownDiv">
-          {buttonDownUp}
-        </div> */}
-        </div>
+        
+         </div>
       </IconContext.Provider>
     );
   }
