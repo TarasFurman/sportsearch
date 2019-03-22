@@ -5,7 +5,7 @@ from cerberus import Validator
 
 
 from . import routes
-from ..models import Event, SportType
+from ..models import Event, SportType, UserInEvent
 
 
 @routes.route('/sports')
@@ -23,7 +23,6 @@ def create_event():
     """
     endpoint that creates new event
     """
-    # session['user'] = 3
     if 'user' not in session:
         return jsonify({
             'code': 401,
@@ -44,10 +43,11 @@ def create_event():
         "sport_id": {"type": 'integer', 'min': 1},
         "owner_id": {"type": 'integer', 'min': 1},
         "event_status_id": {"type": 'integer', 'min': 1},
-        "start_time": {'type': 'datetime'},
-        "end_time": {'type': 'datetime'},
+        "_start_time": {'type': 'datetime'},
+        "_end_time": {'type': 'datetime'},
         'description': {'type': 'string', 'maxlength': 1000}
     }
+
     try:
         data = request.json
         data['owner_id'] = session['user']
@@ -55,17 +55,29 @@ def create_event():
         start_time = dateutil.parser.parse(data['start_time'])
         end_time = dateutil.parser.parse(data['end_time'])
 
-        data.update({'start_time': start_time})
-        data.update({'end_time': end_time})
+        # rewrite dates
+        del data['end_time']
+        del data['start_time']
+        data.update({'_start_time': start_time})
+        data.update({'_end_time': end_time})
 
         validator = Validator(schema)
         is_valid = validator.validate(data)
 
+        # validate data
         if (is_valid and (datetime.now() < start_time < end_time)
             and (data['members_needed'] < data['members_total'])
             and (data['age_from'] <= data['age_to'])):
+
+            # insert into DB new event
             event = Event(**data)
             instance_id = Event.create_event(event)
+            user_id = session['user']
+            
+            # add user to event
+            newUserInEvent = UserInEvent(event_id=instance_id, user_id=user_id, user_event_status_id=2)
+            UserInEvent.create_userInEvent(newUserInEvent)
+
             return jsonify({
                 'code': 201,
                 'message': 'New event was created successfully',

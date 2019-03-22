@@ -90,6 +90,10 @@ export class Map extends React.Component {
     });
   };
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   getCurrentLocation = (map) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
