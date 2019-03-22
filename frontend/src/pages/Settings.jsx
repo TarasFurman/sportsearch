@@ -98,63 +98,63 @@ class Settings extends React.Component{
                         type="checkbox"
                         checked={this.state.requestApproved}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     Your request has been rejected
                     <input
                         name="requestRejected"
                         type="checkbox"
                         checked={this.state.requestRejected}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     You have been kicked from event
                     <input
                         name="isKicked"
                         type="checkbox"
                         checked={this.state.isKicked}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     Event finished
                     <input
                         name="eventFinished"
                         type="checkbox"
                         checked={this.state.eventFinished}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     Event canceled
                     <input
                         name="eventCanceled"
                         type="checkbox"
                         checked={this.state.eventCanceled}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     You received feedback
                     <input
                         name="receivedFeedback"
                         type="checkbox"
                         checked={this.state.receivedFeedback}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     1 hour before the event
                     <input
                         name="beforeEvent"
                         type="checkbox"
                         checked={this.state.beforeEvent}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     When new request appears (for event owners only)
                     <input
                         name="eventRequest"
                         type="checkbox"
                         checked={this.state.eventRequest}
                         onChange={this.handleInputChange}
-                    />
-                    You were invited to the event
+                    /><br/>
+                    You were invited to the event 
                     <input
                         name="eventInvitation"
                         type="checkbox"
                         checked={this.state.eventInvitation}
                         onChange={this.handleInputChange}
-                    />
+                    /><br/>
                     <button type="submit">Submit</button>
                 </form>
             </div>
