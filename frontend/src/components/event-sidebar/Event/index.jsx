@@ -9,7 +9,6 @@ import {
 } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { randomColorClass } from '../eventCardColors.js';
-// import Popup from 'reactjs-popup'
 
 import './index.css';
 import AnotherUserProfileCard from '../../another-user-profile/another-user-profile-card';
@@ -43,7 +42,7 @@ class Event extends React.Component {
       },
     })
       .then(response => response.json())
-      .then(response => console.log(response));
+      .then(response => alert(response.error.description));
   }
 
   render() {
@@ -121,7 +120,7 @@ of
           {fullOwner}
           {fullRating}
           {fullDescription}
-          
+
           <button className="applyButton" onClick={this.handleApply}>
             Apply
           </button>
