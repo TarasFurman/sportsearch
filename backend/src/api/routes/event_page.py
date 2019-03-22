@@ -3,13 +3,47 @@ from flask import jsonify, request, Response
 from sqlalchemy import or_
 
 from . import routes
-from .useful_decorators import visitor_allowed_event, error_func
+from .useful_decorators import visitor_allowed_event, error_func, apply_event
 from ..models import (db,
                       User,
                       UserInEvent,
                       EventStatus,
                       Feedback)
 
+
+
+
+
+@routes.route('/apply-for-event/<int:event_id>', methods=['GET'])
+@apply_event
+def apply_for_event(*args, **kwargs):
+    event = args[0]
+    user = args[1]
+
+    user_in_event = UserInEvent(
+        user_event_status_id=1,
+        event_id=event.id,
+        user_id=user.id
+    )
+
+    print("user in event", user_in_event)
+    print(user.id)
+    db.session.add(user_in_event)
+    db.session.commit()
+    db.session.close()
+
+
+    return jsonify({
+        'user_data':{
+            'id': user.id
+        },
+
+        'event_data':{
+            'id': event.id,
+            'name': event.name,
+            'status_id': event.event_status_id,
+        }
+    })
 
 @routes.route('/event/<int:event_id>/info', methods=['GET'])
 @visitor_allowed_event

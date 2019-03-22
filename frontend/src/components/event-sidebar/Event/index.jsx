@@ -43,7 +43,7 @@ class Event extends React.Component {
       },
     })
       .then(response => response.json())
-      .then(response => console.log(response.error.description));
+      .then(response => console.log(response));
   }
 
   render() {
@@ -121,6 +121,7 @@ of
           {fullOwner}
           {fullRating}
           {fullDescription}
+          
           <button className="applyButton" onClick={this.handleApply}>
             Apply
           </button>
