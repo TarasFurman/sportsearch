@@ -10,7 +10,7 @@ export default class CheckboxFilters extends Component {
           <div className={'sportType'}>
             <h4>Sport type</h4>
             <div className={'sportTypeFilters'}>
-              <label className={"container"}>Football
+              <label className={"my_container"}>Football
               <input
               name="football"
               label="football1"
@@ -20,7 +20,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Basketball
+              <label className={"my_container"}>Basketball
               <input
               name="basketball"
               type="checkbox"
@@ -29,7 +29,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Volleyball
+              <label className={"my_container"}>Volleyball
               <input
               name="volleyball"
               type="checkbox"
@@ -38,7 +38,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Chess
+              <label className={"my_container"}>Chess
               <input
               name="chess"
               type="checkbox"
@@ -47,7 +47,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Ping pong
+              <label className={"my_container"}>Ping pong
               <input
               name="ping_pong"
               type="checkbox"
@@ -56,7 +56,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Other
+              <label className={"my_container"}>Other
               <input
               name="other"
               type="checkbox"
@@ -70,7 +70,7 @@ export default class CheckboxFilters extends Component {
           <div className={'sportType'}>
             <h4>Is owner</h4>
             <div className={'sportTypeFilters'}>
-              <label className={"container"}>Owner
+              <label className={"my_container"}>Owner
               <input
               name="owner"
               type="checkbox"
@@ -79,7 +79,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Not owner
+              <label className={"my_container"}>Not owner
               <input
               name="not_owner"
               type="checkbox"
@@ -93,7 +93,7 @@ export default class CheckboxFilters extends Component {
           <div className={'sportType'}>
             <h4>User status</h4>
             <div className={'sportTypeFilters'}>
-              <label className={"container"}>Waiting for approving
+              <label className={"my_container"}>Waiting for approving
               <input
               name="waiting"
               type="checkbox"
@@ -102,7 +102,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Approved
+              <label className={"my_container"}>Approved
               <input
               name="approved"
               type="checkbox"
@@ -111,7 +111,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Rejected
+              <label className={"my_container"}>Rejected
               <input
               name="rejected"
               type="checkbox"
@@ -120,7 +120,7 @@ export default class CheckboxFilters extends Component {
               />
               <span className={"checkmark"}></span>
               </label>
-              <label className={"container"}>Kicked
+              <label className={"my_container"}>Kicked
               <input
               name="kicked"
               type="checkbox"

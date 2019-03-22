@@ -6,7 +6,7 @@ export default class Events extends Component {
     
     render(){
         return(
-            <a className={'link'} href={'http://localhost:5999/event/' + this.props.id}>
+            <a className={'link'} href={'http://localhost:5998/event/' + this.props.id}>
             <table className="eventsTable">
                     <thead>
                         <tr>
