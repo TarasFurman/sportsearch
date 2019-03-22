@@ -40,13 +40,13 @@ def is_active_user(func):
 @routes.route('/my-events', methods=['GET', 'POST'])
 @is_active_user
 def events(*args, **kwargs):
-    # is_owner = request.args.get('is_owner')
+
     # ev = Event(
     # name = "event4",
     # x_coord = 51.437984,
     # y_coord = 30.606787,
-    # start_time = "2019-01-29 17:30:00",
-    # end_time = "2019-01-28 20:30:00",
+    # _start_time = "2019-01-29 17:30:00",
+    # _end_time = "2019-01-28 20:30:00",
     # age_from = 22,
     # age_to = 26,
     # members_total = 10,
@@ -60,8 +60,8 @@ def events(*args, **kwargs):
     # db.session.commit()
 
     # ev = UserInEvent(
-    #     user_event_status_id  = 1,
-    #     event_id = 10,
+    #     user_event_status_id  = 5,
+    #     event_id = 4,
     #     user_id = 11
     # )
     # db.session.add(ev)

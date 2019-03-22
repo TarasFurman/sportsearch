@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
-import FacebookLogin from 'react-facebook-login';
-import {Redirect} from "react-router-dom";
+import React, {Component} from 'react'
+import FacebookLogin from 'react-facebook-login'
+import {Redirect} from "react-router-dom"
+import Popup from "reactjs-popup"
 
 export default class Facebook extends Component {
     constructor(props) {
@@ -15,8 +16,17 @@ export default class Facebook extends Component {
             first_name: "",
             last_name: "",
             accessToken: "",
-            redirect: false
+            redirect: false,
+            already_reg: false
           };
+    }
+
+    already_reg(){
+        return(
+            <Popup
+                trigger={<h4>This email is already used</h4>} position="bottom center">
+            </Popup>     
+            )
     }
     
     responseFacebook = response => {
@@ -54,22 +64,23 @@ export default class Facebook extends Component {
             .then(response => {
                 if(response['message'] === 'not confirmed') {
                     console.log("not working");
-                }
-                else if(response['message'] !== 'not confirmed') {
+                }else if(response['message'] === 'already register') {
+                    this.setState({already_reg: true})
+                }else if(response['message'] !== 'not confirmed') {
                     this.setState({redirect: true})
                     this.props.handleClick(response['message'])
-                }  
-                else{
+                }else{
                     console.log("nothing")
                 }
         })
     };
 
     render(){
-        const redirect = this.state.redirect;
-
-        if (redirect) {
+        if (this.state.redirect) {
             return <Redirect to='/'/>;
+        }
+        else if (this.state.already_reg) {
+            return this.already_reg()
         }
 
         return(

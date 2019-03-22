@@ -14,6 +14,15 @@ def is_user(email, auth_type):
     except:
         return False
 
+def is_user_not_fb(email, auth_type):
+    try:
+        user = User.query.filter(User.email == email).first()
+        if user and not user.auth_type == auth_type:
+            return True
+        return False
+    except:
+        return False
+
 def is_email(email):
         result = User.query.filter(User.email == email).all()
         return bool(result)
@@ -29,6 +38,8 @@ def signin_fb():
             session['user'] = user
             user = User.query.filter(User.id == session.get('user')).first()
             return jsonify({'code': 200, 'message': user.first_name})
+        elif is_user_not_fb(req.get('email'), req.get('auth_type')):
+            return jsonify({'code': 200, 'message': 'already register'})
         elif not is_user(req.get('email'), req.get('auth_type')):
             nickname = create_nickname(req.get('first_name'), req.get('last_name'))
             user = User(nickname=nickname,
