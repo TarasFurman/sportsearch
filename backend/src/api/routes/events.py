@@ -42,18 +42,18 @@ def is_active_user(func):
 def events(*args, **kwargs):
 
     # ev = Event(
-    # name = "event4",
-    # x_coord = 51.437984,
-    # y_coord = 30.606787,
+    # name = "event2",
+    # x_coord = 51.443575,
+    # y_coord = 30.597445,
     # _start_time = "2019-01-29 17:30:00",
     # _end_time = "2019-01-28 20:30:00",
     # age_from = 22,
     # age_to = 26,
     # members_total = 10,
     # members_needed = 1,
-    # sport_id = 1,
+    # sport_id = 2,
     # event_status_id = 3,
-    # owner_id = 11
+    # owner_id = 16
     # )
 
     # db.session.add(ev)
@@ -61,8 +61,8 @@ def events(*args, **kwargs):
 
     # ev = UserInEvent(
     #     user_event_status_id  = 5,
-    #     event_id = 4,
-    #     user_id = 11
+    #     event_id = 5,
+    #     user_id = 16
     # )
     # db.session.add(ev)
     # db.session.commit()

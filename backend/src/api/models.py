@@ -230,8 +230,8 @@ class Event(db.Model):
     def init_address(self):
         base = "https://maps.googleapis.com/maps/api/geocode/json?"
         params = "latlng={lat},{lon}&key={api_key}".format(
-            lat=self.x_coord,
-            lon=self.y_coord,
+            lat=self.y_coord,
+            lon=self.x_coord,
             api_key='AIzaSyDqP6ssmZfq_A7htoIJ8gsWuJDN6OwaZLE'
         )
         url = "{base}{params}".format(base=base, params=params)
