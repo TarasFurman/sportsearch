@@ -5,7 +5,98 @@ body {
     width: 100%;
     height: 100%;
     color: black;
+    
+  }
+
+.filterForm{
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 10px auto;
 }
+
+.sport1{
+  width: 40%;
+}
+
+.sport2{
+  width: 13%;
+}
+.sport3{
+  width: 36%;
+}
+
+.sportType {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: center;
+  border: 3px solid rgb(98, 179, 98);
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.sportTypeFilters {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.filterContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+/* 
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+.filterContainer:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.filterContainer input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.filterContainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.filterContainer .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+ */
+
+
+
 
 .eventsTable{
   margin: 0 auto;
@@ -53,98 +144,4 @@ td {
     margin: 0px;
 }
 
-.filters {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-  margin-left: 10px;
 
-}
-
-.sportType {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    border: 3px solid gainsboro;
-    /* border-radius: 20%; */
-    padding: 5px;
-}
-
-.sportType:first-child{
-  margin-right: 10px; 
-}
-
-.sportType:last-child{
-  margin-left: 10px; 
-}
-
-.sportTypeFilters {
-    display: flex;
-}
-
-.my_container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 12px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .my_container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  } */
-  
-  /* Create a custom checkbox */
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .my_container:hover input ~ .checkmark {
-    background-color: #ccc;
-  }
-  
-  /* When the checkbox is checked, add a blue background */
-  .my_container input:checked ~ .checkmark {
-    background-color: #2196F3;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Show the checkmark when checked */
-  .my_container input:checked ~ .checkmark:after {
-    display: block;
-  }
-  
-  /* Style the checkmark/indicator */
-  .my_container .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
