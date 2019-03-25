@@ -14,7 +14,7 @@ function EventSidebar(props) {
       name = {event.name}
       sport_type = {event.sport_type}
       price = {event.price}
-      adress="Kreshiatik, 15"
+      adress= {event.address}
       datetime= {event.start_time}
       members = {event.members_needed}
       members_total = {event.members_total}
