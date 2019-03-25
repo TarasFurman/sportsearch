@@ -87,12 +87,13 @@ class Event extends React.Component {
               <span className="center">
                 {' '}
                 <GiAmericanFootballBall />
+                {' '}
                 {this.props.sport_type}
               </span>
               <div className="center">
                 <FaDollarSign />
                 {' '}
-                <span className="priceSpan">{233}</span>
+                <span className="priceSpan">{this.props.price}</span>
               </div>
               <div className="center">
                 <IoIosPeople />
@@ -100,7 +101,8 @@ class Event extends React.Component {
                 <span className="membersSpan">
                   {this.props.members}
                   {' '}
-of
+                   of
+                  {' '}
                   {this.props.members_total}
                 </span>
               </div>

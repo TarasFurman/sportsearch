@@ -365,7 +365,7 @@ class Event(db.Model):
                 )
 
             # 2. execute query
-            query = db.session.query(Event).filter(*filters).all()
+            query = db.session.query(Event).filter(*filters).order_by(Event._start_time.desc()).all()
 
         except KeyError:
             return jsonify(
