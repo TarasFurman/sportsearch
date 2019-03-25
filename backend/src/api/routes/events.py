@@ -39,7 +39,7 @@ def is_active_user(func):
 
 @routes.route('/my-events', methods=['GET', 'POST'])
 @is_active_user
-def events(*args, **kwargs):
+def events(*args):
 
     # ev = Event(
     # name = "event2",
@@ -73,17 +73,17 @@ def events(*args, **kwargs):
 
     if request.method == 'GET':
         events = db.session.query(Event).join(UserInEvent).filter(*filters)\
-        .order_by(Event.start_time.desc()).all()
+        .order_by(Event._start_time.desc()).all()
         return jsonify(
             {
                 'code': 200,
                 'events_data': [
                     {
-                        'start_time': event.start_time.isoformat(' '),
+                        'start_time': event._start_time.isoformat(' '),
                         'id':event.id,
                         'name': event.name,
                         'image_url': event.image_url,
-                        'end_time': event.end_time.isoformat(' '),
+                        'end_time': event._end_time.isoformat(' '),
                         'price': event.price,
                         'age_from': event.age_from,
                         'age_to': event.age_to,
@@ -139,40 +139,40 @@ def events(*args, **kwargs):
         if sport_type_filter and owner_filter and user_status_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
                 or_(*sport_type_filter), or_(*owner_filter), or_(*user_status_filter))\
-                    .order_by(Event.start_time.desc()).all()
+                    .order_by(Event._start_time.desc()).all()
         elif sport_type_filter and owner_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
-                or_(*sport_type_filter), or_(*owner_filter)).order_by(Event.start_time.desc()).all()
+                or_(*sport_type_filter), or_(*owner_filter)).order_by(Event._start_time.desc()).all()
         elif owner_filter and user_status_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
-                or_(*owner_filter), or_(*user_status_filter)).order_by(Event.start_time.desc()).all()
+                or_(*owner_filter), or_(*user_status_filter)).order_by(Event._start_time.desc()).all()
         elif user_status_filter and sport_type_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
                 or_(*user_status_filter ), or_(*sport_type_filter), or_(*user_status_filter))\
-                    .order_by(Event.start_time.desc()).all()
+                    .order_by(Event._start_time.desc()).all()
         elif owner_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
-                or_(*owner_filter)).order_by(Event.start_time.desc()).all()
+                or_(*owner_filter)).order_by(Event._start_time.desc()).all()
         elif sport_type_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
-                or_(*sport_type_filter)).order_by(Event.start_time.desc()).all()
+                or_(*sport_type_filter)).order_by(Event._start_time.desc()).all()
         elif user_status_filter:
             events = db.session.query(Event).join(UserInEvent).filter(*filters, \
-                or_(*user_status_filter)).order_by(Event.start_time.desc()).all()
+                or_(*user_status_filter)).order_by(Event._start_time.desc()).all()
         else:
             events = db.session.query(Event).join(UserInEvent).filter(*filters)\
-                .order_by(Event.start_time.desc()).all()
+                .order_by(Event._start_time.desc()).all()
 
         return jsonify(
             {
                 'code': 200,
                 'events_data': [
                     {
-                        'start_time': event.start_time.isoformat(' '),
+                        'start_time': event._start_time.isoformat(' '),
                         'id':event.id,
                         'name': event.name,
                         'image_url': event.image_url,
-                        'end_time': event.end_time.isoformat(' '),
+                        'end_time': event._end_time.isoformat(' '),
                         'price': event.price,
                         'age_from': event.age_from,
                         'age_to': event.age_to,
