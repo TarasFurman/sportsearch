@@ -39,7 +39,8 @@ def get_events():
                             'owner_id': ev.owner_id,
                             'owner': ev.owner_joined.nickname,
                             'owner_rating': ev.owner_joined.rating,
-                            'image_url': ev.image_url
+                            'image_url': ev.image_url,
+                            'address': ev.address
                         } for ev in query
                     ]
                 }
