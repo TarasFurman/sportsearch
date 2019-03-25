@@ -41,9 +41,9 @@ export default class EventsPage extends Component {
                 status={event.status}
                 members_total={event.members_total}
                 members_needed={event.members_needed}
-                owner_id={event.owner_id}
+                owner={event.owner}
                 address={event.address}
-                user_status={event.user_in_event_status} />
+                event_status={event.event_status} />
         )
         return(
             <div>

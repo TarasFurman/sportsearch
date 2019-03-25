@@ -18,11 +18,11 @@ export default class Events extends Component {
                         <th className={'center'}>Price</th>
                         <th className={'center'}>Age from</th>
                         <th className={'center'}>Age to</th>
-                        <th className={'center'}>Event status</th>
+                        <th className={'center'}>User status</th>
                         <th className={'center'}>Members total</th>
                         <th className={'center'}>Members needed</th>
                         <th className={'center'}>Owner</th>
-                        <th className={'center'}>User status</th>
+                        <th className={'center'}>Event status</th>
                         <th className={'center'}>Address</th>
                         </tr>
                     </thead>
@@ -39,8 +39,8 @@ export default class Events extends Component {
                         <td><p>{this.props.status}</p></td>
                         <td><p>{this.props.members_total}</p></td>
                         <td><p>{this.props.members_needed}</p></td>
-                        <td><p>{this.props.owner_id}</p></td>
-                        <td><p>{this.props.user_status}</p></td>
+                        <td><p>{this.props.owner}</p></td>
+                        <td><p>{this.props.event_status}</p></td>
                         <td><p>{this.props.address}</p></td>
                         </tr>
                     </tbody>
