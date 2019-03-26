@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {Col,Row,Container,Image} from "react-bootstrap";
-import "../../../style/profileStyles/css/style.css";
-import imgProfile from "../../../style/profileStyles/img/img-profile.jpg";
-import userRating from "../../../style/profileStyles/img/rating-background.svg";
+import "../profileStyles/css/style.css";
+import imgProfile from "../profileStyles/img/img-profile.jpg";
+import userRating from "../profileStyles/img/rating-background.svg";
 import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
 
 
