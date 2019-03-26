@@ -64,7 +64,6 @@ class Index extends React.Component {
   render() {
     const { locations } = this.state;
     return (
-
       <div className="mainPage">
         <FiltersForm />
         <div className="body">

@@ -9,12 +9,14 @@ import Signup from './pages/SignupPage/SignupPage';
 import CreateEvent from './pages/CreateEventPage/CreateEvent';
 import EventsPage from './pages/EventsPage/EventsPage';
 import EventPage from './pages/EventPage/EventPage';
+import Footer from './pages/Footer';
 import FeedbacksPage from './pages/FeedbacksPage/FeedbacksPage';
 import SportSearchService from './service/sport-search-service';
 import { SportSearchServiceProvider } from './pages/sport-search-service-context';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
 
 const sportSearchService = new SportSearchService();
 
@@ -92,6 +94,7 @@ export class App extends React.Component {
                 <Route path="/another-user-profile/:anotherUserId" component={AnotherUserProfile}/>
                 <Route component={Error} />
               </Switch>
+              <Footer />
             </div>
           </Router>
         </SportSearchServiceProvider>

@@ -1,8 +1,7 @@
 import React from 'react';
 import Event from './Event/index'
 import {connect} from 'react-redux';
-
-import './eventSideBar.css'
+import './eventSideBar.css';
 
 function EventSidebar(props) {
   const events = props.events
