@@ -4,7 +4,6 @@ import '../../service/sport-search-service';
 import Rating from 'react-rating';
 import StarGrey from './rating-star/star-grey.png';
 import StarYellow from './rating-star/star-yellow.png';
-import FakeUser from './rating-star/fakeuser.png';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';

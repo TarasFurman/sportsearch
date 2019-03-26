@@ -6,7 +6,6 @@ import { FaDollarSign, FaClock } from 'react-icons/fa';
 import { IoIosPeople } from 'react-icons/io';
 import { FaAngleDown, FaAngleUp, FaInfoCircle, FaUserCircle, FaStar} from 'react-icons/fa';
 import { IconContext } from 'react-icons';
-import { randomColorClass } from '../eventCardColors.js';
 import './index.css';
 import AnotherUserProfileCard from '../../../another-user-profile';
 
@@ -16,7 +15,6 @@ class Event extends React.Component {
 
     this.state = {
       isAllInfo: false,
-      randCol: randomColorClass(),
     };
 
     this.handleClick = this.handleClick.bind(this);
