@@ -1,10 +1,8 @@
 import React from 'react';
-
 import { fakeData } from '../map/fakeData';
 import FiltersForm from './filters-form';
 import GoogleApiWrapper from '../map/Map';
 import EventSidebar from './event-sidebar/EventSidebar';
-
 import './Main.css'
 
 class Index extends React.Component {

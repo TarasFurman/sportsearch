@@ -74,7 +74,7 @@ export class App extends React.Component {
       <Provider store={store}>
         <SportSearchServiceProvider value={sportSearchService}>
           <Router>
-            <div>
+            <div className="app">
               <Navbar user={this.state.user}
                       notifications={this.state.notifications}
                       handleClick={this.handleClick}
