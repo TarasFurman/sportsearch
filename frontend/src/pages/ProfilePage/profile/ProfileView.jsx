@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import {Col,Row,Container,Image} from "react-bootstrap";
 import "../profileStyles/css/style.css";
-import imgProfile from "../profileStyles/img/img-profile.jpg";
 import userRating from "../profileStyles/img/rating-background.svg";
-import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
+import { FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
 
 
 class ProfileView extends Component {
@@ -16,7 +14,6 @@ class ProfileView extends Component {
   handleChange() {
     this.props.editClick();
   }
-
 
   render(){
     return (

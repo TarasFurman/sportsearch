@@ -31,47 +31,43 @@ export class App extends React.Component {
 
   handleClick(user){
     this.setState({user:user})
-    };
+  };
 
   componentWillMount(){
-      fetch('http://localhost:5999/header',
-          {
-              headers:{
-                  'Content-Type': 'application/json'
-              },
-              method: 'GET',
-              mode: 'cors',
-              credentials: 'include',
-          }
-          )
-          .then(response => response.json())
-          .then(response => {
-              if (response['code'] === 200){
-                  this.setState({user: response['message']})
-              }
-          }
-          );
+    fetch('http://localhost:5999/header',
+    {
+      headers:{
+          'Content-Type': 'application/json'
+      },
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response['code'] === 200){
+        this.setState({user: response['message']})
+      }
+    });
 
-      fetch('http://localhost:5999/notification',
-          {
-              headers:{
-                  'Content-Type': 'application/json'
-              },
-              method: 'GET',
-              mode: 'cors',
-              credentials: 'include',
-          }
-          )
-          .then(response => response.json())
-          .then(response => {
-              if (response['code'] === 200){
-                  this.setState({
-                      notifications: response['notifications']
-                  });
-              }
-          })
+    fetch('http://localhost:5999/notification',
+    {
+      headers:{
+          'Content-Type': 'application/json'
+      },
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response['code'] === 200){
+        this.setState({
+            notifications: response['notifications']
+        });
+      }
+    })
   }
-
 
   render() {
     return (
