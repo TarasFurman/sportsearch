@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import BriefUserInfo from '../components/FeedbackPage/BriefUserInfo'
-import Feedbacks from '../components/FeedbackPage/Feedbacks'
+import BriefUserInfo from '../FeedbacksPage/FeedbackPage/BriefUserInfo'
+import Feedbacks from '../FeedbacksPage/FeedbackPage/Feedbacks'
 
 export class FeedbacksPage extends React.Component {
     constructor(props) {

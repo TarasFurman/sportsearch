@@ -1,7 +1,7 @@
 import React from 'react';
-import SignUp from '../../components/Signup/Signup'
-import Facebook from '../../components/Facebook'
-import Google from '../../components/Google';
+import SignUp from './Signup/Signup';
+import Facebook from '../Facebook';
+import Google from '../Google';
 
 import './signup_page.css'
 

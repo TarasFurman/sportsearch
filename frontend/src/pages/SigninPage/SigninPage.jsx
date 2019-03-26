@@ -1,10 +1,9 @@
 import React  from 'react';
-import SignIn from '../../components/Signin/Signin'
-import Facebook from '../../components/Facebook'
-import Google from '../../components/Google';
+import SignIn from '../SigninPage/Signin/SignIn';
+import Facebook from '../Facebook';
+import Google from '../Google';
 
 import './signin_page.css';
-
 
 const Signin = (props) => (
   <div className="signinPage">

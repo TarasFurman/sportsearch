@@ -4,14 +4,11 @@ import { MdLocationOn } from 'react-icons/md';
 import { GiAmericanFootballBall } from 'react-icons/gi';
 import { FaDollarSign, FaClock } from 'react-icons/fa';
 import { IoIosPeople } from 'react-icons/io';
-import {
-  FaAngleDown, FaAngleUp, FaInfoCircle, FaUserCircle, FaStar,
-} from 'react-icons/fa';
+import { FaAngleDown, FaAngleUp, FaInfoCircle, FaUserCircle, FaStar} from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import { randomColorClass } from '../eventCardColors.js';
-
 import './index.css';
-import AnotherUserProfileCard from '../../another-user-profile/another-user-profile-card';
+import AnotherUserProfileCard from '../../../another-user-profile';
 
 class Event extends React.Component {
   constructor(props) {

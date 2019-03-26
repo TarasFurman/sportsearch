@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import Events from '../components/Events/Events'
-import CheckboxFilters from '../components/Events/CheckboxFilters'
+import Events from './Events/Events'
+import CheckboxFilters from './Events/CheckboxFilters'
 
 export default class EventsPage extends Component {
     constructor(props){

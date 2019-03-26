@@ -1,5 +1,5 @@
 import React from 'react';
-import ProfileComponent from '../components/profile/Profile';
+import ProfileComponent from './profile/Profile';
 
 const Profile = (props) => (
     <ProfileComponent/>

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import GoogleLogin from 'react-google-login';
-// import {PostData} from '../services/PostData';
 import {Redirect} from 'react-router-dom';
 
 class Google extends Component {
@@ -11,9 +10,7 @@ class Google extends Component {
       loginError: false,
       redirect: false,
     };
-
   }
-
 
   PostData(type, userData) {
     let BaseURL = 'http://localhost:5999/';

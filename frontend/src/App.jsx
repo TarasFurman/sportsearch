@@ -1,23 +1,17 @@
 import React from 'react';
-// import { BrowserRouter as Router, Route } from 'react-router-dom'
-
-import Navbar from './components/NavBar/Navbar';
-import Main from './pages/Main';
-import Settings from './pages/Settings';
-import Profile from './pages/Profile';
-import AnotherUserProfile from './components/another-user-profile';
-
-import Signin from './pages/Signin/Signin';
-import Signup from './pages/Signup/Signup';
-import CreateEvent from './pages/CreateEvent';
-
-import EventsPage from './pages/EventsPage';
-
-import EventPage from './pages/EventPage'
-import FeedbacksPage from './pages/FeedbacksPage'
-
+import Navbar from './pages/NavBar/Navbar';
+import Main from './pages/Main/Main';
+import Settings from './pages/SettingsPage/Settings';
+import Profile from './pages/ProfilePage/Profile';
+import AnotherUserProfile from './pages/another-user-profile';
+import Signin from './pages/SigninPage/SigninPage';
+import Signup from './pages/SignupPage/SignupPage';
+import CreateEvent from './pages/CreateEventPage/CreateEvent';
+import EventsPage from './pages/EventsPage/EventsPage';
+import EventPage from './pages/EventPage/EventPage';
+import FeedbacksPage from './pages/FeedbacksPage/FeedbacksPage';
 import SportSearchService from './service/sport-search-service';
-import { SportSearchServiceProvider } from './components/sport-search-service-context';
+import { SportSearchServiceProvider } from './pages/sport-search-service-context';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';

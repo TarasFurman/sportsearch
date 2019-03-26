@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import EventInfo from '../components/EventPage/EventInfo'
-import EventMembers from '../components/EventPage/EventMembers'
-import EventMessages from '../components/EventPage/EventMessages'
+import EventInfo from '../EventPage/EventPageComponent/EventInfo'
+import EventMembers from '../EventPage/EventPageComponent/EventMembers'
+import EventMessages from '../EventPage/EventPageComponent/EventMessages'
 
 export class EventPage extends React.Component {
     constructor(props) {

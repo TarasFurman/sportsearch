@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import Form from '../components/create/Form';
-import GoogleApiWrapper from '../components/map/SimpleMap';
+import Form from './create/Form';
+import GoogleApiWrapper from '../map/SimpleMap';
 
 class CreateEvent extends React.Component {
   constructor(props) {
