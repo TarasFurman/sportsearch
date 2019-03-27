@@ -7,7 +7,7 @@ import { IoIosPeople } from 'react-icons/io';
 import { FaAngleDown, FaAngleUp, FaInfoCircle, FaUserCircle, FaStar} from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import './index.css';
-import AnotherUserProfileCard from '../../../another-user-profile';
+import AnotherUserProfileCard from '../../../another-user-profile/another-user-profile-card';
 
 class Event extends React.Component {
   constructor(props) {
