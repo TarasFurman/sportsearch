@@ -24,8 +24,6 @@ class Index extends React.Component {
       },
       eventSideBarVisible: false,
     };
-
-    this.handleMarkerClick = this.handleMarkerClick.bind(this)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -37,7 +35,7 @@ class Index extends React.Component {
   handleMarkerClick = (markerId) => {
     // handler for event onMarkerClick on the MAP
     this.setState({ selectedMarker: markerId });
-    this.setState({ eventSideBarVisible: !this.state.eventSideBarVisible });
+    this.setState((prevState) => ({ eventSideBarVisible: !prevState.eventSideBarVisible }));
     console.log(this.state);
   };
 
