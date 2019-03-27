@@ -79,8 +79,7 @@ export class App extends React.Component {
             <div className="app">
               <Navbar user={this.state.user}
                       notifications={this.state.notifications}
-                      handleClick={this.handleClick}
-              />
+                      handleClick={this.handleClick}/>
               <Switch>
                 <Route exact path="/" component={Main}/>
                 <Route path="/profile/" component={Profile} />

@@ -24,4 +24,8 @@
     overflow: hidden;
 }
 
-
+@media (max-width:900px){
+    .eventSideBar{
+        display: none;
+    }
+}

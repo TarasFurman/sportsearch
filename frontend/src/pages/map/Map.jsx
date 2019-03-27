@@ -173,7 +173,7 @@ export class Map extends React.Component {
   };
 
   render() {
-    console.log('render');
+    console.log('map render');
     const { google } = this.props;
     const { defaultMapOptions } = this.state;
     this.updateMarkersOnMap();
