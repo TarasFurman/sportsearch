@@ -5,6 +5,27 @@ import './eventSideBar.css';
 
 function EventSidebar(props) {
   const events = props.events
+  const selectedMarker = props.selectedMarker
+
+
+  let selectedEvent = events.selectedMarker
+  
+  if(selectedMarker){
+    selectedEvent =  <Event 
+      id={selectedMarker}
+      img_url= {events[selectedMarker].image_url}
+      name = {events[selectedMarker].name}
+      sport_type = {events[selectedMarker].sport_type}
+      price = {events[selectedMarker].price}
+      adress= {events[selectedMarker].address}
+      datetime= {events[selectedMarker].start_time}
+      members = {events[selectedMarker].members_needed}
+      members_total = {events[selectedMarker].members_total}
+      owner = {events[selectedMarker].owner}
+      owner_rating = {events[selectedMarker].owner_rating}
+      owner_id = {events[selectedMarker].owner_id}
+      description = {events[selectedMarker].description} />
+  }
 
   const eventsList = events.map((event) =>
     <Event
@@ -23,11 +44,19 @@ function EventSidebar(props) {
       description = {event.description}
     />
   );
-  return (
-    <div className="eventBar">
-      {eventsList}
+
+  if(selectedMarker){
+    return <div className="eventBar">
+      {selectedEvent}
     </div>
-  )
+  } else {
+    return (
+      <div className="eventBar">
+        {eventsList}
+      </div>
+    )
+  }
+  
 }
 
 const mapStateToProps = (state) =>

@@ -22,21 +22,23 @@ class Index extends React.Component {
         east: '',
         west: '',
       },
-      eventSideBarVisible: true,
+      // eventSideBarVisible: true,
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    // to avoid unnecessary re-render
-    const { locations } = this.state;
-    return nextState.locations !== locations;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   // to avoid unnecessary re-render
+  //   const { locations } = this.state;
+  //   return nextState.locations !== locations;
+  // }
 
   handleMarkerClick = (markerId) => {
     // handler for event onMarkerClick on the MAP
     this.setState({ selectedMarker: markerId });
-    this.setState((prevState) => ({ eventSideBarVisible: !prevState.eventSideBarVisible }));
+    // this.setState((prevState) => ({ eventSideBarVisible: !prevState.eventSideBarVisible }));
     console.log(this.state);
+
+    
   };
 
   handleBoundsChanged = (north, south, east, west) => {
@@ -65,17 +67,19 @@ class Index extends React.Component {
 
   render() {
     const { locations, eventSideBarVisible } = this.state;
-    let eventsidebar;
+    // let eventsidebar;
 
-    if (eventSideBarVisible) {
-      eventsidebar =  <EventSidebar />
-    } 
+    // if (eventSideBarVisible) {
+    //   eventsidebar = <EventSidebar />
+    // } 
+
     return (
       <div className="mainPage">
         <FiltersForm />
         <div className="body">
           <div className="eventSideBar">
-            {eventsidebar}
+            <EventSidebar selectedMarker = {this.state.selectedMarker}/>
+            {/* {eventsidebar} */}
           </div>
           <div className="mapWrapper">
             <GoogleApiWrapper              
