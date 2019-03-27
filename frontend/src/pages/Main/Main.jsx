@@ -22,7 +22,7 @@ class Index extends React.Component {
         east: '',
         west: '',
       },
-      eventSideBarVisible: false,
+      eventSideBarVisible: true,
     };
   }
 
@@ -69,9 +69,7 @@ class Index extends React.Component {
 
     if (eventSideBarVisible) {
       eventsidebar =  <EventSidebar />
-    } else {
-      eventsidebar = <React.Fragment></React.Fragment>
-    }
+    } 
     return (
       <div className="mainPage">
         <FiltersForm />
