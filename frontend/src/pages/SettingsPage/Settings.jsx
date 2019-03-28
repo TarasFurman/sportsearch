@@ -1,4 +1,5 @@
 import React from 'react';
+import './settings.css';
 
 class Settings extends React.Component{
     constructor(props){
@@ -63,10 +64,9 @@ class Settings extends React.Component{
 
     render(){
         return(
-            <div>
-                <form onSubmit={this.handleSubmit}>
+            <div className="settingsWrapper">
+                <form className="settingsForm" onSubmit={this.handleSubmit}>
                     <h1>Notifications could be sent to:</h1>
-                    <br/><br/>
                     Email
                     <input
                         name="emailNotification"
@@ -89,72 +89,70 @@ class Settings extends React.Component{
                         onChange={this.handleInputChange}
                     />
 
-
                     <h1>Type notification:</h1>
-                    <br/><br/>
                     Your request has been approved
                     <input
                         name="requestApproved"
                         type="checkbox"
                         checked={this.state.requestApproved}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     Your request has been rejected
                     <input
                         name="requestRejected"
                         type="checkbox"
                         checked={this.state.requestRejected}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     You have been kicked from event
                     <input
                         name="isKicked"
                         type="checkbox"
                         checked={this.state.isKicked}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     Event finished
                     <input
                         name="eventFinished"
                         type="checkbox"
                         checked={this.state.eventFinished}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     Event canceled
                     <input
                         name="eventCanceled"
                         type="checkbox"
                         checked={this.state.eventCanceled}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     You received feedback
                     <input
                         name="receivedFeedback"
                         type="checkbox"
                         checked={this.state.receivedFeedback}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     1 hour before the event
                     <input
                         name="beforeEvent"
                         type="checkbox"
                         checked={this.state.beforeEvent}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     When new request appears (for event owners only)
                     <input
                         name="eventRequest"
                         type="checkbox"
                         checked={this.state.eventRequest}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     You were invited to the event 
                     <input
                         name="eventInvitation"
                         type="checkbox"
                         checked={this.state.eventInvitation}
                         onChange={this.handleInputChange}
-                    /><br/>
+                    />
                     <button type="submit">Submit</button>
                 </form>
             </div>

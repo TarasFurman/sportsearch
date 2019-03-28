@@ -1,0 +1,13 @@
+.settingsWrapper{
+    width: 100%;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.settingsForm{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
