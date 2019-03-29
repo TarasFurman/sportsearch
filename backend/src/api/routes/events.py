@@ -19,7 +19,7 @@ def error_func(error_status=400,
             },
         }
     )
-
+    
 def is_active_user(func):
     @wraps(func)
     def inner(*args, **kwargs):
@@ -37,9 +37,9 @@ def is_active_user(func):
     return inner
 
 
-@routes.route('/my-events', methods=['GET', 'POST'])
+@routes.route('/my-events/<int:page>', methods=['GET', 'POST'])
 @is_active_user
-def events(*args):
+def events(*args, page):
 
     # ev = Event(
     # name = "event5",
@@ -66,40 +66,54 @@ def events(*args):
     # )
     # db.session.add(ev)
     # db.session.commit()
-  
+    
     user_id = session['user']
     filters = [UserInEvent.user_id == user_id]
-    query = db.session.query(Event, UserInEvent, UserEventStatus, User, SportType, EventStatus)\
+    query = db.session.query(Event, UserInEvent, UserEventStatus.name, \
+        User.nickname, SportType.name, EventStatus.name)\
         .outerjoin(UserInEvent, UserInEvent.event_id == Event.id)\
         .outerjoin(UserEventStatus, UserInEvent.user_event_status_id == UserEventStatus.id)\
         .outerjoin(User, User.id == Event.owner_id)\
         .outerjoin(SportType, SportType.id == Event.sport_id)\
-        .outerjoin(EventStatus, EventStatus.id == Event._event_status_id)
-            
+        .outerjoin(EventStatus, EventStatus.id == Event.event_status_id)
+
+    limit = 5
+    length = query.filter(*filters).count()
+    if page == 1:
+        offset = 0
+    else:
+        offset = page*limit - limit
+    
+    if length%limit == 0:
+        pages = length//limit
+    else:
+        pages = length//limit + 1
+      
     if request.method == 'GET':
-        events = query.filter(*filters).order_by(Event._start_time.desc()).all()   
+        events = query.filter(*filters).order_by(Event.start_time.desc()).offset(offset).limit(limit).all()
         return jsonify(
             {
                 'code': 200,
+                'pages': pages,
                 'events_data': [
                     {
-                        'start_time': event._start_time.isoformat(' '),
+                        'start_time': event.start_time.isoformat(' '),
                         'id':event.id,
                         'name': event.name,
                         'image_url': event.image_url,
-                        'end_time': event._end_time.isoformat(' '),
+                        'end_time': event.end_time.isoformat(' '),
                         'price': event.price,
                         'age_from': event.age_from,
                         'age_to': event.age_to,
                         'x_coord': event.x_coord,
                         'y_coord': event.y_coord,
-                        'status': userEventStatus.name,
+                        'status': userEventStatus,
                         'members_total': event.members_total,
                         'members_needed': event.members_needed,
-                        'owner': user.nickname,
+                        'owner': user,
                         'address':event.address,
-                        'sport_name': sportType.name,
-                        'event_status': eventStatus.name
+                        'sport_name': sportType,
+                        'event_status': eventStatus
                     } for event, userInEvent, userEventStatus,\
                         user, sportType, eventStatus in events
                 ]
@@ -139,53 +153,54 @@ def events(*args):
         if sport_type_filter and owner_filter and user_status_filter:
             events = query.filter(*filters, \
                 or_(*sport_type_filter), or_(*owner_filter), or_(*user_status_filter))\
-                    .order_by(Event._start_time.desc()).all()
+                    .order_by(Event.start_time.desc()).all()
         elif sport_type_filter and owner_filter:
             events = query.filter(*filters, \
                 or_(*sport_type_filter), or_(*owner_filter))\
-                .order_by(Event._start_time.desc()).all()
+                .order_by(Event.start_time.desc()).all()
         elif owner_filter and user_status_filter:
             events = query.filter(*filters, \
                 or_(*owner_filter), or_(*user_status_filter))\
-                .order_by(Event._start_time.desc()).all()
+                .order_by(Event.start_time.desc()).all()
         elif user_status_filter and sport_type_filter:
             events = query.filter(*filters, \
                 or_(*user_status_filter), or_(*sport_type_filter))\
-                .order_by(Event._start_time.desc()).all()
+                .order_by(Event.start_time.desc()).all()
         elif owner_filter:
             events = query.filter(*filters, \
-                or_(*owner_filter)).order_by(Event._start_time.desc()).all()
+                or_(*owner_filter)).order_by(Event.start_time.desc()).all()
         elif sport_type_filter:
             events = query.filter(*filters, \
-                or_(*sport_type_filter)).order_by(Event._start_time.desc()).all()
+                or_(*sport_type_filter)).order_by(Event.start_time.desc()).all()
         elif user_status_filter:
             events = query.filter(*filters, \
-                or_(*user_status_filter)).order_by(Event._start_time.desc()).all()
+                or_(*user_status_filter)).order_by(Event.start_time.desc()).all()
         else:
-            events = query.filter(*filters).order_by(Event._start_time.desc()).all()
+            events = query.filter(*filters).order_by(Event.start_time.desc()).offset(offset).limit(limit).all()
 
         return jsonify(
             {
                 'code': 200,
+                'pages': pages,
                 'events_data': [
                     {
-                        'start_time': event._start_time.isoformat(' '),
+                        'start_time': event.start_time.isoformat(' '),
                         'id':event.id,
                         'name': event.name,
                         'image_url': event.image_url,
-                        'end_time': event._end_time.isoformat(' '),
+                        'end_time': event.end_time.isoformat(' '),
                         'price': event.price,
                         'age_from': event.age_from,
                         'age_to': event.age_to,
                         'x_coord': event.x_coord,
                         'y_coord': event.y_coord,
-                        'status': userEventStatus.name,
+                        'status': userEventStatus,
                         'members_total': event.members_total,
                         'members_needed': event.members_needed,
-                        'owner': user.nickname,
+                        'owner': user,
                         'address':event.address,
-                        'sport_name': sportType.name,
-                        'event_status': eventStatus.name
+                        'sport_name': sportType,
+                        'event_status': eventStatus
                     } for event, userInEvent, userEventStatus, user,\
                         sportType, eventStatus in events
                 ]

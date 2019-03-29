@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Events from '../components/Events/Events'
 import CheckboxFilters from '../components/Events/CheckboxFilters'
+import Paginate from './../components/Events/Pagination'
 
 export default class EventsPage extends Component {
     constructor(props){
@@ -9,6 +10,7 @@ export default class EventsPage extends Component {
         this.state = {
             eventData: [],
             error_data: {},
+            pages: 0,
             isLoaded:false,
             football:false,
             basketball:false,
@@ -24,7 +26,6 @@ export default class EventsPage extends Component {
             kicked:false
         }         
     }
-
     isUser(){
         let events = this.state.eventData.map(event => 
             <Events
@@ -64,6 +65,7 @@ export default class EventsPage extends Component {
                     />
                 <h2>List of your events</h2>
                 {events}
+                <Paginate pages={this.state.pages} currentPage={this.props.match.params.page} />
             </div>
         )
     }
@@ -104,8 +106,7 @@ export default class EventsPage extends Component {
     }
 
     componentDidMount() {
-
-        fetch("http://localhost:5999/my-events",
+        fetch("http://localhost:5999/my-events/" + this.props.match.params.page,
         {
             headers:{
                 'Content-Type': 'application/json'
@@ -120,7 +121,8 @@ export default class EventsPage extends Component {
                 console.log("OK")
                 this.setState({
                     eventData: data.events_data,
-                    isLoaded: true
+                    isLoaded: true,
+                    pages: data.pages
                 })
             }else{
                 this.setState({
@@ -153,7 +155,7 @@ export default class EventsPage extends Component {
             filters.rejected = this.state.rejected
             filters.kicked = this.state.kicked
             console.log(filters)
-            fetch("http://localhost:5999/my-events",
+            fetch("http://localhost:5999/my-events/" + this.props.match.params.page,
                 {
                     headers:{
                         'Content-Type': 'application/json'
@@ -170,7 +172,8 @@ export default class EventsPage extends Component {
                     if(data['code']===200){
                         console.log("OK")
                         this.setState({
-                            eventData: data.events_data
+                            eventData: data.events_data,
+                            pages: data.pages
                         })
                     }
                 })

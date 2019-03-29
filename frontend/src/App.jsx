@@ -98,7 +98,7 @@ export class App extends React.Component {
                 <Route path="/event/:eventId" component={EventPage}/>
                 <Route path="/feedbacks/:userId" component={FeedbacksPage}/>
                 <Route path="/createEvent" component={CreateEvent} />
-                <Route path="/my-events" component={EventsPage} />
+                <Route path="/my-events/:page" component={EventsPage} />
                 <Route path="/another-user-profile/:anotherUserId" component={AnotherUserProfile}/>
                 <Route component={Error} />
               </Switch>
