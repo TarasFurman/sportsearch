@@ -1,0 +1,39 @@
+#sport-types-grid
+{
+  padding: 15px;
+  color: rgb(98, 179, 98);
+  font-size: 17px;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media (max-width: 863px){
+  #sport-types-grid{
+    height: 130px;
+  }
+}
+
+@media (max-width: 366px){
+  #sport-types-grid{
+    height: 150px;
+  }
+}
+
+#sliders-and-date-form-grid
+{
+  padding: 15px;
+}
+
+.filters-form
+{
+  border-top: 2px solid rgb(98, 179, 98);
+  background-color: #5A5C70;
+}
+
+.control-title
+{
+  color: white;
+}
+

@@ -1,26 +1,22 @@
 import React from 'react';
-// import { BrowserRouter as Router, Route } from 'react-router-dom'
-
-import Navbar from './components/NavBar/Navbar';
-import Main from './pages/Main';
-import Settings from './pages/Settings';
-import Profile from './pages/Profile';
-import AnotherUserProfile from './components/another-user-profile';
-
-import Signin from './pages/Signin/Signin';
-import Signup from './pages/Signup/Signup';
-import CreateEvent from './pages/CreateEvent';
-
-import EventsPage from './pages/EventsPage';
-
-import EventPage from './pages/EventPage'
-import FeedbacksPage from './pages/FeedbacksPage'
-
+import Navbar from './pages/NavBar/Navbar';
+import Main from './pages/Main/Main';
+import Settings from './pages/SettingsPage/Settings';
+import Profile from './pages/ProfilePage/Profile';
+import AnotherUserProfile from './pages/another-user-profile';
+import Signin from './pages/SigninPage/SigninPage';
+import Signup from './pages/SignupPage/SignupPage';
+import CreateEvent from './pages/CreateEventPage/CreateEvent';
+import EventsPage from './pages/EventsPage/EventsPage';
+import EventPage from './pages/EventPage/EventPage';
+import Footer from './pages/Footer';
+import FeedbacksPage from './pages/FeedbacksPage/FeedbacksPage';
 import SportSearchService from './service/sport-search-service';
-import { SportSearchServiceProvider } from './components/sport-search-service-context';
+import { SportSearchServiceProvider } from './pages/sport-search-service-context';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import './App.css';
 
 const sportSearchService = new SportSearchService();
 
@@ -37,58 +33,53 @@ export class App extends React.Component {
 
   handleClick(user){
     this.setState({user:user})
-    };
+  };
 
   componentWillMount(){
-      fetch('http://localhost:5999/header',
-          {
-              headers:{
-                  'Content-Type': 'application/json'
-              },
-              method: 'GET',
-              mode: 'cors',
-              credentials: 'include',
-          }
-          )
-          .then(response => response.json())
-          .then(response => {
-              if (response['code'] === 200){
-                  this.setState({user: response['message']})
-              }
-          }
-          );
+    fetch('http://localhost:5999/header',
+    {
+      headers:{
+          'Content-Type': 'application/json'
+      },
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response['code'] === 200){
+        this.setState({user: response['message']})
+      }
+    });
 
-      fetch('http://localhost:5999/notification',
-          {
-              headers:{
-                  'Content-Type': 'application/json'
-              },
-              method: 'GET',
-              mode: 'cors',
-              credentials: 'include',
-          }
-          )
-          .then(response => response.json())
-          .then(response => {
-              if (response['code'] === 200){
-                  this.setState({
-                      notifications: response['notifications']
-                  });
-              }
-          })
+    fetch('http://localhost:5999/notification',
+    {
+      headers:{
+          'Content-Type': 'application/json'
+      },
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(response => {
+      if (response['code'] === 200){
+        this.setState({
+            notifications: response['notifications']
+        });
+      }
+    })
   }
-
 
   render() {
     return (
       <Provider store={store}>
         <SportSearchServiceProvider value={sportSearchService}>
           <Router>
-            <div>
+            <div className="app">
               <Navbar user={this.state.user}
                       notifications={this.state.notifications}
-                      handleClick={this.handleClick}
-              />
+                      handleClick={this.handleClick}/>
               <Switch>
                 <Route exact path="/" component={Main}/>
                 <Route path="/profile/" component={Profile} />
@@ -102,6 +93,7 @@ export class App extends React.Component {
                 <Route path="/another-user-profile/:anotherUserId" component={AnotherUserProfile}/>
                 <Route component={Error} />
               </Switch>
+              <Footer />
             </div>
           </Router>
         </SportSearchServiceProvider>
