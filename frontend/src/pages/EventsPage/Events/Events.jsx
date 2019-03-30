@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Table } from 'react-bootstrap';
 import './events.css'
 
 export default class Events extends Component {
@@ -9,21 +8,21 @@ export default class Events extends Component {
             <a className="link" href={'http://localhost:5998/event/' + this.props.id}>
                 <table className="eventsTable">
                     <thead>
-                        <tr>
-                        <th>Image</th>
-                        <th className={'center'}>Name of event</th>
-                        <th className={'center'}>Sport</th>
-                        <th className={'center'}>Start time</th>
-                        <th className={'center'}>End time</th>
-                        <th className={'center'}>Price</th>
-                        <th className={'center'}>Age from</th>
-                        <th className={'center'}>Age to</th>
-                        <th className={'center'}>User status</th>
-                        <th className={'center'}>Members total</th>
-                        <th className={'center'}>Members needed</th>
-                        <th className={'center'}>Owner</th>
-                        <th className={'center'}>Event status</th>
-                        <th className={'center'}>Address</th>
+                        <tr className='tableHead'>
+                        <th className={'events-center'}>Image</th>
+                        <th className={'events-center'}>Name of event</th>
+                        <th className={'events-center'}>Sport</th>
+                        <th className={'events-center'}>Start time</th>
+                        <th className={'events-center'}>End time</th>
+                        <th className={'events-center'}>Price</th>
+                        <th className={'events-center'}>Age from</th>
+                        <th className={'events-center'}>Age to</th>
+                        <th className={'events-center'}>User status</th>
+                        <th className={'events-center'}>Members total</th>
+                        <th className={'events-center'}>Members needed</th>
+                        <th className={'events-center'}>Owner</th>
+                        <th className={'events-center'}>Event status</th>
+                        <th className={'events-center'}>Address</th>
                         </tr>
                     </thead>
                     <tbody>

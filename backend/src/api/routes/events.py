@@ -37,9 +37,9 @@ def is_active_user(func):
     return inner
 
 
-@routes.route('/my-events/<int:page>', methods=['GET', 'POST'])
+@routes.route('/my-events/page=<int:page_num>', methods=['GET', 'POST'])
 @is_active_user
-def events(*args, page):
+def events(*args, page_num):
 
     # ev = Event(
     # name = "event5",
@@ -77,12 +77,12 @@ def events(*args, page):
         .outerjoin(SportType, SportType.id == Event.sport_id)\
         .outerjoin(EventStatus, EventStatus.id == Event.event_status_id)
 
-    limit = 5
+    limit = 8
     length = query.filter(*filters).count()
-    if page == 1:
+    if page_num == 1:
         offset = 0
     else:
-        offset = page*limit - limit
+        offset = page_num*limit - limit
     
     if length%limit == 0:
         pages = length//limit
@@ -125,6 +125,8 @@ def events(*args, page):
         owner_filter = []
         user_status_filter = []
         req = request.get_json().get('filters')
+
+
         if req.get('football'):             # adding filters
             sport_type_filter.append(Event.sport_id == 1)
         if req.get('volleyball'):
@@ -206,3 +208,12 @@ def events(*args, page):
                 ]
             }
         )
+
+
+        # sport_types = {
+        #     'football': 1
+        # }
+
+        # sport_type_filter = [Event.sport_id == sport_id 
+        #     for sport_name, sport_id in filter(lambda k, v: k in req, sport_types.items())]
+            

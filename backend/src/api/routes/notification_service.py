@@ -45,7 +45,7 @@ class NotificationService:
         notification = UserNotification(seen=False,
                                         event_id=self.event_id,
                                         user_id=user_id,
-                                        notification_type=self.notification_type)
+                                        notification_id=self.notification_type)
         db.session.add(notification)
         db.session.commit()
 

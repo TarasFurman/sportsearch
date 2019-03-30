@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Events from './Events/Events'
 import CheckboxFilters from './Events/CheckboxFilters'
-import Paginate from '././Events/Pagination'
+import Paginate from './Events/Pagination'
 
 export default class EventsPage extends Component {
     constructor(props){
@@ -106,7 +106,7 @@ export default class EventsPage extends Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:5999/my-events/" + this.props.match.params.page,
+        fetch("http://localhost:5999/my-events/page=" + this.props.match.params.page,
         {
             headers:{
                 'Content-Type': 'application/json'
@@ -155,7 +155,7 @@ export default class EventsPage extends Component {
             filters.rejected = this.state.rejected
             filters.kicked = this.state.kicked
             console.log(filters)
-            fetch("http://localhost:5999/my-events/" + this.props.match.params.page,
+            fetch("http://localhost:5999/my-events/page=" + this.props.match.params.page,
                 {
                     headers:{
                         'Content-Type': 'application/json'
