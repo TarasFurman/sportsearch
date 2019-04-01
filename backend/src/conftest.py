@@ -1,20 +1,30 @@
-from app import flask_app
 import pytest
-from flask import url_for
+from api.models import User, UserInEvent
 
 
-@pytest.fixture
-def app():
-    app = flask_app()
-    return app
+@pytest.fixture(scope='module')
+def new_user():
+    new_user = User(
+        id = 330,
+        nickname = 'nickname',
+        email = 'olegmikadze10@gmail.com',
+        phone = "+380990125386",
+        password = 'awesomePAssword',
+        first_name = 'Oleg',
+        last_name = 'Mikadze',
+        access_token = '43567ytg56g54f948f85794d',
+        auth_type = 'google'
+    )
+    return new_user
 
 
-def f():
-    print(1/0)
+@pytest.fixture(scope='module')
+def new_userinevent():
+    new_userinevent = UserInEvent(
+        user_event_status_id = 40,
+        event_id = 1,
+        user_id = 1
+    )
+    return new_userinevent
 
-def test_exception():
-    with pytest.raises(ZeroDivisionError):
-        f()
 
-def test_one():
-    print ("test_one")

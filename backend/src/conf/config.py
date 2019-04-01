@@ -7,7 +7,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     SECRET_KEY = 'secret_key'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = 'postgresql://localhost:5432/ss_db'
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_USERNAME = 'kv047python@gmail.com'
