@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Events from './Events/Events'
 import CheckboxFilters from './Events/CheckboxFilters'
-import Paginate from './Events/Pagination'
+
 
 export default class EventsPage extends Component {
     constructor(props){
@@ -11,6 +11,7 @@ export default class EventsPage extends Component {
             eventData: [],
             error_data: {},
             pages: 0,
+            page_num: 1,
             isLoaded:false,
             football:false,
             basketball:false,
@@ -26,6 +27,7 @@ export default class EventsPage extends Component {
             kicked:false
         }         
     }
+
     isUser(){
         let events = this.state.eventData.map(event => 
             <Events
@@ -46,6 +48,7 @@ export default class EventsPage extends Component {
                 address={event.address}
                 event_status={event.event_status} />
         )
+        let pages = this.state.pages;
         return(
             <div>
                 <CheckboxFilters 
@@ -63,12 +66,18 @@ export default class EventsPage extends Component {
                     rejected={this.state.rejected}
                     kicked={this.state.kicked}
                     />
-                <h2>List of your events</h2>
+                <h2 className='events_message'>List of your events</h2>
                 {events}
-                <Paginate pages={this.state.pages} currentPage={this.props.match.params.page} />
+                <nav aria-label="Page navigation" className="myeventsPagination">
+                    <ul className="pagination">{[...Array(pages)].map((e, i) => {
+                        return <li className='pagination_button' onClick={() => this.handleChangePage(i+1)}  key={i}>{i+1}</li>
+                    })}
+                    </ul>
+                </nav>
             </div>
         )
     }
+
 
     notAutorizedUser() {
         return(
@@ -100,25 +109,38 @@ export default class EventsPage extends Component {
                     rejected={this.state.rejected}
                     kicked={this.state.kicked}
                     />
-                <h1>You don't have any events yet</h1>
+                <h2 className='events_message'>You don't have any events yet</h2>
             </div>
         )
     }
 
-    componentDidMount() {
-        fetch("http://localhost:5999/my-events/page=" + this.props.match.params.page,
+    handleChangePage(number) {
+        let filters = {}
+        filters.football = this.state.football
+        filters.basketball = this.state.basketball
+        filters.volleyball = this.state.volleyball
+        filters.chess = this.state.chess
+        filters.ping_pong = this.state.ping_pong
+        filters.other = this.state.other
+        filters.owner = this.state.owner
+        filters.not_owner = this.state.not_owner
+        filters.waiting = this.state.waiting
+        filters.approved = this.state.approved
+        filters.rejected = this.state.rejected
+        filters.kicked = this.state.kicked
+        fetch("http://localhost:5999/my-events/page=" + number,
         {
             headers:{
                 'Content-Type': 'application/json'
             },
-            method: 'GET',
+            method: 'POST',
             mode: 'cors',
-            credentials: 'include'
+            credentials: 'include',
+            body: JSON.stringify({filters})
         }
         ).then(response => response.json())
         .then(data=> {
             if(data['code']===200){
-                console.log("OK")
                 this.setState({
                     eventData: data.events_data,
                     isLoaded: true,
@@ -133,6 +155,10 @@ export default class EventsPage extends Component {
         })
     }
 
+    componentDidMount() {
+        this.handleChangePage(1);
+    }
+
     handleInputChange = (event) => {
         const target = event.target
         const name = target.name
@@ -141,7 +167,6 @@ export default class EventsPage extends Component {
             [name]: value
         }, () => {
             let filters = {}
-
             filters.football = this.state.football
             filters.basketball = this.state.basketball
             filters.volleyball = this.state.volleyball
@@ -154,8 +179,8 @@ export default class EventsPage extends Component {
             filters.approved = this.state.approved
             filters.rejected = this.state.rejected
             filters.kicked = this.state.kicked
-            console.log(filters)
-            fetch("http://localhost:5999/my-events/page=" + this.props.match.params.page,
+            
+            fetch("http://localhost:5999/my-events/page=" + this.state.page_num,
                 {
                     headers:{
                         'Content-Type': 'application/json'
@@ -167,29 +192,34 @@ export default class EventsPage extends Component {
                 }
             )
                 .then(response => response.json())
-                // .then(response => console.log(response))
                 .then(data=> {
                     if(data['code']===200){
-                        console.log("OK")
                         this.setState({
                             eventData: data.events_data,
-                            pages: data.pages
+                            pages: data.pages,
+                        })
+                    }else{
+                        this.setState({
+                            error_data: data.error,
+                            eventData: [],
+                            isLoaded: true 
                         })
                     }
                 })
         });        
     }
-
     render(){
         if(this.state.isLoaded){
-            if(this.state.eventData.length){
+            if(this.state.eventData.length >= 1){
                 return this.isUser()
             }else if(this.state.error_data.message==="UNAUTHORIZED_USER"){
                 return(
                    this.notAutorizedUser() 
                 )
-            }else if(this.state.eventData.length===0 && !this.state.error_data.message){
-                return this.zeroEvents() 
+            }else if(this.state.error_data.message=="NO_EVENTS"){
+                return(
+                    this.zeroEvents() 
+                )
             }  
         }else {
             return(

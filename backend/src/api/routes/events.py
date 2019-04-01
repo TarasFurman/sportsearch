@@ -37,7 +37,7 @@ def is_active_user(func):
     return inner
 
 
-@routes.route('/my-events/page=<int:page_num>', methods=['GET', 'POST'])
+@routes.route('/my-events/page=<int:page_num>', methods=['POST'])
 @is_active_user
 def events(*args, page_num):
 
@@ -67,6 +67,7 @@ def events(*args, page_num):
     # db.session.add(ev)
     # db.session.commit()
     
+    # Main query
     user_id = session['user']
     filters = [UserInEvent.user_id == user_id]
     query = db.session.query(Event, UserInEvent, UserEventStatus.name, \
@@ -76,138 +77,95 @@ def events(*args, page_num):
         .outerjoin(User, User.id == Event.owner_id)\
         .outerjoin(SportType, SportType.id == Event.sport_id)\
         .outerjoin(EventStatus, EventStatus.id == Event.event_status_id)
-
-    limit = 8
-    length = query.filter(*filters).count()
-    if page_num == 1:
-        offset = 0
-    else:
-        offset = page_num*limit - limit
-    
-    if length%limit == 0:
-        pages = length//limit
-    else:
-        pages = length//limit + 1
       
-    if request.method == 'GET':
-        events = query.filter(*filters).order_by(Event.start_time.desc()).offset(offset).limit(limit).all()
-        return jsonify(
-            {
-                'code': 200,
-                'pages': pages,
-                'events_data': [
-                    {
-                        'start_time': event.start_time.isoformat(' '),
-                        'id':event.id,
-                        'name': event.name,
-                        'image_url': event.image_url,
-                        'end_time': event.end_time.isoformat(' '),
-                        'price': event.price,
-                        'age_from': event.age_from,
-                        'age_to': event.age_to,
-                        'x_coord': event.x_coord,
-                        'y_coord': event.y_coord,
-                        'status': userEventStatus,
-                        'members_total': event.members_total,
-                        'members_needed': event.members_needed,
-                        'owner': user,
-                        'address':event.address,
-                        'sport_name': sportType,
-                        'event_status': eventStatus
-                    } for event, userInEvent, userEventStatus,\
-                        user, sportType, eventStatus in events
-                ]
-            }
-        )
-
     if request.method == 'POST':
+        req = request.get_json().get('filters')
+        
+        sport_types = {
+            'football': 1,
+            'volleyball': 2,
+            'chess': 3,
+            'basketball': 4,
+            'ping_pong': 5,
+            'other': 6
+        }
+
+        user_event_status = {
+            'waiting': 1,
+            'approved': 2,
+            'rejected': 3,
+            'kicked': 4
+        }
+
         sport_type_filter = []
         owner_filter = []
         user_status_filter = []
-        req = request.get_json().get('filters')
 
+        for k, v in sport_types.items():
+            if req.get(k):
+                sport_type_filter.append(Event.sport_id == v)
 
-        if req.get('football'):             # adding filters
-            sport_type_filter.append(Event.sport_id == 1)
-        if req.get('volleyball'):
-            sport_type_filter.append(Event.sport_id == 2)
-        if req.get('chess'):
-            sport_type_filter.append(Event.sport_id == 3)
-        if req.get('basketball'):
-            sport_type_filter.append(Event.sport_id == 4)
-        if req.get('ping_pong'):
-            sport_type_filter.append(Event.sport_id == 5)
-        if req.get('other'):
-            sport_type_filter.append(Event.sport_id == 6)
+        for k, v in user_event_status.items():
+            if req.get(k):
+                user_status_filter.append(UserInEvent.user_event_status_id == v)
+
         if req.get('owner'):
             owner_filter.append(Event.owner_id == user_id)
         if req.get('not_owner'):
             owner_filter.append(Event.owner_id != user_id)
-        if req.get('waiting'):
-            user_status_filter.append(UserInEvent.user_event_status_id == 1)
-        if req.get('approved'):
-            user_status_filter.append(UserInEvent.user_event_status_id == 2)
-        if req.get('rejected'):
-            user_status_filter.append(UserInEvent.user_event_status_id == 3)
-        if req.get('kicked'):
-            user_status_filter.append(UserInEvent.user_event_status_id == 4)
-        # Database queries
-        if sport_type_filter and owner_filter and user_status_filter:
-            events = query.filter(*filters, \
-                or_(*sport_type_filter), or_(*owner_filter), or_(*user_status_filter))\
-                    .order_by(Event.start_time.desc()).all()
-        elif sport_type_filter and owner_filter:
-            events = query.filter(*filters, \
-                or_(*sport_type_filter), or_(*owner_filter))\
-                .order_by(Event.start_time.desc()).all()
-        elif owner_filter and user_status_filter:
-            events = query.filter(*filters, \
-                or_(*owner_filter), or_(*user_status_filter))\
-                .order_by(Event.start_time.desc()).all()
-        elif user_status_filter and sport_type_filter:
-            events = query.filter(*filters, \
-                or_(*user_status_filter), or_(*sport_type_filter))\
-                .order_by(Event.start_time.desc()).all()
-        elif owner_filter:
-            events = query.filter(*filters, \
-                or_(*owner_filter)).order_by(Event.start_time.desc()).all()
-        elif sport_type_filter:
-            events = query.filter(*filters, \
-                or_(*sport_type_filter)).order_by(Event.start_time.desc()).all()
-        elif user_status_filter:
-            events = query.filter(*filters, \
-                or_(*user_status_filter)).order_by(Event.start_time.desc()).all()
+        
+        # Pagination
+        limit = 8
+        length = query.filter(*filters, \
+                    or_(*sport_type_filter), or_(*owner_filter), or_(*user_status_filter)).count()
+        if page_num == 1:
+            offset = 0
         else:
-            events = query.filter(*filters).order_by(Event.start_time.desc()).offset(offset).limit(limit).all()
+            offset = page_num*limit - limit
+        
+        if length%limit == 0:
+            pages = length//limit
+        else:
+            pages = length//limit + 1
+        
+        # Database querie
 
-        return jsonify(
-            {
-                'code': 200,
-                'pages': pages,
-                'events_data': [
-                    {
-                        'start_time': event.start_time.isoformat(' '),
-                        'id':event.id,
-                        'name': event.name,
-                        'image_url': event.image_url,
-                        'end_time': event.end_time.isoformat(' '),
-                        'price': event.price,
-                        'age_from': event.age_from,
-                        'age_to': event.age_to,
-                        'x_coord': event.x_coord,
-                        'y_coord': event.y_coord,
-                        'status': userEventStatus,
-                        'members_total': event.members_total,
-                        'members_needed': event.members_needed,
-                        'owner': user,
-                        'address':event.address,
-                        'sport_name': sportType,
-                        'event_status': eventStatus
-                    } for event, userInEvent, userEventStatus, user,\
-                        sportType, eventStatus in events
-                ]
-            }
-        )
+        events = query.filter(*filters, \
+                or_(*sport_type_filter), or_(*owner_filter), or_(*user_status_filter))\
+                    .order_by(Event.start_time.desc()).offset(offset).limit(limit).all()
+        if events:
+            return jsonify(
+                {
+                    'code': 200,
+                    'pages': pages,
+                    'events_data': [
+                        {
+                            'start_time': event.start_time.isoformat(' '),
+                            'id':event.id,
+                            'name': event.name,
+                            'image_url': event.image_url,
+                            'end_time': event.end_time.isoformat(' '),
+                            'price': event.price,
+                            'age_from': event.age_from,
+                            'age_to': event.age_to,
+                            'x_coord': event.x_coord,
+                            'y_coord': event.y_coord,
+                            'status': userEventStatus,
+                            'members_total': event.members_total,
+                            'members_needed': event.members_needed,
+                            'owner': user,
+                            'address':event.address,
+                            'sport_name': sportType,
+                            'event_status': eventStatus
+                        } for event, userInEvent, userEventStatus, user,\
+                            sportType, eventStatus in events
+                    ]
+                }
+            )
+        else:
+            return error_func(error_status=404,
+                              error_description='No events with this filters',
+                              error_message='NO_EVENTS',)
 
 
         # sport_types = {
