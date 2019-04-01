@@ -27,7 +27,7 @@ export class EventPage extends React.Component {
                 <h1 className="text-center">
                     You do not have an access to this event. :)
                     <br/>
-                    <Link to="/signup"> Register! </Link>
+                    <Link to="/signup/"> Register! </Link>
                 </h1>
             </div>
         );
