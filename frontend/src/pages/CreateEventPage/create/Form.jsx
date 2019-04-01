@@ -77,6 +77,15 @@ const Form = (props) => {
         </div>
         <Checkbox onChange={handleFreeChange} id="free" name="free" />
       </div>
+      <Input
+        id="card_number"
+        value={newEvent.card_number}
+        onChange={handleInputChange}
+        placeholder="card number"
+        disabled={isPriceDisable}
+        pattern="\d*"
+        maxLength="16"
+      />
       {/* start time */}
       <Textarea id="description" value={newEvent.description} onChange={handleInputChange} />
       <Members id="members_total" onChange={handleInputChange} label="Total numbers of members:" />

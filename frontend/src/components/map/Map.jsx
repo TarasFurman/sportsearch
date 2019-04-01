@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Map as GoogleMap, GoogleApiWrapper } from 'google-maps-react';
 import MarkerClusterer from '@google/markerclusterer';
 import { connect } from 'react-redux';
-import './index.css';
+
+// import './index.css';
 
 export class Map extends React.Component {
   constructor(props) {
@@ -35,6 +36,7 @@ export class Map extends React.Component {
   }
 
   getCurrentBounds = (map) => {
+    // display only markers, that are within the boundaries of the map
     const { handleBoundsChanged } = this.props;
     const north = map
       .getBounds()

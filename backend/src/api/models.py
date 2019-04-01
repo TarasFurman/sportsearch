@@ -115,14 +115,14 @@ class Event(db.Model):
     name = db.Column(db.Text, nullable=False, unique=False)
     description = db.Column(db.Text, nullable=True, unique=False)
     image_url = db.Column(db.Text, nullable=True, unique=False)
-    x_coord = db.Column(db.Float, nullable=False, unique=False)
-    y_coord = db.Column(db.Float, nullable=False, unique=False)
+    lng = db.Column(db.Float, nullable=False, unique=False)
+    lat = db.Column(db.Float, nullable=False, unique=False)
     _start_time = db.Column(db.DateTime, nullable=False, unique=False)
     _end_time = db.Column(db.DateTime, nullable=False, unique=False)
     period = db.Column(db.Integer, nullable=True, unique=False)
     price = db.Column(db.Integer, nullable=True, unique=False)
-    card_number = db.Column(db.Integer, nullable=True, unique=False)
-    card_holder = db.Column(db.Integer, nullable=True, unique=False)
+    card_number = db.Column(db.String, nullable=True, unique=False)
+    card_holder = db.Column(db.String, nullable=True, unique=False)
     age_from = db.Column(db.Integer, nullable=False, unique=False)
     age_to = db.Column(db.Integer, nullable=False, unique=False)
     members_total = db.Column(db.Integer, nullable=False, unique=False)
@@ -230,8 +230,8 @@ class Event(db.Model):
     def init_address(self):
         base = "https://maps.googleapis.com/maps/api/geocode/json?"
         params = "latlng={lat},{lon}&key={api_key}".format(
-            lat=self.y_coord,
-            lon=self.x_coord,
+            lat=self.lat,
+            lon=self.lng,
             api_key='AIzaSyDqP6ssmZfq_A7htoIJ8gsWuJDN6OwaZLE'
         )
         url = "{base}{params}".format(base=base, params=params)
@@ -302,10 +302,10 @@ class Event(db.Model):
 
                 filters.extend(
                     (
-                        Event.x_coord <= float(data.get('x1_coord')),
-                        Event.y_coord <= float(data.get('y1_coord')),
-                        Event.x_coord >= float(data.get('x2_coord')),
-                        Event.y_coord >= float(data.get('y2_coord')),
+                        Event.lng <= float(data.get('x1_coord')),
+                        Event.lat <= float(data.get('y1_coord')),
+                        Event.lng >= float(data.get('x2_coord')),
+                        Event.lat >= float(data.get('y2_coord')),
                     )
                 )
             else:

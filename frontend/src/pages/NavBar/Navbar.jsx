@@ -107,9 +107,9 @@ const Navbar = (props) => {
             <div className="header">
                 <Link className="sportTitle" to="/">SportSearch</Link>
                 {header}
-                <button onClick={humburgerClick} class="hamburger hamburger--squeeze">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
+                <button onClick={humburgerClick} className="hamburger hamburger--squeeze">
+                    <span className="hamburger-box">
+                        <span className="hamburger-inner"></span>
                     </span>
                 </button>
             </div>

@@ -30,6 +30,7 @@ function EventSidebar(props) {
   const eventsList = events.map((event) =>
     <Event
       id={event.id}
+      key={event.id}
       img_url= {event.image_url}
       name = {event.name}
       sport_type = {event.sport_type}

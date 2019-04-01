@@ -18,8 +18,8 @@ class CreateEvent extends React.Component {
     newEvent: {
       name: '',
       image_url: 'https://img.icons8.com/color/96/000000/today.png',
-      x_coord: 0.0,
-      y_coord: 0.0,
+      lng: 0.0,
+      lat: 0.0,
       description: '',
       start_time: '',
       end_time: '',
@@ -31,6 +31,7 @@ class CreateEvent extends React.Component {
       members_needed: '',
       sport_id: 1,
       event_status_id: 1,
+      card_number: '',
     },
     fields: {
       isAgeDisable: false,
@@ -121,8 +122,8 @@ class CreateEvent extends React.Component {
     this.setState({
       newEvent: {
         ...newEvent,
-        x_coord: Number(lng.toFixed(6)),
-        y_coord: Number(lat.toFixed(6)),
+        lng: Number(lng.toFixed(6)),
+        lat: Number(lat.toFixed(6)),
       },
     });
   }
@@ -132,8 +133,8 @@ class CreateEvent extends React.Component {
     this.setState({
       newEvent: {
         ...newEvent,
-        x_coord: Number(map.position.lng().toFixed(6)),
-        y_coord: Number(map.position.lat().toFixed(6)),
+        lng: Number(map.position.lng().toFixed(6)),
+        lat: Number(map.position.lat().toFixed(6)),
       },
     });
   };
@@ -177,6 +178,11 @@ class CreateEvent extends React.Component {
     if (newEvent.price < 0 || newEvent.price > 100000) {
       isValid = false;
       errors.push('Price should be more than 0 and less than 100000!');
+    }
+    // validate card number
+    if (newEvent.card_number.length !== 16 && newEvent.card_number.length !== 0) {
+      isValid = false;
+      errors.push('Please, pay attention to your card number!');
     }
     // validate description
     if (newEvent.description.length > 1000) {

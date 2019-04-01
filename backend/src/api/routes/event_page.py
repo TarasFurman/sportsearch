@@ -75,8 +75,8 @@ def get_event_room(*args, **kwargs):
                 'card_holder': event.card_holder,
                 'age_from': event.age_from,
                 'age_to': event.age_to,
-                'x_coord': event.x_coord,
-                'y_coord': event.y_coord,
+                'lng': event.lng,
+                'lat': event.lat,
                 'status': db.session.query(EventStatus)
                     .filter(EventStatus.id == event.event_status_id).first().name,
                 'status_id': event.event_status_id,

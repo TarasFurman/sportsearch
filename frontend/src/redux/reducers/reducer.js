@@ -5,8 +5,8 @@ const initialState = {
   newEvent: {
     name: '',
     image_url: 'https://img.icons8.com/color/96/000000/today.png',
-    x_coord: 30.519837,
-    y_coord: 50.4475854,
+    lng: 30.519837,
+    lat: 50.4475854,
     start_time: '',
     end_time: '',
     period: 0,
