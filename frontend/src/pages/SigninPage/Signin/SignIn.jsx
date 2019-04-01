@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Redirect} from "react-router-dom";
-// import '../style/sign.css';
 import './signin.css'
 
 

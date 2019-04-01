@@ -17,7 +17,7 @@ class Event extends React.Component {
 
     this.state = {
       isAllInfo: false,
-      response: ''
+      response: '',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -51,9 +51,7 @@ class Event extends React.Component {
   }
 
   render() {
-    let fullDescription; let fullOwner; let fullRating; let randCol; let
-      buttonDownUp;
-    
+    let fullDescription; let fullOwner; let fullRating; let buttonDownUp;
     
     if (this.state.isAllInfo) {
       fullDescription = (
@@ -80,11 +78,12 @@ class Event extends React.Component {
 
     if(this.state.response != '') {
       if (this.state.response.error.status ==404){
+        alert("You are not authorized. Please sign in!")
         return <Redirect to='/signin' />
       }
       if(this.state.response.error.status ==403)
       {
-        alert("Already in event")
+        alert("You have applied to this event! Please, wait for approve!")
       }
     }
 
@@ -122,7 +121,6 @@ class Event extends React.Component {
           <button className="applyButton" onClick={this.handleApply}>
             Apply
           </button>
-        
 
           <a href="#container">
             <div id="arrow-down">{buttonDownUp}</div>
