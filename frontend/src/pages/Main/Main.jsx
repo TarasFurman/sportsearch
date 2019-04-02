@@ -28,8 +28,6 @@ class Index extends React.Component {
     this.resetEvents = this.resetEvents.bind(this)
   }
 
-<<<<<<< HEAD
-=======
   // shouldComponentUpdate(nextProps, nextState) {
   //   // to avoid unnecessary re-render
   //   const { locations } = this.state;
@@ -40,7 +38,6 @@ class Index extends React.Component {
     this.setState({ selectedMarker: null });
   }
 
->>>>>>> map_hotfixes
   handleMarkerClick = (markerId) => {
     // handler for event onMarkerClick on the MAP
     this.setState({ selectedMarker: markerId });
