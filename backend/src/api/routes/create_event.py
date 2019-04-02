@@ -49,7 +49,7 @@ def validate(data):
         "_start_time": {'type': 'datetime'},
         "_end_time": {'type': 'datetime'},
         'description': {'type': 'string', 'maxlength': 1000},
-        'card_number': {'type': 'string', 'minlength': 16, 'maxlength': 16},
+        'card_number': {'type': 'string', 'maxlength': 16},
         'card_holder': {'type': 'string', 'maxlength': 255},
     }
 
