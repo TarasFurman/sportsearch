@@ -37,3 +37,13 @@ def test_newuserinevent(new_userinevent):
     assert new_userinevent.user_event_status_id == 40
     assert new_userinevent.event_id == 1
     assert new_userinevent.user_id == 1
+
+
+def test_sportType(new_sport_type):
+    assert new_sport_type.id == 40
+    assert new_sport_type.name == 'football'
+
+
+def test_eventStatus(new_event_status):
+    assert new_event_status.id == 40
+    assert new_event_status.name == 'canceled'

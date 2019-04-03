@@ -1,5 +1,5 @@
 import pytest
-from api.models import User, UserInEvent
+from api.models import User, UserInEvent, SportType, EventStatus
 
 
 @pytest.fixture(scope='module')
@@ -28,3 +28,19 @@ def new_userinevent():
     return new_userinevent
 
 
+@pytest.fixture(scope='module')
+def new_sport_type():
+    new_sport_type = SportType(
+        id = 40,
+        name = 'football',
+    )
+    return new_sport_type
+
+
+@pytest.fixture(scope='module')
+def new_event_status():
+    new_event_status = EventStatus(
+        id = 40,
+        name = 'canceled',
+    )
+    return new_event_status
