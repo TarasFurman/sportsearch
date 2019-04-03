@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Redirect } from 'react-router'
 import { Image } from 'react-bootstrap';
 import { MdLocationOn } from 'react-icons/md';
 import { GiAmericanFootballBall } from 'react-icons/gi';
@@ -8,6 +9,7 @@ import { FaAngleDown, FaAngleUp, FaInfoCircle, FaUserCircle, FaStar} from 'react
 import { IconContext } from 'react-icons';
 import './index.css';
 import AnotherUserProfileCard from '../../../another-user-profile/another-user-profile-card';
+import SignIn from '../../../SigninPage/SigninPage';
 
 class Event extends React.Component {
   constructor(props) {
@@ -15,6 +17,7 @@ class Event extends React.Component {
 
     this.state = {
       isAllInfo: false,
+      response: '',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -28,22 +31,28 @@ class Event extends React.Component {
     console.log(this.state);
   }
 
+  isUser() {
+    return <SignIn />
+  }
+
   handleApply() {
-    fetch(`http://localhost:5999/apply-for-event/${this.props.id}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
+  
+      fetch(`http://localhost:5999/apply-for-event/${this.props.id}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       .then(response => response.json())
-      .then(response => alert(response.error.description));
+      .then(response => this.setState({
+        response: response
+      }))
   }
 
   render() {
-    let fullDescription; let fullOwner; let fullRating; let randCol; let
-      buttonDownUp;
-
+    let fullDescription; let fullOwner; let fullRating; let buttonDownUp;
+    
     if (this.state.isAllInfo) {
       fullDescription = (
         <div className="fullDescription partDescription">
@@ -66,6 +75,18 @@ class Event extends React.Component {
     } else {
       buttonDownUp = <FaAngleDown className="arrowBtn" onClick={this.handleClick} />;
     }
+
+    if(this.state.response != '') {
+      if (this.state.response.error.status ==404){
+        alert("You are not authorized. Please sign in!")
+        return <Redirect to='/signin' />
+      }
+      if(this.state.response.error.status ==403)
+      {
+        alert("You have applied to this event! Please, wait for approve!")
+      }
+    }
+
     return (
       <IconContext.Provider value={{ className: 'global-svg-icon-class' }}>
         <div className="eventWrapper">
@@ -100,7 +121,6 @@ class Event extends React.Component {
           <button className="applyButton" onClick={this.handleApply}>
             Apply
           </button>
-        
 
           <a href="#container">
             <div id="arrow-down">{buttonDownUp}</div>

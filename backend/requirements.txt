@@ -25,3 +25,4 @@ flask-socketio==3.3.2
 boto3==1.9.116
 celery==4.2.1
 Requests==2.21.0
+pytest==4.3.1

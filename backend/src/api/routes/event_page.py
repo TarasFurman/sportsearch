@@ -26,8 +26,6 @@ def apply_for_event(*args, **kwargs):
         user_id=user.id
     )
 
-    print("user in event", user_in_event)
-    print(user.id)
     db.session.add(user_in_event)
     db.session.commit()
     db.session.close()

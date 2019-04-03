@@ -24,6 +24,8 @@ class Index extends React.Component {
       },
       // eventSideBarVisible: true,
     };
+
+    this.resetEvents = this.resetEvents.bind(this)
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -31,6 +33,10 @@ class Index extends React.Component {
   //   const { locations } = this.state;
   //   return nextState.locations !== locations;
   // }
+
+  resetEvents(){
+    this.setState({ selectedMarker: null });
+  }
 
   handleMarkerClick = (markerId) => {
     // handler for event onMarkerClick on the MAP
@@ -87,6 +93,7 @@ class Index extends React.Component {
               handleMarkerClick={this.handleMarkerClick}
               locations={locations}
             />
+            <button className="resetBtn" onClick={this.resetEvents}>Reset</button>
           </div>
         </div>
       </div>

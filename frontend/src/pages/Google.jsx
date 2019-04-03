@@ -33,13 +33,16 @@ class Google extends Component {
             }
             else if(response['message'] === 'login') {
                 this.setState({redirect: true})
+                this.props.handleClick(response['message'])
             }   
             else if(response['message'] === 'register') {
                 this.setState({redirect: true})
+                this.props.handleClick(response['message'])
             }  
             else{
                 console.log("nothing")
             }
+            
         })
         .catch((error) => {
           reject(error);
@@ -72,7 +75,7 @@ class Google extends Component {
 
   render() {
     if (this.state.redirect) {
-      return (window.location.reload(), <Redirect to={'/'}/>)
+      return (<Redirect to={'/'}/>)
     }
 
     const responseGoogle = (response) => {

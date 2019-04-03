@@ -62,7 +62,7 @@ const User = (props) =>{
         <div className="user">
             <Link className="createEvent" to="/createEvent">Create Event</Link>
             <Link className="settings" to="/settings">Settings</Link>
-            <Link to="/profile/">{props.user}</Link>
+            <Link className="userName" to="/profile/">Profile</Link>
             <Link className="myEvents" to={"/my-events"} > My events </Link>
             <Popup
                 trigger={<a href="#" className="notifications">Notification</a>} position="bottom center">
@@ -84,34 +84,34 @@ const Navbar = (props) => {
         header = <Sign/>
     }
 
-    function humburgerClick(){
-        var forEach=function(t,o,r){
-            if("[object Object]"===Object.prototype.toString.call(t))
-                for(var c in t)
-                    Object.prototype.hasOwnProperty.call(t,c)&&o.call(r,t[c],c,t);
-            else 
-                for(var e = 0,l = t.length; l > e; e++)
-                    o.call(r,t[e],e,t)};
-        var hamburgers = document.querySelectorAll(".hamburger");
-        if (hamburgers.length > 0) {
-            forEach(hamburgers, function(hamburger) {
-                hamburger.addEventListener("click", function() {
-                    this.classList.toggle("is-active");
-                }, false);
-            });
-        }
-    }
+    // function humburgerClick(){
+    //     var forEach=function(t,o,r){
+    //         if("[object Object]"===Object.prototype.toString.call(t))
+    //             for(var c in t)
+    //                 Object.prototype.hasOwnProperty.call(t,c)&&o.call(r,t[c],c,t);
+    //         else 
+    //             for(var e = 0,l = t.length; l > e; e++)
+    //                 o.call(r,t[e],e,t)};
+    //     var hamburgers = document.querySelectorAll(".hamburger");
+    //     if (hamburgers.length > 0) {
+    //         forEach(hamburgers, function(hamburger) {
+    //             hamburger.addEventListener("click", function() {
+    //                 this.classList.toggle("is-active");
+    //             }, false);
+    //         });
+    //     }
+    // }
 
     return (
         <div className="headerWrapper">
             <div className="header">
                 <Link className="sportTitle" to="/">SportSearch</Link>
                 {header}
-                <button onClick={humburgerClick} class="hamburger hamburger--squeeze">
+                {/* <button onClick={humburgerClick} class="hamburger hamburger--squeeze">
                     <span class="hamburger-box">
                         <span class="hamburger-inner"></span>
                     </span>
-                </button>
+                </button> */}
             </div>
         </div>
     )

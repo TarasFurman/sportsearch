@@ -24,6 +24,17 @@
     overflow: hidden;
 }
 
+.resetBtn{
+    position: relative;
+    top: 15px;
+    left: 15px;
+    border: 1px solid transparent;  
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 4px 5px 15px 5px grey;
+    
+}
+
 @media (max-width:900px){
     .body{
         width: 100%;
