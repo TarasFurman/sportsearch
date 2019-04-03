@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './index.css';
 import defaultImage from './create.svg';
@@ -14,9 +15,12 @@ class LoadImage extends React.Component {
 
   handleChange(event) {
     if (event.target.files[0]) {
+      const { handleFileChange } = this.props;
+      // change image on page view
       this.setState({
         file: URL.createObjectURL(event.target.files[0]),
       });
+      handleFileChange(event.target.files[0]);
     }
   }
 
@@ -40,5 +44,9 @@ class LoadImage extends React.Component {
     );
   }
 }
+
+LoadImage.propTypes = {
+  handleFileChange: PropTypes.func.isRequired,
+};
 
 export default LoadImage;

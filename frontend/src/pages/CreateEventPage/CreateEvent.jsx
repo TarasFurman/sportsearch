@@ -54,6 +54,14 @@ class CreateEvent extends React.Component {
     });
   };
 
+  handleFileChange = (image) => {
+    this.setState({
+      image,
+    }, () => {
+      console.log(this.state);
+    });
+  }
+
   handleSelectChange = (event) => {
     const { newEvent } = this.state;
     this.setState({
@@ -268,6 +276,7 @@ class CreateEvent extends React.Component {
                 handleInputChange={this.handleInputChange}
                 handleSelectChange={this.handleSelectChange}
                 handleSubmit={this.handleSubmit}
+                handleFileChange={this.handleFileChange}
               />
             </div>
             <div className="col-xl-8 col-lg-7 col-md-12 col-sm-12 col-12">

@@ -21,13 +21,14 @@ const Form = (props) => {
     handleFreeChange,
     handleSubmit,
     handleCancel,
+    handleFileChange,
   } = props;
 
   return (
     <form className="p-2 shadow">
       <h3>Create new event!</h3>
       <hr />
-      <LoadImage />
+      <LoadImage handleFileChange={handleFileChange} />
       <Input
         id="name"
         onChange={handleInputChange}
@@ -117,6 +118,7 @@ Form.propTypes = {
   handleFreeChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
+  handleFileChange: PropTypes.func.isRequired,
 };
 
 export default Form;
