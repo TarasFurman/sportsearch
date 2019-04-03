@@ -64,7 +64,7 @@ class Index extends React.Component {
         <FiltersForm />
         <div className="body">
           <div className="eventSideBar">
-            <EventSidebar />
+            <EventSidebar selectedMarker={this.state.selectedMarker}/>
           </div>
           <div className="mapWrapper">
             <GoogleApiWrapper
