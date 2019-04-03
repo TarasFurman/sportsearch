@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { fakeData } from '../map/fakeData';
 import FiltersForm from './filters-form';
 import GoogleApiWrapper from '../map/Map';
 import EventSidebar from './event-sidebar/EventSidebar';
-import './Main.css'
+
+import './Main.css';
 
 class Index extends React.Component {
   constructor(props) {
@@ -13,19 +15,16 @@ class Index extends React.Component {
       domain: 'http://localhost:5999/',
       locations: fakeData,
       selectedMarker: null,
-      selectedFilters: {
-
-      },
+      selectedFilters: {},
       mapBounds: {
         north: '',
         south: '',
         east: '',
         west: '',
       },
-      // eventSideBarVisible: true,
     };
 
-    this.resetEvents = this.resetEvents.bind(this)
+    this.resetEvents = this.resetEvents.bind(this);
   }
 
   // shouldComponentUpdate(nextProps, nextState) {
@@ -34,17 +33,14 @@ class Index extends React.Component {
   //   return nextState.locations !== locations;
   // }
 
-  resetEvents(){
+  resetEvents() {
     this.setState({ selectedMarker: null });
   }
 
   handleMarkerClick = (markerId) => {
     // handler for event onMarkerClick on the MAP
     this.setState({ selectedMarker: markerId });
-    // this.setState((prevState) => ({ eventSideBarVisible: !prevState.eventSideBarVisible }));
     console.log(this.state);
-
-    
   };
 
   handleBoundsChanged = (north, south, east, west) => {
@@ -58,42 +54,26 @@ class Index extends React.Component {
         west,
       },
     });
-    console.log(this.state.mapBounds);
+    const { mapBounds } = this.state;
+    console.log(mapBounds);
   };
 
-  async loadLocationsForMap() {
-    // get locations for map that looks like {id: 1, lat: 50.11, lng: 30.11, sport_type_id: 1}
-    const { domain } = this.state;
-    const response = await fetch(`${domain}/get-locations`);
-    const locations = await response.json();
-    this.setState({
-      locations,
-    });
-  }
-
   render() {
-    const { locations, eventSideBarVisible } = this.state;
-    // let eventsidebar;
-
-    // if (eventSideBarVisible) {
-    //   eventsidebar = <EventSidebar />
-    // } 
-
     return (
       <div className="mainPage">
         <FiltersForm />
         <div className="body">
           <div className="eventSideBar">
-            <EventSidebar selectedMarker = {this.state.selectedMarker}/>
-            {/* {eventsidebar} */}
+            <EventSidebar />
           </div>
           <div className="mapWrapper">
-            <GoogleApiWrapper              
+            <GoogleApiWrapper
               handleBoundsChanged={this.handleBoundsChanged}
               handleMarkerClick={this.handleMarkerClick}
-              locations={locations}
             />
-            <button className="resetBtn" onClick={this.resetEvents}>Reset</button>
+            <button className="resetBtn" onClick={this.resetEvents}>
+              Reset
+            </button>
           </div>
         </div>
       </div>

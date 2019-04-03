@@ -4,6 +4,7 @@ import { Map as GoogleMap, GoogleApiWrapper } from 'google-maps-react';
 import MarkerClusterer from '@google/markerclusterer';
 import { connect } from 'react-redux';
 import './index.css';
+
 export class Map extends React.Component {
   constructor(props) {
     super(props);
@@ -90,10 +91,6 @@ export class Map extends React.Component {
     });
   };
 
-  shouldComponentUpdate() {
-    return true;
-  }
-
   getCurrentLocation = (map) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -122,11 +119,11 @@ export class Map extends React.Component {
     const { mapStyle } = this.state;
     const { google } = this.props;
     google.maps.event.addListener(map, 'zoom_changed', () => {
-      // this.getCurrentBounds(map);
+      this.getCurrentBounds(map);
     });
 
     google.maps.event.addListener(map, 'dragend', () => {
-      // this.getCurrentBounds(map);
+      this.getCurrentBounds(map);
     });
 
     // searchBox initialization
@@ -149,13 +146,13 @@ export class Map extends React.Component {
   generateMarkersFromListOfSportEvents = () => {
     const { google, handleMarkerClick, events } = this.props;
     // add markers to the map
-    const markers = events.map((event, index) => {
+    const markers = events.map((event) => {
       const marker = new google.maps.Marker({
-        position: { lat: event.y_coord, lng: event.x_coord },
+        position: { lat: event.lat, lng: event.lng },
         label: event.sport_type,
         title: event.name,
         animation: google.maps.Animation.DROP,
-        id: index,
+        id: event.id,
       });
       marker.addListener('click', () => handleMarkerClick(marker.id));
       return marker;
@@ -173,7 +170,7 @@ export class Map extends React.Component {
   };
 
   render() {
-    console.log('map render');
+    console.log('render');
     const { google } = this.props;
     const { defaultMapOptions } = this.state;
     this.updateMarkersOnMap();
@@ -196,7 +193,7 @@ export class Map extends React.Component {
 
 Map.propTypes = {
   google: PropTypes.instanceOf(Object).isRequired,
-  locations: PropTypes.instanceOf(Array).isRequired,
+  events: PropTypes.instanceOf(Array).isRequired,
   handleMarkerClick: PropTypes.func.isRequired,
   handleBoundsChanged: PropTypes.func.isRequired,
 };

@@ -43,8 +43,8 @@ def events(*args, page_num):
 
     # ev = Event(
     # name = "event5",
-    # x_coord = 51.443575,
-    # y_coord = 30.597445,
+    # lng = 51.443575,
+    # lat = 30.597445,
     # _start_time = "2019-04-29 17:30:00",
     # _end_time = "2019-04-28 20:30:00",
     # age_from = 22,

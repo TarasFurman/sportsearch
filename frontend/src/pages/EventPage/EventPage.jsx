@@ -88,11 +88,11 @@ export class EventPage extends React.Component {
                                 cancelEvent={ this.cancelEvent } />
                         </div>
                         <div className="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-                            {/* <Map lat={ data.x_coord }
-                                lng={ data.y_coord }/> */}
+                            {/* <Map lat={ data.lng }
+                                lng={ data.lat }/> */}
                             {/* <Map marker={{
-                                lat: info.x_coord,
-                                lng: info.y_coord,
+                                lat: info.lng,
+                                lng: info.lat,
                             }} /> */}
                         </div>
                     </div>
