@@ -1,10 +1,11 @@
 import React from 'react';
 import './settings.css';
 
-class Settings extends React.Component{
+export default class Settings extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            isLoaded: false,
             emailNotification: true,
             telegramNotification: false,
             viberNotification: false,
@@ -16,53 +17,12 @@ class Settings extends React.Component{
             receivedFeedback: false,
             beforeEvent: false,
             eventRequest: false,
-            eventInvitation: false
+            eventInvitation: false,
+            error_data: {}
         }
     }
 
-    handleInputChange = (event) => {
-        const target = event.target;
-        const name = target.name;
-        const value = target.checked;
-        this.setState({
-            [name]: value
-        });
-    };
-
-    handleSubmit = (event) => {
-        event.preventDefault();
-
-        let setting = {};
-
-        setting.email_notification = this.state.emailNotification;
-        setting.telegram_notification = this.state.telegramNotification;
-        setting.viber_notification = this.state.viberNotification;
-        setting.request_approved = this.state.requestApproved;
-        setting.request_rejected = this.state.requestRejected;
-        setting.is_kicked = this.state.isKicked;
-        setting.event_finished = this.state.eventFinished;
-        setting.event_canceled = this.state.eventCanceled;
-        setting.received_feedback = this.state.receivedFeedback;
-        setting.before_event = this.state.beforeEvent;
-        setting.event_request = this.state.eventRequest;
-        setting.event_invitation = this.state.eventInvitation;
-
-        fetch('http://localhost:5999/save_setting',
-            {
-                headers:{
-                    'Content-Type': 'application/json'
-                },
-                method: 'POST',
-                mode: 'cors',
-                credentials: 'include',
-                body: JSON.stringify({setting})
-            }
-        )
-            .then(response => response.json())
-            .then(response => console.log(response))
-    };
-
-    render(){
+    isUser(){
         return(
             <div className="settingsWrapper">
                 <form className="settingsForm" onSubmit={this.handleSubmit}>
@@ -107,7 +67,7 @@ class Settings extends React.Component{
                     <h1>Type notification:</h1>
 
                     <div className="notificationTypeDiv">
-                       
+                        
                         <div className="notificationTexts">
                             <span> <input
                                 name="requestApproved"
@@ -197,14 +157,124 @@ class Settings extends React.Component{
                             You were invited to the event </span>
                         </div>                    
                     </div>
-
-                    
                     <button className="submitSettings" type="submit">Submit</button>
                 </form>
             </div>
         )
     }
+
+    notAutorizedUser() {
+        return(
+            <div className={'notAutorized'}>
+                <h1>
+                    You do not have an access to this page. Please 
+                    <br/> 
+                    <p><a href="http://localhost:5998/signup"> Sign up </a>  or  <a href="http://localhost:5998/signin"> Sign in </a></p>
+                </h1>
+            </div>
+        );
+    }
+
+    componentDidMount(){
+        fetch("http://localhost:5999/settings",
+        {
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include'
+        }
+        ).then(response => response.json())
+        .then(data=> {
+            if(data['code']===200){
+                let settings = data.settings_data[0]
+                this.setState({
+                    isLoaded: true,
+                    emailNotification: settings['email_notification'],
+                    telegramNotification: settings['telegram_notification'],
+                    viberNotification: settings['viber_notification'],
+                    requestApproved: settings['request_approved'],
+                    requestRejected: settings['request_rejected'],
+                    isKicked: settings['is_kicked'],
+                    eventFinished: settings['event_finished'],
+                    eventCanceled: settings['event_canceled'],
+                    receivedFeedback: settings['received_feedback'],
+                    beforeEvent: settings['before_event'],
+                    eventRequest: settings['event_request'],
+                    eventInvitation: settings['event_invitation']
+                    })
+            }else{
+                this.setState({
+                    isLoaded: true,
+                    error_data: data.error
+                })
+            }
+        })   
+    }
+
+    handleInputChange = (event) => {
+        const target = event.target;
+        const name = target.name;
+        const value = target.checked;
+        this.setState({
+            [name]: value
+        });
+    };
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+
+        let setting = {};
+
+        setting.email_notification = this.state.emailNotification;
+        setting.telegram_notification = this.state.telegramNotification;
+        setting.viber_notification = this.state.viberNotification;
+        setting.request_approved = this.state.requestApproved;
+        setting.request_rejected = this.state.requestRejected;
+        setting.is_kicked = this.state.isKicked;
+        setting.event_finished = this.state.eventFinished;
+        setting.event_canceled = this.state.eventCanceled;
+        setting.received_feedback = this.state.receivedFeedback;
+        setting.before_event = this.state.beforeEvent;
+        setting.event_request = this.state.eventRequest;
+        setting.event_invitation = this.state.eventInvitation;
+
+        fetch('http://localhost:5999/settings',
+            {
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                body: JSON.stringify({setting})
+            }
+        )
+            .then(response => response.json())
+            .then(response => console.log(response))
+    };
+
+    render(){
+        if(this.state.isLoaded){
+            if(this.state.error_data.message==="UNAUTHORIZED_USER"){
+                return(
+                    this.notAutorizedUser() 
+                )
+            }else{
+                return(
+                    this.isUser()
+                )
+            }
+        }else{
+            return(
+                <div>
+                    <div className="spinner-grow text-success" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            )
+        }
+        
 }
-
-
-export default Settings;
+}

@@ -19,7 +19,7 @@ from .google import signin_google
 from .main_page import get_events, get_filters
 from .create_event import get_sports, create_event
 from .events import events
-from .setting import save_setting
+from .setting import settings
 from .notification import notification
 from .another_users_profile import another_users_profile
 from .profile import profile

@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from flask import jsonify, request, Response
 from sqlalchemy import or_
-
+from .notification_service import send
 from . import routes
 from .useful_decorators import visitor_allowed_event, error_func, apply_event
 from ..models import (db,
@@ -29,6 +29,7 @@ def apply_for_event(*args, **kwargs):
     db.session.add(user_in_event)
     db.session.commit()
     db.session.close()
+
 
 
     return jsonify({
@@ -142,7 +143,7 @@ def cancel_event(*args, **kwargs):
     event.event_status_id = 3
 
     db.session.commit()
-
+    send(5, event_id=event)
     return Response(status=200)
 
 
