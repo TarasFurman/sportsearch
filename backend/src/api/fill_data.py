@@ -23,7 +23,9 @@ from models import (db,
                       Feedback,
                       Payment,
                       UserInEvent,
-                      Message)
+                      Message,
+                      NotificationType,
+                      )
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ss_user:5heMcHFf&L9ehUuk@sportsearch_database_1/ss_db'
@@ -35,6 +37,28 @@ user_img_urls = ( 'https://pngimage.net/wp-content/uploads/2018/06/logo-user-png
                   'https://banner2.kisspng.com/20180716/lra/kisspng-logo-person-user-person-icon-5b4d2bd2236ca6.6010202115317841461451.jpg',
                   'https://pngimage.net/wp-content/uploads/2018/06/user-logo-png-4.png',
                 )
+#function for inserting data into notification_type table
+def notification_type():
+    with app.app_context():
+        data_in_db = NotificationType.query.all()
+
+    if not data_in_db:
+        notification_types = [
+            NotificationType(name="Approved Request", message="Your request has been approved"),
+            NotificationType(name="Rejected Request", message="Your request has been rejected"),
+            NotificationType(name="Kicked from event", message="You have been kicked from event"),
+            NotificationType(name="Event finished", message="Event has finished"),
+            NotificationType(name="Event canceled", message="Event has canceled"),
+            NotificationType(name="Feedback received", message="You received feedback"),
+            NotificationType(name="Hour before event", message="1 hour before the event"),
+            NotificationType(name="New request", message="New request appears (for event owners only)"),
+            NotificationType(name="Event invitation", message="You have been invited"),
+        ]
+
+        with app.app_context():
+            for n_t in notification_types:
+                db.session.add(n_t)
+            db.session.commit()
 
 # function for inserting data into sport_types table
 def sport_type():
@@ -310,6 +334,7 @@ if __name__ == '__main__':
         user_in_event()
         message(fake)
         feedback(fake)
+        notification_type()
         # add more...
     elif sys.argv[1] == 'production':
         sport_type()
