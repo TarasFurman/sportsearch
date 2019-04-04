@@ -1,8 +1,7 @@
-from ..models import UserInEvent
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import requests
-from ..models import db, User, UserNotification, NotificationType
+from ..models import db, User, UserNotification, NotificationType, UserInEvent
 
 from conf import APP_CONFIG
 

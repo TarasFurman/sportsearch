@@ -44,15 +44,15 @@ def notification_type():
 
     if not data_in_db:
         notification_types = [
-            NotificationType(name="Approved Request", message="Your request has been approved"),
-            NotificationType(name="Rejected Request", message="Your request has been rejected"),
-            NotificationType(name="Kicked from event", message="You have been kicked from event"),
-            NotificationType(name="Event finished", message="Event has finished"),
-            NotificationType(name="Event canceled", message="Event has canceled"),
-            NotificationType(name="Feedback received", message="You received feedback"),
-            NotificationType(name="Hour before event", message="1 hour before the event"),
-            NotificationType(name="New request", message="New request appears (for event owners only)"),
-            NotificationType(name="Event invitation", message="You have been invited"),
+            NotificationType(name="request_approved", message="Your request has been approved"),
+            NotificationType(name="request_rejected", message="Your request has been rejected"),
+            NotificationType(name="is_kicked", message="You have been kicked from event"),
+            NotificationType(name="event_finished", message="Event has finished"),
+            NotificationType(name="event_canceled", message="Event has canceled"),
+            NotificationType(name="received_feedback", message="You received feedback"),
+            NotificationType(name="before_event", message="1 hour before the event"),
+            NotificationType(name="event_request", message="New request appears (for event owners only)"),
+            NotificationType(name="event_invitation", message="You have been invited"),
         ]
 
         with app.app_context():

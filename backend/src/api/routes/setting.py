@@ -2,6 +2,7 @@ from flask import request, session, jsonify
 from api.routes import routes
 from ..models import db, User
 from functools import wraps
+from .notification_service import send
 
 
 def error_func(error_status=400,
@@ -55,4 +56,7 @@ def settings(*args):
         req = request.get_json().get('setting')
         User.query.filter(User.id == user_id).update(dict(settings=req))
         db.session.commit()
+        send(1, user_id=13, event_id=2)
         return jsonify({'code': 200})
+
+
