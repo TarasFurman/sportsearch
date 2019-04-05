@@ -41,16 +41,15 @@ def is_active_user(func):
 def settings(*args):
     if request.method == 'GET':
         user_id = session.get('user')
-        query = db.session.query(User.settings).filter(
-            User.id == user_id).first()
+        query = db.session.query(User.settings).filter(User.id == user_id).first()
 
-        notification_type = NotificationType.query.filter(NotificationType.id == 1).first().name
-        result = User.query.filter(User.id == user_id).first().settings[notification_type]
+        # notification_type = NotificationType.query.filter(NotificationType.id == 1).first().name
+        # result = User.query.filter(User.id == user_id).first().settings[notification_type]
         return jsonify(
             {
                 'code': 200,
                 'settings_data': query,
-                'resuly': result
+                # 'result': result
             }
         )
 

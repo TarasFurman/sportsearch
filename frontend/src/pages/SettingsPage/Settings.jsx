@@ -184,10 +184,10 @@ export default class Settings extends React.Component{
             method: 'GET',
             mode: 'cors',
             credentials: 'include'
-        }
-        ).then(response => response.json())
-        .then(data=> {
-            if(data['code']===200){
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data['code'] === 200){
                 let settings = data.settings_data[0]
                 this.setState({
                     isLoaded: true,
