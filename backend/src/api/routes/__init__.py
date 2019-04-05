@@ -17,7 +17,7 @@ from .signin import signin
 from .facebook import signin_fb
 from .google import signin_google
 from .main_page import get_events, get_filters
-from .create_event import get_sports, create_event
+from .create_event import get_sports, create_event, upload_image_to_s3
 from .events import events
 from .setting import save_setting
 from .notification import notification

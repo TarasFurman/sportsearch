@@ -38,7 +38,6 @@ const Form = (props) => {
       <Select id="sport_id" handleChange={handleSelectChange} sportTypes={sportTypes} />
       <DateTime id="start_time" onChange={handleInputChange} label="Start time:" />
       <DateTime id="end_time" onChange={handleInputChange} label="End time:" />
-      {/* age */}
       <div className="form-row my-2">
         <span className="col-3 col-form-label">Age:</span>
         <div className="col-3">
@@ -63,7 +62,6 @@ const Form = (props) => {
         </div>
         <Checkbox onChange={handleAnyAgeChange} id="any_age" name="any" />
       </div>
-      {/* price */}
       <div className="form-row my-2">
         <span className="col-3 col-form-label">Price:</span>
         <div className="col">
@@ -87,7 +85,6 @@ const Form = (props) => {
         pattern="\d*"
         maxLength="16"
       />
-      {/* start time */}
       <Textarea id="description" value={newEvent.description} onChange={handleInputChange} />
       <Members id="members_total" onChange={handleInputChange} label="Total numbers of members:" />
       <Members id="members_needed" onChange={handleInputChange} label="You need members:" />
