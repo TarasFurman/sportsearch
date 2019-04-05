@@ -12,17 +12,6 @@ const Sign = () =>{
     )
 };
 
-const Notification = (props) =>{
-
-        return (
-        <div className="card">
-            <div className="content">
-                <h6>{props.eventId}</h6>
-                {props.notificationType}
-            </div>
-        </div>
-    )
-};
 
 const User = (props) =>{
     function handleClick(){
@@ -45,18 +34,7 @@ const User = (props) =>{
         )
     }
 
-    function createNotification() {
-        let notifications = props.notifications.map(notification =>
-            <Notification
-                key={notification.id}
-                eventId={notification.event_name}
-                notificationType={notification.notification_message}
-            />
-        );
-        return(
-            <div>{notifications}</div>
-        )
-    }
+    
 
     return(
         <div className="user">
@@ -64,11 +42,12 @@ const User = (props) =>{
             <Link className="settings" to="/settings">Settings</Link>
             <Link className="userName" to="/profile/">Profile</Link>
             <Link className="myEvents" to={"/my-events"} > My events </Link>
-            <Popup
+            <Link className="notifications" to={"/notifications"}> Notifications </Link>
+              {/* <Popup
                 trigger={<a href="#" className="notifications">Notification</a>} position="bottom center">
                 <div>Notifications</div>
                 {createNotification()}
-            </Popup>
+            </Popup> */}
             <button className="logout" onClick={handleClick}>Log out</button>
         </div>
     )
@@ -78,7 +57,7 @@ const Navbar = (props) => {
     let header;
     if (props.user) {
         header = <User user={props.user}
-                       notifications={props.notifications}
+                    //    notifications={props.notifications}
                        handleClick={props.handleClick}/>
     }else{
         header = <Sign/>
