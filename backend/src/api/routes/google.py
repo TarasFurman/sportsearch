@@ -73,6 +73,11 @@ def signin_google():
                         auth_type=req.get('type'),
                         first_name=first_name,
                         last_name=last_name,
+                        settings = {"email_notification": True, "telegram_notification": False, 
+                                    "viber_notification": False, "request_approved": False, 
+                                    "request_rejected": False, "is_kicked": False, "event_finished": False, 
+                                    "event_canceled": False, "received_feedback": False, "before_event": False, 
+                                    "event_request": False, "event_invitation": False},
                         status_id=1)
             # return jsonify(user)
 

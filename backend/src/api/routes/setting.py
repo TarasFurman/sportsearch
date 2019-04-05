@@ -1,6 +1,6 @@
 from flask import request, session, jsonify
 from api.routes import routes
-from ..models import db, User
+from ..models import db, User, NotificationType
 from functools import wraps
 from .notification_service import send
 
@@ -43,11 +43,14 @@ def settings(*args):
         user_id = session.get('user')
         query = db.session.query(User.settings).filter(
             User.id == user_id).first()
-        print(query)
+
+        notification_type = NotificationType.query.filter(NotificationType.id == 1).first().name
+        result = User.query.filter(User.id == user_id).first().settings[notification_type]
         return jsonify(
             {
                 'code': 200,
-                'settings_data': query
+                'settings_data': query,
+                'resuly': result
             }
         )
 
@@ -56,7 +59,7 @@ def settings(*args):
         req = request.get_json().get('setting')
         User.query.filter(User.id == user_id).update(dict(settings=req))
         db.session.commit()
-        send(1, user_id=13, event_id=2)
+        # send(2, user_id=13, event_id=2)
         return jsonify({'code': 200})
 
 

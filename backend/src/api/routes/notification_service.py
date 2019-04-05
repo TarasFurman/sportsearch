@@ -32,7 +32,6 @@ class NotificationService:
         try:
             notification_type = NotificationType.query.filter(NotificationType.id == self.notification_type).first().name
             result = User.query.filter(User.id == user_id).first().settings
-
             if result[notification_type]:
                 return True
             else:

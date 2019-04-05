@@ -142,8 +142,8 @@ def cancel_event(*args, **kwargs):
 
     event.event_status_id = 3
 
-    db.session.commit()
-    send(5, event_id=event)
+    # db.session.commit()
+    send(5, event_id=event.id)
     return Response(status=200)
 
 
