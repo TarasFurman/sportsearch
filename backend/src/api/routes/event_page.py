@@ -6,11 +6,10 @@ from . import routes
 from .useful_decorators import visitor_allowed_event, error_func, apply_event
 from ..models import (db,
                       User,
+                      Event,
                       UserInEvent,
                       EventStatus,
                       Feedback)
-
-
 
 
 
@@ -26,11 +25,12 @@ def apply_for_event(*args, **kwargs):
         user_id=user.id
     )
 
+    owner = db.session.query(Event).filter(Event.id == event.id).first().owner_id
+    send(8, user_id=owner, event_id=event.id) #send notification to owner(new request)
+
     db.session.add(user_in_event)
     db.session.commit()
     db.session.close()
-
-
 
     return jsonify({
         'user_data':{
@@ -141,9 +141,9 @@ def cancel_event(*args, **kwargs):
                           error_message='EVENT_NOT_PLANNED', )
 
     event.event_status_id = 3
-
-    # db.session.commit()
+    db.session.commit()
     send(5, event_id=event.id)
+    
     return Response(status=200)
 
 
@@ -287,11 +287,12 @@ def invite_member(*args, **kwargs):
                                   error_message='USER_STATUS_FORBIDDEN', )
 
             user_event.user_event_status_id = 5
-
         else:
             user_event = UserInEvent(event_id=event.id,
                                      user_id=target_id,
                                      user_event_status_id=5)
+            
+            send(9, user_id=target_id, event_id=event.id)   #notification (event_invitation)
             db.session.add(user_event)
 
         db.session.commit()

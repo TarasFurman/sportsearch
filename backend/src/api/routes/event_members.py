@@ -2,6 +2,7 @@ from datetime import date, datetime
 from flask import Response, request
 from flask_socketio import join_room, leave_room
 from sqlalchemy import or_
+from .notification_service import send
 
 from . import socketio
 from .useful_decorators import error_func, visitor_allowed_socket
@@ -124,7 +125,7 @@ def kick_user(*args, **kwargs):
         ).first()
 
         kick_in_event.user_event_status_id = 4
-
+        send(3, user_id=kick_id, event_id=event.id)  #user kick notification
         db.session.commit()
 
     except Exception:
@@ -146,9 +147,9 @@ def grant_request_member(*args, **kwargs):
     :return:
     """
 
-    event = args[0]
-    user = args[1]
-    data = args[2]
+    event = args[0]  #event id
+    user = args[1]  #owner id
+    data = args[2]  #{'event_id': '19', 'user_id': 17, 'target_user_id': 20, 'target_user_status': 2}
     user_is_owner = user.id == event.owner_id
 
     if not user_is_owner:
@@ -163,7 +164,7 @@ def grant_request_member(*args, **kwargs):
     try:
         target_id = data.get('target_user_id')
         target_status = data.get('target_user_status')
-
+        
         if not (target_id and target_status):
             return error_func(error_status=400,
                               error_description='Some of required fields missed.',
@@ -202,6 +203,11 @@ def grant_request_member(*args, **kwargs):
                               error_message='USER_NOT_REQUESTED_EVENT', )
 
         target_in_event.user_event_status_id = target_status
+        # User notification
+        if target_status == 2:
+            send(1, target_id, event.id)    #request has been approved
+        elif target_status == 3:
+            send(2, target_id, event.id)    #request has been rejected
 
         db.session.commit()
 
@@ -335,6 +341,8 @@ def rate_user(*args, **kwargs):
         else:
             feedback.rating = mark
             feedback.text = comment or None
+        
+        send(6, user_id=target_user_id) #user notification (received_feedback)
 
         db.session.commit()
 

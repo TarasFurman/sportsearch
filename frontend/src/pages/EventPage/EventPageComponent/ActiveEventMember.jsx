@@ -1,5 +1,6 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
+ 
 export class ActiveEventMember extends React.Component {
     constructor(props) {
         super(props);
@@ -82,7 +83,7 @@ export class ActiveEventMember extends React.Component {
                     Your mark for this user is <b>{ member.request_user_rating }</b>
                 </span>
 
-        return(
+        return( 
             <div className="row" style={{
                 borderTop: "1px solid #AE99AF",
                 margin: "1vmin",
@@ -111,6 +112,7 @@ export class ActiveEventMember extends React.Component {
 
                 </div>
                 <div className="col-xl-9 col-lg-9 col-md-9 col-sm-4">
+                    <Link to={'/another-user-profile/'+ member.id }>
                     <h6>
                         { member.name }
                         &nbsp;
@@ -129,7 +131,7 @@ export class ActiveEventMember extends React.Component {
                         &nbsp;
                         { this.props.isMember ? you : "" }
                     </h6>
-                    
+                    </Link>
                     { this.props.userisAdmin ? !this.props.isAdmin ? kickButton : "" : ""}
 
                     { !this.props.isMember && this.props.eventStatus === 2 ? member.request_user_rating === 0 ? rate : mark : ""}

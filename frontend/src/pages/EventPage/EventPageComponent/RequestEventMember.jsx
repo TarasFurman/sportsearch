@@ -91,7 +91,7 @@ export class RequestEventMember extends React.Component {
                     <div>
                         { this.props.eventStatus === 1 ? 
                             member.age >= this.props.eventMinAge && member.age <= this.props.eventMaxAge ? 
-                                <>{ acceptButton }{ rejectButton }</> : rejectButton : ""}
+                                <>{ acceptButton } { rejectButton }</> : rejectButton : ""}
                     </div>
                     
                 </div>
