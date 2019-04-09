@@ -19,8 +19,6 @@ def apply_for_event(*args, **kwargs):
     event = args[0]
     user = args[1]
 
-    print(event.owner_id)
-    print(user.id)
     if event.owner_id == user.id:
         return error_func(error_status=403,
                           error_description='Owner can not apply to his own event.',
@@ -37,10 +35,18 @@ def apply_for_event(*args, **kwargs):
                           error_message='BIRTHDATE_IS_EMPTY', )
     
     today = date.today()  
-    age = today.year - user.birth_date.year - ((today.month, today.day)\
+    user_age = today.year - user.birth_date.year - ((today.month, today.day)\
          < (user.birth_date.month, user.birth_date.day))
     
+    if user_age < event.age_from :
+        return error_func(error_status=403,
+                          error_description="User is to young.",
+                          error_message='USER_TO_YOUNG', )
     
+    if user_age > event.age_to:
+        return error_func(error_status=403,
+                          error_description="User is to old.",
+                          error_message='USER_TO_OLD', )
 
     user_in_event = UserInEvent(
         user_event_status_id=1,

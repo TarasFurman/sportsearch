@@ -34,7 +34,7 @@ class Index extends React.Component {
 
         let notifications = this.state.notifications.map(notification  =>
         {    
-            if(notification.seen === true)
+            if(notification.seen === false)
                 return <Notification
                     id={notification.id} 
                     key={notification.id}
@@ -53,7 +53,7 @@ class Index extends React.Component {
     seenClick = id => { 
         let notifications = [...this.state.notifications];
         let index = notifications.findIndex(el => el.id === id);
-        notifications[index] = {...notifications[index], seen: false};
+        notifications[index] = {...notifications[index], seen: true};
         let obj = notifications[index]
 
         fetch('http://localhost:5999/notification',

@@ -45,6 +45,7 @@ class Event extends React.Component {
         },
       })
       .then(response => response.json())
+      // .then(response =>console.log(response))
       .then(response => this.setState({
         response: response
       }))
@@ -83,9 +84,29 @@ class Event extends React.Component {
         alert("You are not authorized. Please sign in!")
         return <Redirect to='/signin' />
       }
-      if(this.state.response.error.status == 403)
+      if(this.state.response.error['message'] == 'USER_FORBIDDEN')
       {
         alert("You have applied to this event! Please, wait for approve!")
+      }
+      if(this.state.response.error['message'] == 'OWNER_EVENT')
+      {
+        alert("You are the owner of this event!")
+      }
+      if(this.state.response.error['message'] == 'EVENT_NOT_PLANNED')
+      {
+        alert("Sorry! This event is not planned")
+      }
+      if(this.state.response.error['message'] == 'BIRTHDATE_IS_EMPTY')
+      {
+        alert("Sorry! For apply to this event you need fill up your birth date on Profile page")
+      }
+      if(this.state.response.error['message'] == 'USER_TO_YOUNG')
+      {
+        alert("Sorry! You are to youmg for apply to this event")
+      }
+      if(this.state.response.error['message'] == 'USER_TO_OLD')
+      {
+        alert("Sorry! You are to old for apply to this event")
       }
     }
 

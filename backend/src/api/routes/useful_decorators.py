@@ -130,7 +130,8 @@ def apply_event(func):
             if db.session.query(UserInEvent).filter(
                     UserInEvent.user_id == user_id,
                     UserInEvent.event_id == event_id,
-            ).first():
+            ).first() and not db.session.query(Event).filter(
+                                Event.id == event_id, Event.owner_id == user_id).first():
                 return error_func(error_status=403,
                                   error_description='User is already in this event.',
                                   error_message='USER_FORBIDDEN',)

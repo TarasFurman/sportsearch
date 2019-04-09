@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom'
 import './events.css'
 
 export default class Events extends Component {
     
     render(){
         return(
-            <a className="link" href={'http://localhost:5998/event/' + this.props.id}>
+            <Link className='link' to={"/event/" + this.props.id}>
                 <table className="eventsTable">
                     <thead>
                         <tr className='tableHead'>
@@ -44,7 +45,7 @@ export default class Events extends Component {
                         </tr>
                     </tbody>
                 </table>
-            </a>
+            </Link>
         )
     }
 }

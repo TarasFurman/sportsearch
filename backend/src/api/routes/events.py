@@ -166,12 +166,4 @@ def events(*args, page_num):
             return error_func(error_status=404,
                               error_description='No events with this filters',
                               error_message='NO_EVENTS',)
-
-
-        # sport_types = {
-        #     'football': 1
-        # }
-
-        # sport_type_filter = [Event.sport_id == sport_id 
-        #     for sport_name, sport_id in filter(lambda k, v: k in req, sport_types.items())]
             
