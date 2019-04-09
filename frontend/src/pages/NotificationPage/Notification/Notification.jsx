@@ -4,10 +4,6 @@ class Index extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-        
-        };
-
     }
 
     render() {
@@ -15,8 +11,10 @@ class Index extends React.Component {
             <div className="card">
                 <div className="content">
                     <h6>{this.props.eventId}</h6>
-                    {this.props.notificationType}
+                    <span>{this.props.notificationType}{" "}{this.props.seen}</span>
                 </div>
+
+                <button onClick={() => this.props.seenClick(this.props.id)}>Ok</button>
             </div>
         )
     }

@@ -19,20 +19,43 @@ def apply_for_event(*args, **kwargs):
     event = args[0]
     user = args[1]
 
+    print(event.owner_id)
+    print(user.id)
+    if event.owner_id == user.id:
+        return error_func(error_status=403,
+                          error_description='Owner can not apply to his own event.',
+                          error_message='OWNER_EVENT', )
+
+    if event.event_status_id != 1:
+        return error_func(error_status=403,
+                          error_description='Users can apply to an planned event.',
+                          error_message='EVENT_NOT_PLANNED', )
+
+    if not user.birth_date:
+        return error_func(error_status=403,
+                          error_description='User not specified birth date.',
+                          error_message='BIRTHDATE_IS_EMPTY', )
+    
+    today = date.today()  
+    age = today.year - user.birth_date.year - ((today.month, today.day)\
+         < (user.birth_date.month, user.birth_date.day))
+    
+    
+
     user_in_event = UserInEvent(
         user_event_status_id=1,
         event_id=event.id,
         user_id=user.id
     )
 
-    owner = db.session.query(Event).filter(Event.id == event.id).first().owner_id
-    send(8, user_id=owner, event_id=event.id) #send notification to owner(new request)
+    send(8, user_id=event.owner_id, event_id=event.id) #send notification to owner(new request)
 
     db.session.add(user_in_event)
     db.session.commit()
     db.session.close()
 
-    return jsonify({
+    return jsonify(
+        {
         'user_data':{
             'id': user.id
         },

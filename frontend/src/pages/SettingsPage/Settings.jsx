@@ -29,29 +29,28 @@ export default class Settings extends React.Component{
                     <h1>Notifications could be sent to:</h1>
                     <div className="notificationReceiver">
                         <div>
-                            <span>Email</span>
+                            <label>
                             <input
                                 name="emailNotification"
                                 type="checkbox"
                                 checked={this.state.emailNotification}
                                 onChange={this.handleInputChange}
                                 className="notificationInput"
-                            />
+                            />Email</label>
                         </div>
                         
                         <div>
-                            <span>Telegram</span>
+                            <label>
                             <input
                                 name="telegramNotification"
                                 type="checkbox"
                                 checked={this.state.telegramNotification}
                                 onChange={this.handleInputChange}
                                 className="notificationInput"
-
-                            />
+                            />Telegram</label>
                         </div>
                         
-                        <div>
+                        {/* <div>
                             <span>Viber</span>
                             <input
                                 name="viberNotification"
@@ -61,7 +60,7 @@ export default class Settings extends React.Component{
                                 className="notificationInput"
 
                             />
-                        </div>
+                        </div> */}
                     </div>
                     
                     <h1>Type notification:</h1>
@@ -69,15 +68,15 @@ export default class Settings extends React.Component{
                     <div className="notificationTypeDiv">
                         
                         <div className="notificationTexts">
-                            <span> <input
+                            <label> <input
                                 name="requestApproved"
                                 type="checkbox"
                                 checked={this.state.requestApproved}
                                 onChange={this.handleInputChange}
                                 className="notificationInput"
                             />
-                            Your request has been approved</span>
-                            <span>
+                            Your request has been approved</label>
+                            <label>
                                 <input
                                     name="requestRejected"
                                     type="checkbox"
@@ -86,8 +85,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 Your request has been rejected
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="isKicked"
                                     type="checkbox"
@@ -96,8 +95,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 You have been kicked from event
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="eventFinished"
                                     type="checkbox"
@@ -106,8 +105,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 Event finished
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="eventCanceled"
                                     type="checkbox"
@@ -116,8 +115,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 Event canceled
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="receivedFeedback"
                                     type="checkbox"
@@ -126,8 +125,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 You received feedback
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="beforeEvent"
                                     type="checkbox"
@@ -136,8 +135,8 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 1 hour before the event
-                            </span>
-                            <span>
+                            </label>
+                            <label>
                                 <input
                                     name="eventRequest"
                                     type="checkbox"
@@ -145,8 +144,8 @@ export default class Settings extends React.Component{
                                     onChange={this.handleInputChange}
                                     className="notificationInput"
                                 />
-                            When new request appears (for event owners only)</span>
-                            <span>
+                            When new request appears (for event owners only)</label>
+                            <label>
                                 <input
                                     name="eventInvitation"
                                     type="checkbox"
@@ -154,7 +153,7 @@ export default class Settings extends React.Component{
                                     onChange={this.handleInputChange}
                                     className="notificationInput"
                                 />
-                            You were invited to the event </span>
+                            You were invited to the event </label>
                         </div>                    
                     </div>
                     <button className="submitSettings" type="submit">Submit</button>

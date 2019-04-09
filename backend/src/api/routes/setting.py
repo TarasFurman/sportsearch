@@ -60,10 +60,9 @@ def settings(*args):
         if req.get('telegram_notification') and not telegram_chat:
             url = 'https://api.telegram.org/bot628686042:AAE7G9c_5cv082F8fEZN-97U2GFDXb6rSYM/getUpdates'
             response = requests.get(url).json()
-            chat_id = response['result'][0]['message']['chat']['id']
+            chat_id = response['result'][-1]['message']['chat']['id']
             User.query.filter(User.id == user_id).update(dict(telegram_account=chat_id))
             db.session.commit()
-            print(chat_id)
             print('telegramTrue')
         else:
             print('telegramFalse')

@@ -47,3 +47,35 @@ def test_sportType(new_sport_type):
 def test_eventStatus(new_event_status):
     assert new_event_status.id == 40
     assert new_event_status.name == 'canceled'
+
+def test_userEventStatus(new_user_event_status):
+    assert new_user_event_status.name == 'test'
+
+def test_userStatus(new_user_status):
+    assert new_user_status.name == 'abc'
+
+def test_payment(new_payment):
+    assert new_payment.bank_response == 'Bank response'
+    assert new_payment.event_id == 2
+    assert new_payment.user_from_id == 3
+    assert new_payment.payment_status_id == 1
+
+def test_userInEvent(new_user_in_event):
+    assert new_user_in_event.user_event_status_id == 1
+    assert new_user_in_event.event_id == 3
+    assert new_user_in_event.user_id == 9
+
+def test_message(new_message):
+    assert new_message.text == 'New message test'
+    assert new_message.message_time == '2019-03-18 10:13:27.0'
+    assert new_message.event_id == 3
+    assert new_message.sender_id == 2
+
+def test_userNotification(new_user_notification):
+    assert new_user_notification.event_id == 2
+    assert new_user_notification.user_id == 3
+    assert new_user_notification.notification_id == 2
+
+def test_notificationType(new_notification_type):
+    assert new_notification_type.name == 'request_approved'
+    assert new_notification_type.message == 'Your request has been approved'
