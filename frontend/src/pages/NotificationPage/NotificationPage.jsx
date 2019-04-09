@@ -6,8 +6,9 @@ class Index extends React.Component {
         super(props);
 
         this.state = {
-            notifications: '',
+            notifications: [],
         };
+
 
     }
 
@@ -21,7 +22,7 @@ class Index extends React.Component {
           mode: 'cors',
           credentials: 'include',
         })
-        .then(response => response.json())
+        .then(response => response.json()) 
         .then(response => {
           if (response['code'] === 200){
             this.setState({
@@ -29,19 +30,45 @@ class Index extends React.Component {
             });
           }
         })
+    
 
-
-        let notifications = this.props.notifications.map(notification =>
-        <Notification
-            key={this.props.notification.id}
-            eventId={this.props.notification.event_name}
-            notificationType={this.props.notification.notification_message}
-        />);
+        let notifications = this.state.notifications.map(notification  =>
+        {    
+            if(notification.seen === true)
+                return <Notification
+                    id={notification.id} 
+                    key={notification.id}
+                    eventId={notification.event_name}
+                    notificationType={notification.notification_message}
+                    seen={notification.seen}
+                    seenClick={this.seenClick}
+                />
+        });
         return (
             <div>{notifications}</div>
+            
         )
     }
 
+    seenClick = id => { 
+        let notifications = [...this.state.notifications];
+        let index = notifications.findIndex(el => el.id === id);
+        notifications[index] = {...notifications[index], seen: false};
+        let obj = notifications[index]
+
+        fetch('http://localhost:5999/notification',
+        {
+          headers:{
+              'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          mode: 'cors',
+          credentials: 'include',
+          body: JSON.stringify({obj})
+        })
+        .then(response => response.json()) 
+    }
+ 
     render() {
         return (
             <div className="notificationsWrapper">

@@ -48,6 +48,8 @@ class Event extends React.Component {
       .then(response => this.setState({
         response: response
       }))
+
+    
   }
 
   render() {
@@ -81,7 +83,7 @@ class Event extends React.Component {
         alert("You are not authorized. Please sign in!")
         return <Redirect to='/signin' />
       }
-      if(this.state.response.error.status ==403)
+      if(this.state.response.error.status == 403)
       {
         alert("You have applied to this event! Please, wait for approve!")
       }

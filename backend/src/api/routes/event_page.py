@@ -26,13 +26,14 @@ def apply_for_event(*args, **kwargs):
     )
 
     owner = db.session.query(Event).filter(Event.id == event.id).first().owner_id
-    send(8, user_id=owner, event_id=event.id) #send notification to owner(new request)
+    send(notification_type=8, user_id=owner, event_id=event.id) 
 
     db.session.add(user_in_event)
     db.session.commit()
     db.session.close()
 
-    return jsonify({
+    return jsonify(
+        {
         'user_data':{
             'id': user.id
         },
