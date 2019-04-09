@@ -1,6 +1,8 @@
 import React from 'react';
 import Notification from './Notification/Notification'
 
+import './notificationPage.css'
+
 class Index extends React.Component {
     constructor(props) {
         super(props);
@@ -8,8 +10,6 @@ class Index extends React.Component {
         this.state = {
             notifications: [],
         };
-
-
     }
 
     createNotification() {
@@ -72,8 +72,8 @@ class Index extends React.Component {
     render() {
         return (
             <div className="notificationsWrapper">
-                Notifications
-                {this.createNotification()}
+                <span className='notificationTitle'>Notifications:</span>
+                <div className="notificationList">{this.createNotification()}</div>
             </div>
         );
     }

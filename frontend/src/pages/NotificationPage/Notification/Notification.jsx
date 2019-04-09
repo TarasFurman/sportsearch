@@ -1,20 +1,21 @@
 import React from 'react';
+import './notification.css'
 
 class Index extends React.Component {
     constructor(props) {
         super(props);
-
     }
 
     render() {
         return (
             <div className="card">
                 <div className="content">
-                    <h6>{this.props.eventId}</h6>
-                    <span>{this.props.notificationType}{" "}{this.props.seen}</span>
+                    <h2>Event: {this.props.eventId}</h2>
+                    <h6>Notification: {this.props.notificationType}{" "}{this.props.seen}</h6>
                 </div>
-
-                <button onClick={() => this.props.seenClick(this.props.id)}>Ok</button>
+                <div className="rightContent">
+                    <button className="notificationSubmit" onClick={() => this.props.seenClick(this.props.id)}>Ok</button>
+                </div>
             </div>
         )
     }
