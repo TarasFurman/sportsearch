@@ -11,6 +11,7 @@ class Index extends React.Component {
             <div className="card">
                 <div className="content">
                     <h2>Event: {this.props.eventId}</h2>
+                    You:{this.props.user}
                     <h6>Notification: {this.props.notificationType}{" "}{this.props.seen}</h6>
                 </div>
                 <div className="rightContent">

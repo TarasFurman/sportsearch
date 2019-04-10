@@ -9,6 +9,8 @@ class Index extends React.Component {
 
         this.state = {
             notifications: [],
+            count: 0,
+            owners:[]
         };
     }
 
@@ -26,7 +28,9 @@ class Index extends React.Component {
         .then(response => {
           if (response['code'] === 200){
             this.setState({
-                notifications: response['notifications']
+                notifications: response['notifications'],
+                count: response['count'],
+                owners: response['owners']
             });
           }
         })
@@ -34,10 +38,11 @@ class Index extends React.Component {
 
         let notifications = this.state.notifications.map(notification  =>
         {    
-            if(notification.seen === true)
+            if(notification.seen === false)
                 return <Notification
                     id={notification.id} 
                     key={notification.id}
+                    user={notification.user}
                     eventId={notification.event_name}
                     notificationType={notification.notification_message}
                     seen={notification.seen}
@@ -45,15 +50,17 @@ class Index extends React.Component {
                 />
         });
         return (
-            <div>{notifications}</div>
-            
+            <div>
+            Count:{this.state.count}
+            {notifications}
+            </div>
         )
     }
 
     seenClick = id => { 
         let notifications = [...this.state.notifications];
         let index = notifications.findIndex(el => el.id === id);
-        notifications[index] = {...notifications[index], seen: false};
+        notifications[index] = {...notifications[index], seen: true};
         let obj = notifications[index]
 
         fetch('http://localhost:5999/notification',
