@@ -13,7 +13,7 @@ from ..models import Event, SportType, UserInEvent
 
 
 def login_required(func):
-    """ Derorator to check is use in a session """
+    """Derorator to check is use in a session"""
     @wraps(func)
     def wrapper(*args, **kwargs):
         if 'user' not in session:
@@ -28,7 +28,7 @@ def login_required(func):
 
 @routes.route('/sports')
 def get_sports():
-    """ Endpoint that returns all sport types """
+    """Endpoint that returns all sport types"""
     sports = SportType.get_sports()
     data = list({'ids': sport.id, 'name': sport.name} for sport in sports)
 
@@ -36,7 +36,7 @@ def get_sports():
 
 
 def normalize(data):
-    """ Normalize data for new event """
+    """Normalize data for new event"""
     try:
         start_time = dateutil.parser.parse(data['start_time'])
         end_time = dateutil.parser.parse(data['end_time'])
@@ -50,7 +50,7 @@ def normalize(data):
 
 
 def validate(data):
-    """ Validate data for new event """
+    """Validate data for new event"""
     schema = {
         "name": {'required': True, "type": "string", "minlength":3, "maxlength": 200},
         "image_url": {"type": "string"},
@@ -74,7 +74,6 @@ def validate(data):
 
     validator = Validator(schema)
     is_valid = validator.validate(data)
-
     try:
         if (is_valid and (datetime.utcnow() < data['_start_time'] < data['_end_time'])
             and (data['members_needed'] < data['members_total'])
@@ -89,7 +88,7 @@ def validate(data):
 @routes.route("/events", methods=["POST"])
 @login_required
 def create_event():
-    """ Endpoint that creates new event """
+    """Endpoint that creates new event"""
 
     data = request.json
     data['owner_id'] = session['user']
@@ -120,7 +119,7 @@ def create_event():
 @routes.route('/upload_image', methods=['POST'])
 @login_required
 def upload_image_to_s3():
-    """ Endpoint to upload image to amazon s3 """
+    """Endpoint to upload image to amazon s3"""
     bucket = 'eventsportsearch'
     aws_access_key_id = 'AKIAWCGFITH6DGFB5MHH'
     aws_secret_access_key = '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'
