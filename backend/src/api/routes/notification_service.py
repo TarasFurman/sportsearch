@@ -1,8 +1,7 @@
-from ..models import UserInEvent
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
 import requests
-from ..models import db, User, UserNotification, NotificationType
+from ..models import db, User, UserNotification, NotificationType, UserInEvent
 
 from conf import APP_CONFIG
 
@@ -33,7 +32,6 @@ class NotificationService:
         try:
             notification_type = NotificationType.query.filter(NotificationType.id == self.notification_type).first().name
             result = User.query.filter(User.id == user_id).first().settings
-
             if result[notification_type]:
                 return True
             else:
@@ -48,6 +46,17 @@ class NotificationService:
                                         notification_id=self.notification_type)
         db.session.add(notification)
         db.session.commit()
+        for user in self.users:
+            query = db.session.query(UserNotification).filter(UserNotification.event_id == self.event_id, 
+                    UserNotification.user_id == user, 
+                    UserNotification.notification_id == self.notification_type).first()
+            if not query:
+                notification = UserNotification(seen=False,
+                                                event_id=self.event_id,
+                                                user_id=user,
+                                                notification_id=self.notification_type)
+                db.session.add(notification)
+                db.session.commit()
 
 
 class UserEventNotificationService(NotificationService):
@@ -68,9 +77,9 @@ class EventNotificationService(NotificationService):
         self.add_users()
 
     def add_users(self):
-        users = UserInEvent.query.filter(UserInEvent.event_id == self.event_id,
+        event_users = UserInEvent.query.filter(UserInEvent.event_id == self.event_id,
                                          UserInEvent.user_event_status_id == 2).all()
-        for user in users:
+        for user in event_users:
             self.users.append(user.user_id)
 
 

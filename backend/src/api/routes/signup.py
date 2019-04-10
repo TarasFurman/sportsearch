@@ -81,7 +81,11 @@ def signup():
                                 first_name=req.get('first_name'),
                                 last_name=req.get('last_name'),
                                 birth_date=req.get('birth_date'),
-                                settings = {"email_notification": True, "telegram_notification": False, "viber_notification": False, "request_approved": False, "request_rejected": False, "is_kicked": False, "event_finished": False, "event_canceled": False, "received_feedback": False, "before_event": False, "event_request": False, "event_invitation": False},
+                                settings = {"email_notification": True, "telegram_notification": False, 
+                                    "viber_notification": False, "request_approved": False, 
+                                    "request_rejected": False, "is_kicked": False, "event_finished": False, 
+                                    "event_canceled": False, "received_feedback": False, "before_event": False, 
+                                    "event_request": False, "event_invitation": False},
                                 status_id=2)
                     send_mail(req.get('email'))
                 except:

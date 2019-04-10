@@ -62,6 +62,10 @@ body {
   border-bottom: 2px solid rgb(98, 179, 98);
 }
 
+.eventsTable:hover {
+  background-color: mintcream;
+}
+
 .photoIcon{
   width: 30px;
 }

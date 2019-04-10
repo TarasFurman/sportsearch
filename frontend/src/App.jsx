@@ -9,6 +9,7 @@ import Signup from './pages/SignupPage/SignupPage';
 import CreateEvent from './pages/CreateEventPage/CreateEvent';
 import EventsPage from './pages/EventsPage/EventsPage';
 import EventPage from './pages/EventPage/EventPage';
+import NotificationPage from './pages/NotificationPage/NotificationPage'
 import Footer from './pages/Footer';
 import FeedbacksPage from './pages/FeedbacksPage/FeedbacksPage';
 import SportSearchService from './service/sport-search-service';
@@ -25,7 +26,7 @@ export class App extends React.Component {
     super(props);
     this.state = {
       user: '',
-        notifications: [],
+      notifications: [],
       userId:'',
     };
     this.handleClick = this.handleClick.bind(this);
@@ -51,24 +52,6 @@ export class App extends React.Component {
         this.setState({user: response['message']})
       }
     });
-
-    fetch('http://localhost:5999/notification',
-    {
-      headers:{
-          'Content-Type': 'application/json'
-      },
-      method: 'GET',
-      mode: 'cors',
-      credentials: 'include',
-    })
-    .then(response => response.json())
-    .then(response => {
-      if (response['code'] === 200){
-        this.setState({
-            notifications: response['notifications']
-        });
-      }
-    })
   }
 
   render() {
@@ -78,7 +61,6 @@ export class App extends React.Component {
           <Router>
             <div className="app">
               <Navbar user={this.state.user}
-                      notifications={this.state.notifications}
                       handleClick={this.handleClick}/>
               <Switch>
                 <Route exact path="/" component={Main}/>
@@ -88,12 +70,13 @@ export class App extends React.Component {
                 <Route path="/signup" render={() => <Signup handleClick={this.handleClick}/>} />
                 <Route path="/event/:eventId" component={EventPage}/>
                 <Route path="/feedbacks/:userId" component={FeedbacksPage}/>
+                <Route path="/notifications" render={(props) => <NotificationPage {...props} notifications={this.state.notifications}/>}/>
                 <Route path="/createEvent" component={CreateEvent} />
                 <Route path="/my-events" component={EventsPage} />
                 <Route path="/another-user-profile/:anotherUserId" component={AnotherUserProfile}/>
                 <Route component={Error} />
               </Switch>
-              <Footer />
+              {/* <Footer /> */}
             </div>
           </Router>
         </SportSearchServiceProvider>
