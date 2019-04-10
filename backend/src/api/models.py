@@ -248,7 +248,6 @@ class Event(db.Model):
     @staticmethod
     def create_event(new_instance):
         db.session.add(new_instance)
-        db.session.flush()
         db.session.commit()
         return new_instance.id
 

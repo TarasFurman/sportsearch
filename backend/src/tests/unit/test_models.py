@@ -1,3 +1,8 @@
+from datetime import datetime
+
+from api.models import Feedback, PaymentStatus
+
+
 def test_new_user(new_user):
     assert new_user.id == 330
     assert new_user.nickname == 'nickname'
@@ -47,3 +52,35 @@ def test_sportType(new_sport_type):
 def test_eventStatus(new_event_status):
     assert new_event_status.id == 40
     assert new_event_status.name == 'canceled'
+
+
+def test_feedback_model():
+    """Test Feedback database model"""
+    feedback = Feedback(
+        id=1,
+        rating=5,
+        text='feedback',
+        feedback_time=datetime(2020, 4, 9, 15, 00),
+        event_id=1,
+        user_from_id=2,
+        user_to_id=3,
+    )
+
+    assert feedback.id == 1
+    assert feedback.rating == 5
+    assert feedback.text == 'feedback'
+    assert str(feedback.feedback_time) == '2020-04-09 15:00:00'
+    assert feedback.event_id == 1
+    assert feedback.user_from_id == 2
+    assert feedback.user_to_id == 3
+
+
+def test_payment_status_model():
+    """Test PaymentStatus database model"""
+    payment_status = PaymentStatus(
+        id=1,
+        name='payment_status'
+    )
+    
+    assert payment_status.id == 1
+    assert payment_status.name == 'payment_status'

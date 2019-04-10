@@ -9,6 +9,7 @@ class CreateEvent extends React.Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
     this.loadSportType = this.loadSportType.bind(this);
   }
 
@@ -17,7 +18,7 @@ class CreateEvent extends React.Component {
     redirect: false,
     newEvent: {
       name: '',
-      image_url: 'https://img.icons8.com/color/96/000000/today.png',
+      image_url: '',
       lng: 0.0,
       lat: 0.0,
       description: '',
@@ -45,7 +46,10 @@ class CreateEvent extends React.Component {
 
   handleInputChange = (event) => {
     const { newEvent } = this.state;
-    const value = event.target.type === 'number' ? parseInt(event.target.value, 10) : event.target.value;
+    let value = event.target.type === 'number' ? parseInt(event.target.value, 10) : event.target.value;
+    if (event.target.type === 'datetime-local') {
+      value = new Date(value).toISOString().slice(0, 16);
+    }
     this.setState({
       newEvent: {
         ...newEvent,
@@ -59,6 +63,7 @@ class CreateEvent extends React.Component {
       image,
     }, () => {
       console.log(this.state);
+      this.handleUploadImage();
     });
   }
 
@@ -246,6 +251,28 @@ class CreateEvent extends React.Component {
         alert('We\'re so sorry!');
       }
     }
+  }
+
+  async handleUploadImage() {
+    const { image, newEvent } = this.state;
+    const data = new FormData();
+    data.append('image', image);
+    const response = await fetch('http://localhost:5999/upload_image', {
+      method: 'POST',
+      mode: 'cors',
+      credentials: 'include',
+      body: data,
+    });
+    const message = await response.json();
+    console.log(message.url);
+    this.setState({
+      newEvent: {
+        ...newEvent,
+        image_url: message.url,
+      },
+    }, () => {
+      console.log(this.state);
+    });
   }
 
   render() {

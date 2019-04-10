@@ -35,7 +35,7 @@ class LoadImage extends React.Component {
               id="image"
               type="file"
               className="form-control-file mt-1"
-              accept="image/png, image/jpeg"
+              accept="image/png, image/jpeg, image/jpg"
               onChange={event => this.handleChange(event)}
             />
           </div>
