@@ -102,7 +102,7 @@ class Event extends React.Component {
       }
       if(this.state.response.error['message'] == 'USER_TO_YOUNG')
       {
-        alert("Sorry! You are to youmg for apply to this event")
+        alert("Sorry! You are to young for apply to this event")
       }
       if(this.state.response.error['message'] == 'USER_TO_OLD')
       {
