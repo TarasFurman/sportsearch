@@ -6,6 +6,7 @@ from . import routes
 from .useful_decorators import visitor_allowed_event, error_func, apply_event
 from ..models import (db,
                       User,
+                      Event,
                       UserInEvent,
                       EventStatus,
                       Feedback)
@@ -20,11 +21,43 @@ def apply_for_event(*args, **kwargs):
     event = args[0]
     user = args[1]
 
+    if event.owner_id == user.id:
+        return error_func(error_status=403,
+                          error_description='Owner can not apply to his own event.',
+                          error_message='OWNER_EVENT', )
+
+    if event.event_status_id != 1:
+        return error_func(error_status=403,
+                          error_description='Users can apply to an planned event.',
+                          error_message='EVENT_NOT_PLANNED', )
+
+    if not user.birth_date:
+        return error_func(error_status=403,
+                          error_description='User not specified birth date.',
+                          error_message='BIRTHDATE_IS_EMPTY', )
+
+    today = date.today()  
+    user_age = today.year - user.birth_date.year - ((today.month, today.day)\
+         < (user.birth_date.month, user.birth_date.day))
+    
+    if user_age < event.age_from :
+        return error_func(error_status=403,
+                          error_description="User is to young.",
+                          error_message='USER_TO_YOUNG', )
+    
+    if user_age > event.age_to:
+        return error_func(error_status=403,
+                          error_description="User is to old.",
+                          error_message='USER_TO_OLD', )
+
+
     user_in_event = UserInEvent(
         user_event_status_id=1,
         event_id=event.id,
         user_id=user.id
     )
+
+    send(8, user_id=event.owner_id, event_id=event.id) #send notification to owner(new request)
 
     db.session.add(user_in_event)
     db.session.commit()
@@ -118,6 +151,8 @@ def leave_event(*args, **kwargs):
 
     db.session.commit()
 
+
+
     return Response(status=200)
 
 
@@ -144,7 +179,7 @@ def cancel_event(*args, **kwargs):
     event.event_status_id = 3
 
     db.session.commit()
-    send(5, event_id=event)     #notification(cancel event)
+    send(5, event_id=event.id)     #notification(cancel event)
     return Response(status=200)
 
 
@@ -207,7 +242,6 @@ def search_members(*args, **kwargs):
                     'age': today.year - member.birth_date.year - \
                            ((today.month, today.day) < (member.birth_date.month, member.birth_date.day)),
                     'image_url': member.image_url,
-                    # 'event_status': getattr(mem_status, 'user_event_status_id', None)
                 } for member in found_members
             ],
         }
@@ -276,6 +310,8 @@ def invite_member(*args, **kwargs):
             user_event = UserInEvent(event_id=event.id,
                                      user_id=target_id,
                                      user_event_status_id=5)
+            
+            send(9, user_id=target_id, event_id=event.id)   #notification (event_invitation)
             db.session.add(user_event)
 
         db.session.commit()

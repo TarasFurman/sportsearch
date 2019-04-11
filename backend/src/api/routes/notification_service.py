@@ -40,12 +40,12 @@ class NotificationService:
             return False
 
     def add_notification(self, user_id=None):
-        notification = UserNotification(seen=False,
-                                        event_id=self.event_id,
-                                        user_id=user_id,
-                                        notification_id=self.notification_type)
-        db.session.add(notification)
-        db.session.commit()
+        # notification = UserNotification(seen=False,
+        #                                 event_id=self.event_id,
+        #                                 user_id=user_id,
+        #                                 notification_id=self.notification_type)
+        # db.session.add(notification)
+        # db.session.commit()
         for user in self.users:
             query = db.session.query(UserNotification).filter(UserNotification.event_id == self.event_id, 
                     UserNotification.user_id == user, 
