@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
-import {Col,Row,Container,Image} from "react-bootstrap";
-import '../profileStyles/css/style.css';
+import {Col,Row,Container,Image,Button} from "react-bootstrap";
+import "../profileStyles/css/style.css";
 import imgProfile from "../profileStyles/img/img-profile.jpg";
 import userRating from "../profileStyles/img/rating-background.svg";
 import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
+import UploadProfilePhoto from "./UploadProfilePhoto";
 
 
 class ProfileEdit extends Component {
@@ -26,16 +27,55 @@ class ProfileEdit extends Component {
       birthDateValid: true,
       formValid: false,
       descriptionValid:true,
-      confirmEmail: '',
       redirect: false,
+      changePassMessage:'',
+      showImgWindow: false,
       validClass: {firstName: 'valid', lastName: 'valid', email: 'valid', phone: 'valid', birthDate: 'valid', description: 'valid'}
-
     };
-  this.handleEdit = this.handleEdit.bind(this);
-  this.handleSubmit = this.handleSubmit.bind(this);
-  this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleChangePass = this.handleChangePass.bind(this);
+    this._onFocus = this._onFocus.bind(this);
+    this._onBlur = this._onBlur.bind(this);
+    this.handleImgClick = this.handleImgClick.bind(this);
+    this.imgChecker = this.imgChecker.bind(this);
   }
 
+  imgChecker(img) {
+    this.props.ImgChange(img);
+  }
+  handleImgClick () {
+    this.setState(prevState => ({
+      showImgWindow: !prevState.showImgWindow,
+    }));
+  }
+  _onFocus(e){
+    e.currentTarget.type = "date";
+  }
+  _onBlur(e){
+      e.currentTarget.type = "text";
+      e.currentTarget.placeholder = this.props.checkedUserData.birth_date;
+  }
+
+  handleChangePass(){
+    this.setState({
+      changePassMessage:'To continue changing our password, go to your email',
+    });
+    fetch( "http://localhost:5999/change-password",
+        {
+            headers:{
+                'Content-Type': 'application/json'
+            },
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'include',
+        })
+        .then(response => response.json())
+        .then(response => {
+            console.log(response);
+        })
+  }
 
     handleInputChange = (e) => {
         const name = e.target.name;
@@ -120,6 +160,8 @@ class ProfileEdit extends Component {
   handleEdit(){
     this.props.editClick();
   }
+
+
   handleSubmit(e){
     e.preventDefault();
     let obj = {};
@@ -129,6 +171,9 @@ class ProfileEdit extends Component {
     obj.phone = this.state.phone ? this.state.phone: this.props.checkedUserData.phone ;
     obj.description = this.state.description ? this.state.description: this.props.checkedUserData.description ;
     obj.birth_date = this.state.birth_date ? this.state.birth_date: this.props.checkedUserData.birth_date ;
+    if (obj.email !=  this.props.checkedUserData.email ) {
+      this.props.popupClick();
+    }
     console.log(obj);
     fetch( "http://localhost:5999/profile",
         {
@@ -145,7 +190,7 @@ class ProfileEdit extends Component {
         .then(response => {
             console.log(response);
             if (response['code'] === 200) {
-              this.props.editClick();
+              this.props.submitClick();
             }else if (response['code'] === 1) {
 
             }
@@ -157,13 +202,14 @@ class ProfileEdit extends Component {
 
     return (
       <div id="main-wrapper">
+        {this.state.showImgWindow ? <UploadProfilePhoto popupClick = {this.handleImgClick} imgChanger = {this.imgChecker}  /> : ''}
                           <div className="userinfo">
                               <Container>
                                   <Row>
                                     <form onSubmit = {this.handleSubmit}>
                                       <Col md={3}>
-                                          <div className="profile-img">
-                                              <Image src={this.props.checkedUserData.image_url} trumbnail/>
+                                          <div className="profile-img" onClick={this.handleImgClick}>
+                                              <Image src={this.props.checkedUserData.image_url} trumbnail="true"  />
                                           </div>
                                           <div className="userRating">
                                             <img src={userRating}  />
@@ -196,29 +242,32 @@ class ProfileEdit extends Component {
                                               </Col>
                                               <Col md={6}>
                                                   <div className="personal-details">
-                                                      <strong>{this.props.checkedUserData.email}</strong>
+                                                      <strong><input className={this.state.validClass.email} type="text" name="email" placeholder={this.props.checkedUserData.email}  value={this.state.email} onChange={this.handleInputChange} /></strong>
                                                       <small>EMAIL</small>
                                                   </div>
                                               </Col>
                                               <Col md={6}>
                                                   <div className="personal-details">
-                                                      <strong ><input className={this.state.validClass.birthDate} type="date" name="birth_date" placeholder={this.props.checkedUserData.birth_date}  value={this.state.birth_date} onChange={this.handleInputChange} /></strong>
+                                                      <strong ><input className={this.state.validClass.birthDate} type="text" name="birth_date"  placeholder={this.props.checkedUserData.birth_date} onFocus={this._onFocus} onBlur={this._onBlur} value={this.state.birth_date} onChange={this.handleInputChange} /></strong>
                                                       <small>BIRTH</small>
                                                       <div className="formErrors">{this.state.formErrors.birthDate}</div>
                                                   </div>
                                               </Col>
+                                              <Col md={12}>
+                                                <Button onClick={this.handleChangePass}>Change/Add Password</Button>
+                                                <p>{this.state.changePassMessage}</p>
+                                              </Col>
                                           </Row>
 
+                                          <h5>About me</h5>
                                           <p>
-                                            <h5>About me</h5>
                                             <span> <input className={this.state.validClass.description} type="text" name="description" placeholder={this.props.checkedUserData.description}  value={this.state.description} onChange={this.handleInputChange} /> </span>
                                             <div className="formErrors">{this.state.formErrors.description}</div>
                                           </p>
                                           <ul className="social-icon">
                                               <li><a href="http://t.me/SportSearchBot"><FaTelegram/></a></li>
-                                              <li><a href="#"><FaViber/></a></li>
                                           </ul>
-                                          <button type="submit" style={{background:'#343a40'}} disabled={!this.state.formValid} >Update Info</button>
+                                          <Button type="submit" size="lg" style={{background:'#343a40'}} disabled={!this.state.formValid} >Update Info</Button>
                                       </Col>
                                     </form>
                                   </Row>

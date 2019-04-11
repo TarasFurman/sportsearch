@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import {Col,Row,Container,Image} from "react-bootstrap";
 import "../profileStyles/css/style.css";
+import imgProfile from "../profileStyles/img/img-profile.jpg";
 import userRating from "../profileStyles/img/rating-background.svg";
-import { FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
-
+import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
+import ProfilePopup from "./ProfilePopup";
 
 class ProfileView extends Component {
   constructor(props){
@@ -15,15 +17,22 @@ class ProfileView extends Component {
     this.props.editClick();
   }
 
+
   render(){
     return (
       <div id="main-wrapper">
+        {this.props.confirmEmail ?
+          <ProfilePopup
+            closePopup={this.props.popupClick}
+          />
+          : null
+        }
          <div className="userinfo">
              <Container>
                  <Row>
                      <Col md={3}>
                          <div className="profile-img">
-                             <Image src={this.props.checkedUserData.image_url} trumbnail/>
+                             <Image src={this.props.checkedUserData.image_url} trumbnail="true"/>
                          </div>
                          <div className="userRating">
                            <img src={userRating}  />
@@ -62,14 +71,13 @@ class ProfileView extends Component {
                              </Col>
                          </Row>
 
+                         <h5>About me</h5>
                          <p>
-                           <h5>About me</h5>
                            <span className={this.props.fieldsValids.description ? '': 'empty_field'}> {this.props.checkedUserData.description} </span>
                          </p>
 
                          <ul className="social-icon">
                              <li><a href="http://t.me/SportSearchBot"><FaTelegram/></a></li>
-                             <li><a href="#"><FaViber/></a></li>
                          </ul>
                      </Col>
                  </Row>

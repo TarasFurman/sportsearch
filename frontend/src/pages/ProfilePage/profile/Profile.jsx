@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import {Col,Row,Container,Image} from "react-bootstrap";
-import '../profileStyles/css/style.css';
-import imgProfile from '../profileStyles/img/img-profile.jpg';
-import userRating from '../profileStyles/img/rating-background.svg';
+import "../profileStyles/css/style.css";
+import imgProfile from "../profileStyles/img/img-profile.jpg";
+import userRating from "../profileStyles/img/rating-background.svg";
 import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
 import ProfileView from "./ProfileView";
 import ProfileEdit from "./ProfileEdit";
@@ -16,6 +16,7 @@ class ProfileComponent extends React.Component {
       userData:{},
       isLoggedin:true,
       isEditble: false,
+      confirmEmail:false,
       checkedUserData: {
         email:'',
         phone:'',
@@ -41,15 +42,19 @@ class ProfileComponent extends React.Component {
       },
     };
     this.handleEdit = this.handleEdit.bind(this);
-
-  }
-  handleEdit(){
-    this.setState(prevState => ({
-      isEditble: !prevState.isEditble
-    }));
+    this.handleSubmitClick = this.handleSubmitClick.bind(this);
+    this.handleshowPopup = this.handleshowPopup.bind(this);
+    this.imgCheck = this.imgCheck.bind(this);
   }
 
-  componentDidMount() {
+  imgCheck(newImg){
+    this.setState(({checkedUserData}) => ({checkedUserData: {
+      ...checkedUserData,
+      image_url: newImg,
+    }}));
+  }
+
+  getComponentData(){
     fetch( "http://localhost:5999/profile",
     {
       headers:{
@@ -70,8 +75,30 @@ class ProfileComponent extends React.Component {
         userData:data.user_data,
         isLoggedin:false,
       })
-      }})
+    }})
   }
+  handleEdit(){
+    this.setState(prevState => ({
+      isEditble: !prevState.isEditble
+    }));
+  }
+  handleSubmitClick(){
+    this.setState(prevState => ({
+      isEditble: !prevState.isEditble
+    }));
+    this.getComponentData();
+  }
+
+  handleshowPopup(){
+    this.setState(prevState =>({
+      confirmEmail: !prevState.confirmEmail,
+    }));
+  }
+
+  componentDidMount() {
+    this.getComponentData();
+  }
+
 
   checkData(data){
     let checkedUserData = {...this.state.checkedUserData};
@@ -101,7 +128,7 @@ class ProfileComponent extends React.Component {
       checkedUserData.birth_date='Empty birth date';
       fieldsValids.birth_date=false;
     } else {
-      checkedUserData.birth_date = data.birth_date;
+      checkedUserData.birth_date = new Date(data.birth_date).toLocaleDateString();
       fieldsValids.birth_date=true;
     }
     if (data.email==='' || data.email===undefined || data.email===null || data.email.match(/^([a-z0-9_-]+.)*[a-z0-9_-]+@[a-z0-9_-]+(.[a-z0-9_-]+)*.[a-z]{2,6}$/i)===null){
@@ -133,6 +160,7 @@ class ProfileComponent extends React.Component {
   }
   render(){
     let renderBlock;
+    console.log(this.props.myMessage);
     if (!this.state.isLoggedin){
           renderBlock =  <Container fluid>
                             <div className="deniedImg"><Image src="https://cdn.windowsreport.com/wp-content/uploads/2017/11/extract-rar-access-denied-fix.png" fluid/></div>
@@ -140,9 +168,9 @@ class ProfileComponent extends React.Component {
                          </Container>
         } else {
           if (!this.state.isEditble){
-            renderBlock=<ProfileView checkedUserData = {this.state.checkedUserData} editClick={this.handleEdit} fieldsValids={this.state.fieldsValids}/>;
+            renderBlock=<ProfileView checkedUserData = {this.state.checkedUserData} editClick={this.handleEdit} fieldsValids={this.state.fieldsValids} popupClick={this.handleshowPopup} confirmEmail={this.state.confirmEmail} />;
           } else {
-            renderBlock = <ProfileEdit checkedUserData = {this.state.checkedUserData} editClick={this.handleEdit} fieldsValids={this.state.fieldsValids} userId = {this.props.userId}/>;
+            renderBlock = <ProfileEdit checkedUserData = {this.state.checkedUserData} editClick={this.handleEdit} submitClick={this.handleSubmitClick} fieldsValids={this.state.fieldsValids} userId = {this.props.userId} popupClick={this.handleshowPopup} ImgChange = {this.imgCheck}  />;
           }
         }
         return (

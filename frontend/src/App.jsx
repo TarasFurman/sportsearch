@@ -3,6 +3,8 @@ import Navbar from './pages/NavBar/Navbar';
 import Main from './pages/Main/Main';
 import Settings from './pages/SettingsPage/Settings';
 import Profile from './pages/ProfilePage/Profile';
+import ChangePassword from "./pages/ProfilePage/profile/ChangePassword";
+import ConfirmEmailChanging from "./pages/ProfilePage/profile/ConfirmEmailChanging";
 import AnotherUserProfile from './pages/another-user-profile';
 import Signin from './pages/SigninPage/SigninPage';
 import Signup from './pages/SignupPage/SignupPage';
@@ -65,6 +67,8 @@ export class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={Main}/>
                 <Route path="/profile/" component={Profile} />
+                <Route path="/confirm_password_changing/:token" component={ChangePassword}/>
+                <Route path="/change_email/:token" component={ConfirmEmailChanging}/>
                 <Route path="/settings" component={Settings}/>
                 <Route path="/signin" render={() => <Signin handleClick={this.handleClick}/>} />
                 <Route path="/signup" render={() => <Signup handleClick={this.handleClick}/>} />
