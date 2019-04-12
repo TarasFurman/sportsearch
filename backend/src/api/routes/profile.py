@@ -51,7 +51,7 @@ def profile():
             user.description = new_data.get('description')
             user.phone = new_data.get('phone')
             if user.email != new_data.get('email'):
-                send_mail(user.email, new_data.get('email'))
+                send_mail(user.id, new_data.get('email'))
             db.session.commit()
             return jsonify({'code':200, 'message': 'true'})
         except:
@@ -65,14 +65,14 @@ def change_email(token):
     if request.method == 'GET':
         try:
             emails = s.loads(token, salt=APP_CONFIG.SECURITY_PASSWORD_SALT, max_age=60*10)
-            user = User.query.filter(User.email == emails.get('old_email')).first()
+            user = User.query.filter(User.id == emails.get('user_id')).first()
             return jsonify({'code': 200, 'message': 'True'})
         except:
             return jsonify({'code': 0, 'message': 'false'})
     elif request.method =='PUT':
         try:
             emails = s.loads(token, salt=APP_CONFIG.SECURITY_PASSWORD_SALT, max_age=60*10)
-            user = User.query.filter(User.email == emails.get('old_email')).first()
+            user = User.query.filter(User.id == emails.get('user_id')).first()
             if user.check_password(request.get_json().get('password')):
                 user.email = emails.get('new_email')
                 db.session.commit()
@@ -153,8 +153,8 @@ def upload_profileimage_to_s3():
             print (e)
             return jsonify({'code': 0, 'message': 'false'})
 
-def send_mail(old_email, new_email):
-    token = s.dumps({'new_email':new_email,'old_email':old_email}, salt=APP_CONFIG.SECURITY_PASSWORD_SALT)
+def send_mail(user_id, new_email):
+    token = s.dumps({'new_email':new_email,'user_id':user_id}, salt=APP_CONFIG.SECURITY_PASSWORD_SALT)
     msg = Message('Change Email', sender=APP_CONFIG.MAIL_USERNAME, recipients=[new_email])
     link = 'http://localhost:5998/change_email/'+token
     msg.body = 'Your link is {}'.format(link)

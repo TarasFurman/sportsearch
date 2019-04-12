@@ -28,6 +28,8 @@ class ProfileComponent extends React.Component {
         viber_account:'',
         telegram_account:'',
         nickname:'',
+        rating:'',
+        user_id:'',
       },
       fieldsValids:{
         email:false,
@@ -154,13 +156,14 @@ class ProfileComponent extends React.Component {
       fieldsValids.image_url=true;
     }
     checkedUserData.nickname=data.nickname;
+    checkedUserData.rating=data.rating;
+    checkedUserData.user_id=data.user_id;
     this.setState({checkedUserData});
     this.setState({fieldsValids});
 
   }
   render(){
     let renderBlock;
-    console.log(this.props.myMessage);
     if (!this.state.isLoggedin){
           renderBlock =  <Container fluid>
                             <div className="deniedImg"><Image src="https://cdn.windowsreport.com/wp-content/uploads/2017/11/extract-rar-access-denied-fix.png" fluid/></div>

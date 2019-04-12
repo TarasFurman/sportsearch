@@ -22,7 +22,6 @@ class ConfirmEmailChanging extends Component {
     e.preventDefault();
     let password;
     password = this.state.password;
-    console.log(password);
     fetch( 'http://localhost:5999/change_email/'+this.props.match.params.token,
         {
             headers:{
@@ -36,7 +35,6 @@ class ConfirmEmailChanging extends Component {
     )
         .then(response => response.json())
         .then(response => {
-            console.log(response);
             if (response['code'] === 200) {
               this.setState({message:true})
             }else if (response['code'] === 1) {
@@ -75,7 +73,6 @@ class ConfirmEmailChanging extends Component {
         <Container fluid>
           <Row>
             <Col lg={12}>
-              <p>{this.state.token}</p>
               <h1>Enter your password to end your email changing</h1>
               <form className="FormEmailChange" onSubmit={this.handleSubmit}>
                     <input type="password" name="password"

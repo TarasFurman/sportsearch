@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {Col,Row,Container,Image} from "react-bootstrap";
+import {Col,Row,Container,Image , Button} from "react-bootstrap";
 import "../profileStyles/css/style.css";
 import imgProfile from "../profileStyles/img/img-profile.jpg";
 import userRating from "../profileStyles/img/rating-background.svg";
+import StarRatings from 'react-star-ratings';
 import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
 import ProfilePopup from "./ProfilePopup";
+
 
 class ProfileView extends Component {
   constructor(props){
@@ -19,6 +21,7 @@ class ProfileView extends Component {
 
 
   render(){
+    let buttonLink = '/feedbacks/'+this.props.checkedUserData.user_id;
     return (
       <div id="main-wrapper">
         {this.props.confirmEmail ?
@@ -35,7 +38,15 @@ class ProfileView extends Component {
                              <Image src={this.props.checkedUserData.image_url} trumbnail="true"/>
                          </div>
                          <div className="userRating">
-                           <img src={userRating}  />
+                           <StarRatings
+                              rating={this.props.checkedUserData.rating ? this.props.checkedUserData.rating : 0 }
+                              starRatedColor="rgb(98, 179, 98)"
+                              numberOfStars={5}
+                              starDimension = {'30px'}
+                            />
+                         </div>
+                         <div className="getFeedbacks">
+                            <Button size="sm" href={buttonLink}>Feedbacks</Button>
                          </div>
                      </Col>
                      <Col md={9}>

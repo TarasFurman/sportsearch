@@ -55,17 +55,19 @@ class UploadProfilePhoto extends Component {
 
 
   render() {
-    console.log(this.state);
     return (
       <div className="popup">
         <div className='popup_inner'>
             <form onSubmit={this.handleUploadImage}>
-              <div>
-                <input type="file" name="file" onChange={this.onChangeHandler} />
+              <div >
+                <label className="uploadChoose">
+                  Choose your photo 
+                  <input type="file" name="file" onChange={this.onChangeHandler} />
+                </label>
               </div>
               <br />
-              <div>
-                <button>Upload</button>
+              <div className="upload">
+                <Button>Upload</Button>
               </div>
             </form>
             <p>{this.state.changed ? 'Photo updated' : ' '}</p>

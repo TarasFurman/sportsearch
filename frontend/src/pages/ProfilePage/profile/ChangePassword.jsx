@@ -99,7 +99,6 @@ class ChangePassword extends React.Component {
       )
           .then(response => response.json())
           .then(response => {
-              console.log(response);
               if (response['code'] === 200) {
                 this.setState({message:true})
               }else if (response['code'] === 1) {
@@ -110,7 +109,6 @@ class ChangePassword extends React.Component {
 
 
   render(){
-    console.log(this.state.token);
     if (this.state.message) {
       return(<p> Changed!</p>);
     }

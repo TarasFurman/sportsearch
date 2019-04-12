@@ -6,6 +6,7 @@ import "../profileStyles/css/style.css";
 import imgProfile from "../profileStyles/img/img-profile.jpg";
 import userRating from "../profileStyles/img/rating-background.svg";
 import { Fa,FaViber, FaTelegram, FaRegEdit } from 'react-icons/fa';
+import StarRatingComponent from 'react-star-rating-component';
 import UploadProfilePhoto from "./UploadProfilePhoto";
 
 
@@ -73,7 +74,6 @@ class ProfileEdit extends Component {
         })
         .then(response => response.json())
         .then(response => {
-            console.log(response);
         })
   }
 
@@ -174,7 +174,6 @@ class ProfileEdit extends Component {
     if (obj.email !=  this.props.checkedUserData.email ) {
       this.props.popupClick();
     }
-    console.log(obj);
     fetch( "http://localhost:5999/profile",
         {
             headers:{
@@ -188,7 +187,6 @@ class ProfileEdit extends Component {
     )
         .then(response => response.json())
         .then(response => {
-            console.log(response);
             if (response['code'] === 200) {
               this.props.submitClick();
             }else if (response['code'] === 1) {
@@ -267,7 +265,7 @@ class ProfileEdit extends Component {
                                           <ul className="social-icon">
                                               <li><a href="http://t.me/SportSearchBot"><FaTelegram/></a></li>
                                           </ul>
-                                          <Button type="submit" size="lg" style={{background:'#343a40'}} disabled={!this.state.formValid} >Update Info</Button>
+                                          <Button type="submit" size="lg" style={{background:'rgb(98, 179, 98)'}} disabled={!this.state.formValid} >Update Info</Button>
                                       </Col>
                                     </form>
                                   </Row>
