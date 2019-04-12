@@ -96,7 +96,7 @@ export default class Settings extends React.Component{
                                 />
                                 You have been kicked from event
                             </label>
-                            <label>
+                            {/* <label>
                                 <input
                                     name="eventFinished"
                                     type="checkbox"
@@ -105,7 +105,7 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 Event finished
-                            </label>
+                            </label> */}
                             <label>
                                 <input
                                     name="eventCanceled"
@@ -126,7 +126,7 @@ export default class Settings extends React.Component{
                                 />
                                 You received feedback
                             </label>
-                            <label>
+                            {/* <label>
                                 <input
                                     name="beforeEvent"
                                     type="checkbox"
@@ -135,7 +135,7 @@ export default class Settings extends React.Component{
                                     className="notificationInput"
                                 />
                                 1 hour before the event
-                            </label>
+                            </label> */}
                             <label>
                                 <input
                                     name="eventRequest"
