@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {Button} from "react-bootstrap";
 import "../profileStyles/css/style.css";
 
+
 class UploadProfilePhoto extends Component {
   constructor(props){
     super(props);
@@ -59,15 +60,12 @@ class UploadProfilePhoto extends Component {
       <div className="popup">
         <div className='popup_inner'>
             <form onSubmit={this.handleUploadImage}>
-              <div >
-                <label className="uploadChoose">
-                  Choose your photo 
-                  <input type="file" name="file" onChange={this.onChangeHandler} />
-                </label>
+              <div>
+                <input type="file" name="file" onChange={this.onChangeHandler} />
               </div>
               <br />
-              <div className="upload">
-                <Button>Upload</Button>
+              <div>
+                <button>Upload</button>
               </div>
             </form>
             <p>{this.state.changed ? 'Photo updated' : ' '}</p>
