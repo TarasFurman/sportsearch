@@ -11,6 +11,7 @@ class UploadProfilePhoto extends Component {
       file:'',
       imageURL:'',
       changed: false,
+      badRequest:false,
     };
     this.closePopup = this.closePopup.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -50,6 +51,11 @@ class UploadProfilePhoto extends Component {
             })
 
           }
+          else {
+            this.setState({
+            badRequest:true,
+            })
+          }
           this.handleChange();
         });
   }
@@ -59,6 +65,7 @@ class UploadProfilePhoto extends Component {
     return (
       <div className="popup">
         <div className='popup_inner'>
+          {this.state.badRequest ?  'Error 400: Bad request' :''}
             <form onSubmit={this.handleUploadImage}>
               <div>
                 <input type="file" name="file" onChange={this.onChangeHandler} />

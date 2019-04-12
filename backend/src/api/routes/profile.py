@@ -19,7 +19,6 @@ def profile():
     if request.method == 'GET':
         try:
             user = User.query.filter(User.id == session.get('user')).first()
-            #count_own_event = Event.query(func.count(user.id)).filter(Event.owner_id==user.id)
             return jsonify({'code': 200,
                             'user_data':{
                                 'user_id':user.id,
@@ -34,11 +33,10 @@ def profile():
                                 'description':user.description,
                                 'viber_account':user.viber_account,
                                 'telegram_account':user.telegram_account,
-                                #'count_own_event':count_own_event,
                             }
                            })
         except:
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code': 400})
     elif request.method == 'PUT':
         try:
             user = User.query.filter(User.id == session.get('user')).first()
@@ -55,11 +53,11 @@ def profile():
             if user.email != new_data.get('email'):
                 send_mail(user.id, new_data.get('email'))
             db.session.commit()
-            return jsonify({'code':200, 'message': 'true'})
+            return jsonify({'code':200})
         except:
-            return jsonify({'code': 0, 'message': 'False'})
+            return jsonify({'code':400})
     else:
-        return jsonify({'code': 0, 'message': 'false'})
+        return jsonify({'code': 400})
 
 
 @routes.route('/change_email/<token>', methods=['GET', 'PUT'])
@@ -68,9 +66,9 @@ def change_email(token):
         try:
             emails = s.loads(token, salt=APP_CONFIG.SECURITY_PASSWORD_SALT, max_age=60*10)
             user = User.query.filter(User.id == emails.get('user_id')).first()
-            return jsonify({'code': 200, 'message': 'True'})
+            return jsonify({'code': 200})
         except:
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code': 400})
     elif request.method =='PUT':
         try:
             emails = s.loads(token, salt=APP_CONFIG.SECURITY_PASSWORD_SALT, max_age=60*10)
@@ -78,11 +76,11 @@ def change_email(token):
             if user.check_password(request.get_json().get('password')):
                 user.email = emails.get('new_email')
                 db.session.commit()
-                return jsonify({'code': 200, 'message': 'True'})
+                return jsonify({'code': 200})
         except:
-            return jsonify({'code': 0, 'message': request.get_json().get('password')})
+            return jsonify({'code': 400})
     else:
-        return jsonify({'code': 0, 'message': 'false'})
+        return jsonify({'code':400})
 
 @routes.route('/change-password', methods=['GET'])
 def change_password():
@@ -90,9 +88,9 @@ def change_password():
         try:
             user = User.query.filter(User.id == session.get('user')).first()
             send_password_mail(user.id, user.email)
-            return jsonify({'code': 200, 'message': 'Mail was sended'})
+            return jsonify({'code': 200})
         except:
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code': 400})
 
 
 @routes.route('/confirm_password_changing/<token>', methods=['GET', 'PUT'])
@@ -103,7 +101,7 @@ def confirm_password_changing(token):
             user = User.query.filter(User.id == user_id.get('user_id')).first()
             return jsonify({'code': 200})
         except:
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code':400})
     elif request.method =='PUT':
         try:
             user_id = s.loads(token, salt=APP_CONFIG.SECURITY_PASSWORD_SALT, max_age=60*10)
@@ -114,16 +112,14 @@ def confirm_password_changing(token):
                 db.session.commit()
                 return jsonify({'code': 200})
         except:
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code': 400})
 
     else:
-        return jsonify({'code': 0, 'message': 'false'})
+        return jsonify({'code': 400})
 
 @routes.route('/upload_profile_img', methods = ['GET', 'POST'])
 def upload_profileimage_to_s3():
     bucket = 'profileimgsportsearch'
-    aws_access_key_id = 'AKIAWCGFITH6DGFB5MHH'
-    aws_secret_access_key = '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'
 
     if request.method == 'POST':
         try:
@@ -131,41 +127,45 @@ def upload_profileimage_to_s3():
             user = User.query.filter(User.id == session.get('user')).first()
             print(request.files.get('img'))
             if not new_img:
-                return jsonify({'message': 'File not found'})
+                return jsonify({'code': 400})
             filetype = imghdr.what(new_img)
 
             if filetype not in ('png', 'jpg', 'jpeg'):
-                return jsonify({'message': 'This file is not an image'})
+                return jsonify({'code': 400})
             filename = str(uuid4())
             s3 = boto3.resource(
                 's3',
                 region_name='eu-north-1',
-                aws_access_key_id=aws_access_key_id,
-                aws_secret_access_key=aws_secret_access_key,
+                aws_access_key_id=APP_CONFIG.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=APP_CONFIG.AWS_SECRET_ACCESS_KEY,
             )
 
-            s3.Bucket(bucket).put_object(Key=f'{filename}.{filetype}', Body=new_img, ACL='public-read', )
+            s3.Bucket(bucket).put_object(Key=f'{filename}.{filetype}',
+                                         Body=new_img, ACL='public-read',
+                                         )
 
             user.image_url = f'https://s3.eu-north-1.amazonaws.com/{bucket}/{filename}.{filetype}'
             db.session.commit()
 
-            return jsonify({'code': 200, 'url': f'https://s3.eu-north-1.amazonaws.com/{bucket}/{filename}.{filetype}'})
+            return jsonify({'code': 200, 'url': user.image_url})
 
         except Exception as e:
             print (e)
-            return jsonify({'code': 0, 'message': 'false'})
+            return jsonify({'code': 400})
 
 def send_mail(user_id, new_email):
-    token = s.dumps({'new_email':new_email,'user_id':user_id}, salt=APP_CONFIG.SECURITY_PASSWORD_SALT)
+    token = s.dumps({'new_email':new_email,'user_id':user_id},
+                      salt=APP_CONFIG.SECURITY_PASSWORD_SALT)
     msg = Message('Change Email', sender=APP_CONFIG.MAIL_USERNAME, recipients=[new_email])
-    link = 'http://localhost:5998/change_email/'+token
+    link = APP_CONFIG.FRONTEND_URL+'/change_email/'+token
     msg.body = 'Your link is {}'.format(link)
     mail.send(msg)
 
 
 def send_password_mail(user_id, email):
     token = s.dumps({'user_id':user_id,}, salt=APP_CONFIG.SECURITY_PASSWORD_SALT)
-    msg = Message('Go here to end password changing', sender=APP_CONFIG.MAIL_USERNAME, recipients=[email])
-    link = 'http://localhost:5998/confirm_password_changing/'+token
+    msg = Message('Go here to end password changing',
+                   sender=APP_CONFIG.MAIL_USERNAME, recipients=[email])
+    link = APP_CONFIG.FRONTEND_URL+'/confirm_password_changing/'+token
     msg.body = 'Your link is {}'.format(link)
     mail.send(msg)

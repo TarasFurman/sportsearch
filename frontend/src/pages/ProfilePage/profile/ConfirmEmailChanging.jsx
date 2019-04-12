@@ -9,6 +9,7 @@ class ConfirmEmailChanging extends Component {
       token:'',
       password:'',
       message:false,
+      badRequest:false,
     }
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -37,8 +38,10 @@ class ConfirmEmailChanging extends Component {
         .then(response => {
             if (response['code'] === 200) {
               this.setState({message:true})
-            }else if (response['code'] === 1) {
-
+            }else {
+              this.setState({
+              badRequest:true,
+              })
             }
         })
   }
@@ -59,7 +62,9 @@ class ConfirmEmailChanging extends Component {
           token:this.props.match.params.token,
         })
       } else {
-
+        this.setState({
+        badRequest:true,
+        })
       }
     });
   }
@@ -68,8 +73,13 @@ class ConfirmEmailChanging extends Component {
     if (this.state.message) {
       return(<p> Changed!</p>);
     }
-    else {
+    else if (this.state.badRequest) {
     return(
+       'Error 400: Bad request'
+     );
+    }
+    else {
+      return(
         <Container fluid>
           <Row>
             <Col lg={12}>

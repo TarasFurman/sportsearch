@@ -31,7 +31,9 @@ class ProfileEdit extends Component {
       redirect: false,
       changePassMessage:'',
       showImgWindow: false,
-      validClass: {firstName: 'valid', lastName: 'valid', email: 'valid', phone: 'valid', birthDate: 'valid', description: 'valid'}
+      validClass: {firstName: 'valid', lastName: 'valid', email: 'valid', phone: 'valid',
+                   birthDate: 'valid', description: 'valid'},
+      badRequest:false,
     };
     this.handleEdit = this.handleEdit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -74,6 +76,12 @@ class ProfileEdit extends Component {
         })
         .then(response => response.json())
         .then(response => {
+          if (response['code'] === 200) {
+          }else{
+            this.setState({
+            badRequest:true,
+            })
+          }
         })
   }
 
@@ -189,8 +197,10 @@ class ProfileEdit extends Component {
         .then(response => {
             if (response['code'] === 200) {
               this.props.submitClick();
-            }else if (response['code'] === 1) {
-
+            }else{
+              this.setState({
+              badRequest:true,
+              })
             }
         })
 
@@ -201,6 +211,7 @@ class ProfileEdit extends Component {
     return (
       <div id="main-wrapper">
         {this.state.showImgWindow ? <UploadProfilePhoto popupClick = {this.handleImgClick} imgChanger = {this.imgChecker}  /> : ''}
+        {this.state.badRequest ? 'Error 400: Bad request ':''}
                           <div className="userinfo">
                               <Container>
                                   <Row>

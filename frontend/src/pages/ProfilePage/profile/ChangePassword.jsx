@@ -15,6 +15,7 @@ class ChangePassword extends React.Component {
       formValid: false,
       formErrors: {password: '', confirmPassword: ''},
       validClass: {password: 'valid', confirmPassword: 'valid'},
+      badRequest:false,
     };
   }
 
@@ -75,7 +76,9 @@ class ChangePassword extends React.Component {
           token:this.props.match.params.token,
         })
       } else {
-
+        this.setState({
+        badRequest:true,
+        })
       }
     });
   }
@@ -101,8 +104,10 @@ class ChangePassword extends React.Component {
           .then(response => {
               if (response['code'] === 200) {
                 this.setState({message:true})
-              }else if (response['code'] === 1) {
-
+              }else  {
+                this.setState({
+                badRequest:true,
+                })
               }
           })
   }
@@ -112,8 +117,12 @@ class ChangePassword extends React.Component {
     if (this.state.message) {
       return(<p> Changed!</p>);
     }
+    else if (this.state.badRequest) {
+    return(
+       'Error 400: Bad request'
+     );
+    }
     else {
-
       return(
         <Container fluid>
           <Row>

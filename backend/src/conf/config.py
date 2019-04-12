@@ -16,6 +16,9 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USE_TLS = False
     SECURITY_PASSWORD_SALT = 'email-confirm'
+    AWS_ACCESS_KEY_ID = 'AKIAWCGFITH6DGFB5MHH'
+    AWS_SECRET_ACCESS_KEY = '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'
+    FRONTEND_URL = 'http://localhost:5998'
 
 
 class ProductionConfig(Config):
