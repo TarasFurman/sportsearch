@@ -19,6 +19,7 @@ def profile():
     if request.method == 'GET':
         try:
             user = User.query.filter(User.id == session.get('user')).first()
+            #count_own_event = Event.query(func.count(user.id)).filter(Event.owner_id==user.id)
             return jsonify({'code': 200,
                             'user_data':{
                                 'user_id':user.id,
@@ -33,6 +34,7 @@ def profile():
                                 'description':user.description,
                                 'viber_account':user.viber_account,
                                 'telegram_account':user.telegram_account,
+                                #'count_own_event':count_own_event,
                             }
                            })
         except:
